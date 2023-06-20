@@ -57,7 +57,7 @@ export default function Paybutton({ amount, user }) {
                 type="text"
                 name="merchant_id"
                 id="merchant_id"
-                value="2"
+                value="2566790"
               />{" "}
             </td>
           </tr>
@@ -85,7 +85,7 @@ export default function Paybutton({ amount, user }) {
               <input
                 type="text"
                 name="redirect_url"
-                value="http://127.0.0.1:3001/ccavResponseHandler"
+                value="https://riekolpayment.vercel.app/ccavResponseHandler"
               />
             </td>
           </tr>
@@ -95,7 +95,7 @@ export default function Paybutton({ amount, user }) {
               <input
                 type="text"
                 name="cancel_url"
-                value="http://127.0.0.1:3001/ccavResponseHandler"
+                value="https://riekolpayment.vercel.app/ccavResponseHandler"
               />
             </td>
           </tr>
