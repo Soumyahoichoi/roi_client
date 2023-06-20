@@ -33,7 +33,7 @@ export default function Paybutton({ amount, user }) {
         ref={formRef}
         method="POST"
         name="customerData"
-        action="https://localhost:4242/ccavRequestHandler"
+        action="https://riekolpayment.vercel.app/ccavRequestHandler"
       >
         <table width="40%" height="100" border="1" align="center">
           <caption>
