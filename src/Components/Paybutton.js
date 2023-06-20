@@ -5,14 +5,21 @@ export default function Paybutton({ amount, user }) {
   const handleCheckout = () => {
     axios
       .post("http://localhost:4242/ccavResponseHandler", {
-        amount: amount,
-        user: user,
+        amount: 10,
+        user: "user",
+        currency: "INR",
       })
       .then((res) => {
-        if (res.data.url) {
-          window.location.href = res.data.url;
-
-          var newWin = window.open("url", "windowName", "height=300,width=300");
+        if (res.data) {
+          var newWin = window.open(
+            "",
+            "windowName",
+            "" +
+              (window.screen.height - 400) +
+              ",left=" +
+              (window.screen.width - 840)
+          );
+          console.log({ res });
           newWin.document.write(res.data);
         }
       })
