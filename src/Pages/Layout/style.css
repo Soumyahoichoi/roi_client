@@ -1,0 +1,20 @@
+.header{
+  position: sticky;
+    top: 0;
+    padding: 8px 16px;
+    background: var(--prim-bg);
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    transition: max-width .35s ease-in-out;
+    max-width: 100%;
+    border-bottom: 1px solid var(--third-border-color);
+    box-shadow: 0 2px 4px rgba(0,0,0,.12);
+    flex-wrap: wrap;
+}
+
+.cards{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
