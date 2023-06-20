@@ -7,7 +7,7 @@ export default function Paybutton({ amount, user }) {
     formRef.current.submit();
     return;
     axios
-      .post("http://localhost:4000/create-checkout-session", {
+      .post("https://riekolpayment.vercel.app/create-checkout-session", {
         amount: amount,
         user: user,
       })
