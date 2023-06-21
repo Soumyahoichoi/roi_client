@@ -98,7 +98,7 @@ export default function Paybutton({ amount, user }) {
               <input
                 type="text"
                 name="cancel_url"
-                value={"https://register.riekol.com/layout"}
+                value={"https://register.riekol.com/payment-failed"}
               />
             </td>
           </tr>
