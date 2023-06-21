@@ -15,23 +15,23 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import supabase from "../../config/supabaseClient";
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+// function Copyright(props) {
+//   return (
+//     <Typography
+//       variant="body2"
+//       color="text.secondary"
+//       align="center"
+//       {...props}
+//     >
+//       {"Copyright © "}
+//       <Link color="inherit" href="https://mui.com/">
+//         Your Website
+//       </Link>{" "}
+//       {new Date().getFullYear()}
+//       {"."}
+//     </Typography>
+//   );
+// }
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -46,17 +46,27 @@ export default function SignIn() {
   const navigate = useNavigate();
 
   const fetchData = async () => {
-    const { data, error } = await supabase.from("tb1").select("*");
-    // .eq("emailId", email);
+    const { data, error } = await supabase
+    .from("MembersList")
+    .select("VoucherUSD,Plan,emailaddress,VoucherINR")
+    .eq("emailaddress", email);
 
     if (error) {
       setEmailError("Please enter your EO email or reach your EO Chapter");
     }
     if (data) {
-      const found = data.find(({ emailId }) => emailId === email);
+      const found = data.find(({ emailaddress }) => emailaddress === email);
+      console.log(data,'data');
       if (found) {
         localStorage.setItem("email", email);
-        localStorage.setItem("currency", found.Currency);
+        // localStorage.setItem("currency", found.Plan);
+        localStorage.setItem("plan", found.Plan);
+        if(found.Plan === "Plan 1"){
+          localStorage.setItem("voucher", found.VoucherINR);
+        }
+        else {
+          localStorage.setItem("voucher", found.VoucherUSD);
+        }
         navigate("/layout");
       } else {
         setEmailError("Please enter your EO email or reach your EO Chapter");

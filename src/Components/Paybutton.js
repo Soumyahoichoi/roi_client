@@ -3,15 +3,16 @@ import React, { useRef } from "react";
 
 export default function Paybutton({ amount, user }) {
   const formRef = useRef(null);
+  let stripeTotalAmount = amount * 100;
   const handleCheckout = () => {
-    const currency = localStorage.getItem("currency");
-    if (currency === "INR") {
+    const plan = localStorage.getItem("plan");
+    if (plan === "Plan 1") {
       formRef.current.submit();
       return;
     }
     axios
       .post("https://riekolpayment.vercel.app/create-checkout-session", {
-        amount: amount,
+        amount: stripeTotalAmount,
         user: user,
       })
       .then((res) => {

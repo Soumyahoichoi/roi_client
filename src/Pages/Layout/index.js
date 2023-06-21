@@ -14,20 +14,27 @@ export default function Layout() {
   const [counterValueTwo, setCounterValueTwo] = useState(0);
   const [totalValue, setTotalValue] = useState(0);
   const navigate = useNavigate();
-  let price, discount, currency, discountedPrice, addOns, totalPrice;
+  let price, memberPrice,partnerPrice, currency;
+  let regularPrice, regularMemberPrice, regularAddOns, regularTotalPrice,earlybird_member,earlybird_spouse,earlybird_total;
   let emailId = localStorage.getItem("email");
+  let plan = localStorage.getItem("plan");
+  let voucherDiscount = localStorage.getItem("voucher");
   useEffect(() => {
     const fetchData = async () => {
+      console.log('clicked');
       const { data, error } = await supabase
-        .from("tb1")
-        .select("discount,Currency,addOns,voucherPrice")
-        .eq("emailId", emailId);
+        .from("eo table")
+        // .select("discount,Currency,addOns,voucherPrice")
+        .select("*")
+        .eq("PlanID", plan);
       if (error) {
         setError("could not fetch Data!");
         setData([]);
+        console.log(error, "error");
       }
       if (data) {
         setData(data);
+        console.log(data, "data");
         setError(null);
       }
     };
@@ -36,11 +43,10 @@ export default function Layout() {
 
   useEffect(() => {
     if (counterValueTwo > 0) {
-      totalPrice = discountedPrice + addOns;
-      setTotalValue(totalPrice);
+      setTotalValue(earlybird_total);
     } else {
-      totalPrice = discountedPrice;
-      setTotalValue(totalPrice);
+      // totalPrice = discountedPrice;
+      setTotalValue(earlybird_member);
     }
   }, [counterValue, counterValueTwo]);
 
@@ -54,11 +60,26 @@ export default function Layout() {
 
   if (data.length > 0) {
     price = data[0].voucherPrice;
-    discount = data[0].discount;
+    memberPrice = data[0].earlybird_member;
+    // discount = data[0].discount;
     currency = data[0].Currency;
-    addOns = data[0].addOns;
-    discountedPrice = Math.floor(price - discount);
+    // addOns = data[0].earlybird_spouse;
+    regularMemberPrice = data[0].regular_member;
+    regularAddOns = data[0].regular_spouse;
+    regularTotalPrice = data[0].regular_total;
+    earlybird_member = data[0].earlybird_member;
+    earlybird_spouse = data[0].earlybird_spouse;
+    earlybird_total = data[0].earlybird_total;
   }
+  if (voucherDiscount !== "") {
+    memberPrice = regularMemberPrice;
+    partnerPrice = regularAddOns;
+  }
+  else {
+    memberPrice = earlybird_member;
+    partnerPrice = earlybird_spouse;
+  } 
+  
 
   return (
     <React.Fragment>
@@ -76,8 +97,8 @@ export default function Layout() {
               </header>
               <CardOne
                 title="Member (Early Bird)"
-                description={`Your voucher of ${currency} ${discount} has been applied as a discount on the actual ticket cost ${currency} ${price}`}
-                discountedPrice={`${currency} ${discountedPrice} incl. 18% GST`}
+                description={`Your voucher of ${currency} ${voucherDiscount} has been applied as a discount on the actual ticket cost ${currency} ${regularMemberPrice}`}
+                discountedPrice={`${currency} ${partnerPrice} incl. 18% GST`}
                 sendData={handleDataOne}
                 counterData={counterValueTwo}
               />
@@ -86,7 +107,7 @@ export default function Layout() {
                 description={`We have some great experiences for everyone at RIE and can help curate a holiday 
               for you and your SLP before or after RIE while you are in India.`}
                 subTitle={`Bring along your Spouse / Life Partner to India!`}
-                discountedPrice={`${currency} ${addOns} incl. 18% GST`}
+                discountedPrice={`${currency} ${partnerPrice} incl. 18% GST`}
                 sendData={handleDataTwo}
               />
             </div>
@@ -115,7 +136,7 @@ export default function Layout() {
                             Members (Early Bird)
                           </h2>
                           <span class="text-black">
-                            {currency} {discountedPrice}
+                            {currency} {earlybird_member}
                           </span>
                         </div>
                         <hr class="my-4" />
@@ -125,13 +146,13 @@ export default function Layout() {
                               Spouse/Life Partner (Early Bird)
                             </h2>
                             <span class="text-black">
-                              {currency} {addOns}
+                              {currency} {earlybird_spouse}
                             </span>
                           </div>
                         ) : null}
                         <div class="flex justify-between items-center mb-4">
                           <h2 class="text-xl text-black font-semibold">Fees</h2>
-                          <span class="text-black">{currency} 10.00</span>
+                          <span class="text-black">{currency} 0.00</span>
                         </div>
                         <hr class="my-4" />
                         <div class="flex justify-between items-center">
@@ -145,7 +166,7 @@ export default function Layout() {
                           onClick={handleSubmit}>
                           Proceed to payment
                           </button> */}
-                          <Paybutton amount={totalValue} user={emailId} />
+                          <Paybutton amount={earlybird_total} user={emailId} />
                         </div>
                       </div>
                     </>
