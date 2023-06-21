@@ -27,7 +27,7 @@ export default function Paybutton({ amount, user }) {
     <>
       <div
         onClick={handleCheckout}
-        className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-1/2 text-center"
+        className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-1/2 text-center cursor-pointer"
       >
         Checkout
       </div>

@@ -50,12 +50,10 @@ export default function SignIn() {
     // .eq("emailId", email);
 
     if (error) {
-      console.log(error);
       setEmailError("Please enter your EO email or reach your EO Chapter");
     }
     if (data) {
       const found = data.find(({ emailId }) => emailId === email);
-      console.log(found, "found");
       if (found) {
         localStorage.setItem("email", email);
         localStorage.setItem("currency", found.Currency);
@@ -68,7 +66,6 @@ export default function SignIn() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // console.log(email,'email', checked,'checked');
     if (email === " " || email === null) {
       setEmailError("Please enter email");
       return;
@@ -162,21 +159,10 @@ export default function SignIn() {
             >
               Proceed
             </Button>
-            <Grid container>
-              {/* <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid> */}
-              <Grid item>
-                <Link href="/signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
+           
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+        
       </Container>
     </ThemeProvider>
   );

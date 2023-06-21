@@ -21,7 +21,7 @@ export default function Layout() {
       const { data, error } = await supabase
         .from("tb1")
         .select("discount,Currency,addOns,voucherPrice")
-        .eq("EmailID", emailId);
+        .eq("emailId", emailId);
       if (error) {
         setError("could not fetch Data!");
         setData([]);

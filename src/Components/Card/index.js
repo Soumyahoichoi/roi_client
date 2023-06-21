@@ -50,7 +50,7 @@ export default function CardOne({
           >
             +
           </button>
-          <p class="text-gray-500 text-2xl px-4 py-12">{counter}</p>
+          <p class="text-gray-500 text-2xl px-2 py-2">{counter}</p>
           <button
             class="bg-gray-300  shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full  w-12 h-12 disabled:opacity-50"
             onClick={handleDecrement}
@@ -108,7 +108,7 @@ export function CardTwo({
           >
             +
           </button>
-          <p class="text-gray-500 text-2xl px-4 py-12">{counter}</p>
+          <p class="text-gray-500 text-2xl px-2 py-2">{counter}</p>
           <button
             class="bg-gray-300  shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full  w-12 h-12 disabled:opacity-50"
             onClick={handleDecrement}
