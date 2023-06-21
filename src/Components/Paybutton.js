@@ -4,8 +4,11 @@ import React, { useRef } from "react";
 export default function Paybutton({ amount, user }) {
   const formRef = useRef(null);
   const handleCheckout = () => {
-    formRef.current.submit();
-    return;
+    const currency = localStorage.getItem("currency");
+    if (currency === "INR") {
+      formRef.current.submit();
+      return;
+    }
     axios
       .post("https://riekolpayment.vercel.app/create-checkout-session", {
         amount: amount,

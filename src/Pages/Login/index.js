@@ -58,6 +58,7 @@ export default function SignIn() {
       console.log(found, "found");
       if (found) {
         localStorage.setItem("email", email);
+        localStorage.setItem("currency", found.Currency);
         navigate("/layout");
       } else {
         setEmailError("Please enter your EO email or reach your EO Chapter");
