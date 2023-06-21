@@ -79,7 +79,7 @@ export default function Paybutton({ amount, user }) {
           <tr>
             <td>Amount</td>
             <td>
-              <input type="text" name="amount" value="1.00" />
+              <input type="text" name="amount" value={amount} />
             </td>
           </tr>
           <tr>
