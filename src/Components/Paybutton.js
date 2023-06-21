@@ -88,7 +88,7 @@ export default function Paybutton({ amount, user }) {
               <input
                 type="text"
                 name="redirect_url"
-                value="https://riekolpayment.vercel.app/ccavResponseHandler"
+                value={window.location.origin.concat("/payment-successed")}
               />
             </td>
           </tr>
@@ -98,7 +98,7 @@ export default function Paybutton({ amount, user }) {
               <input
                 type="text"
                 name="cancel_url"
-                value="https://riekolpayment.vercel.app/ccavResponseHandler"
+                value={window.location.origin.concat("/payment-failed")}
               />
             </td>
           </tr>
