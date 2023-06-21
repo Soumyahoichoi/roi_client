@@ -39,7 +39,7 @@ const defaultTheme = createTheme();
 
 export default function SignIn() {
   const [email, setEmail] = useState(" ");
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(true);
   const [emailError, setEmailError] = useState(" ");
   const [error, setError] = useState(" ");
   // const [data, setData] = useState([]);
@@ -56,7 +56,7 @@ export default function SignIn() {
     }
     if (data) {
       const found = data.find(({ emailaddress }) => emailaddress === email);
-      console.log(data,'data');
+      
       if (found) {
         localStorage.setItem("email", email);
         // localStorage.setItem("currency", found.Plan);
@@ -155,8 +155,14 @@ export default function SignIn() {
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               onChange={(e) => handleCheckChange(e)}
-              label="Remember me"
+              checked={checked}
             />
+            <span className="text-gray-400">I agree to the 
+             <a href="https://www.riekol.com/event-waiver" className="text-decoration-line: underline"> Event Waiver, </a>
+             <a href="https://www.riekol.com/termsofservices" className="text-decoration-line: underline"> Terms of Service, </a>
+             <a href="https://www.riekol.com/privacypolicy" className="text-decoration-line: underline"> Privacy Policy </a> and
+             <a href="https://www.riekol.com/cancellationpolicy" className="text-decoration-line: underline">  Cancellation Policy</a>
+            </span>
             <br />
             {error && (
               <span style={{ color: "red", fontSize: "12px" }}>{error}</span>

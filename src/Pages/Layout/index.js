@@ -9,19 +9,34 @@ export default function Layout() {
 
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
+  const [message,setMessage] = useState(false);
   const [extraRow, setExtraRow] = useState(false);
   const [counterValue, setCounterValue] = useState(0);
   const [counterValueTwo, setCounterValueTwo] = useState(0);
   const [totalValue, setTotalValue] = useState(0);
   const navigate = useNavigate();
-  let price, memberPrice,partnerPrice, currency;
-  let regularPrice, regularMemberPrice, regularAddOns, regularTotalPrice,earlybird_member,earlybird_spouse,earlybird_total;
+  const [memberPrice,setMemberPrice] = useState(0);
+  const [partnerPrice,setPartnerPrice] = useState(0);
+  const [totalPrice,setTotalPrice] = useState(0);
+
+  let price, currency;
+  let regularMemberPrice, regularAddOns, regularTotalPrice,earlybird_member,earlybird_spouse,earlybird_total;
   let emailId = localStorage.getItem("email");
   let plan = localStorage.getItem("plan");
   let voucherDiscount = localStorage.getItem("voucher");
+
+  if (data.length > 0) {
+    currency = data[0].Currency;
+    regularMemberPrice = data[0].regular_member;
+    regularAddOns = data[0].regular_spouse;
+    regularTotalPrice = data[0].regular_total;
+    earlybird_member = data[0].earlybird_member;
+    earlybird_spouse = data[0].earlybird_spouse;
+    earlybird_total = data[0].earlybird_total;
+  }
+
   useEffect(() => {
     const fetchData = async () => {
-      console.log('clicked');
       const { data, error } = await supabase
         .from("eo table")
         // .select("discount,Currency,addOns,voucherPrice")
@@ -30,11 +45,9 @@ export default function Layout() {
       if (error) {
         setError("could not fetch Data!");
         setData([]);
-        console.log(error, "error");
       }
       if (data) {
         setData(data);
-        console.log(data, "data");
         setError(null);
       }
     };
@@ -42,12 +55,32 @@ export default function Layout() {
   }, []);
 
   useEffect(() => {
+    if(voucherDiscount === "null")
+    {
+    setMemberPrice(regularMemberPrice);
+    setPartnerPrice(regularAddOns);
+    
     if (counterValueTwo > 0) {
-      setTotalValue(earlybird_total);
+     
+      setTotalPrice(regularTotalPrice);
     } else {
       // totalPrice = discountedPrice;
-      setTotalValue(earlybird_member);
+      setTotalPrice(regularMemberPrice);
     }
+   }
+    else {
+      setMemberPrice(earlybird_member);
+      setPartnerPrice(earlybird_spouse);
+      if (counterValueTwo > 0) {
+        setMemberPrice(regularMemberPrice);
+        setPartnerPrice(regularAddOns);
+        setTotalPrice(earlybird_total);
+      } else {
+        // totalPrice = discountedPrice;
+        setTotalPrice(earlybird_member);
+      }
+    }
+
   }, [counterValue, counterValueTwo]);
 
   const handleDataOne = (data) => {
@@ -58,28 +91,29 @@ export default function Layout() {
     setCounterValueTwo(data);
   };
 
-  if (data.length > 0) {
-    price = data[0].voucherPrice;
-    memberPrice = data[0].earlybird_member;
-    // discount = data[0].discount;
-    currency = data[0].Currency;
-    // addOns = data[0].earlybird_spouse;
-    regularMemberPrice = data[0].regular_member;
-    regularAddOns = data[0].regular_spouse;
-    regularTotalPrice = data[0].regular_total;
-    earlybird_member = data[0].earlybird_member;
-    earlybird_spouse = data[0].earlybird_spouse;
-    earlybird_total = data[0].earlybird_total;
-  }
-  if (voucherDiscount !== "") {
-    memberPrice = regularMemberPrice;
-    partnerPrice = regularAddOns;
-  }
-  else {
-    memberPrice = earlybird_member;
-    partnerPrice = earlybird_spouse;
-  } 
-  
+  useEffect(() => {
+    // console.log( voucherDiscount,'voucherDiscount');
+    if(voucherDiscount === "null") {
+      setMessage(true);
+      setMemberPrice(regularMemberPrice);
+      setPartnerPrice(regularAddOns);
+      setTotalPrice(regularTotalPrice);
+    }
+    else {
+      setMessage(false);
+      setMemberPrice(earlybird_member);
+      setPartnerPrice(earlybird_spouse);
+      setTotalPrice(earlybird_total);
+    }
+  },[])
+
+  // console.log(memberPrice, partnerPrice, totalPrice, "totalPrice");
+
+  // if(voucherDiscount === null) {
+  //   setMessage(true);
+  // }
+
+  // console.log(memberPrice,'memberPrice', partnerPrice,'partnerPrice',totalPrice,'totalPrice');
 
   return (
     <React.Fragment>
@@ -89,27 +123,59 @@ export default function Layout() {
             <div className="px-8">
               <header>
                 <div class="container mx-auto px-4 py-6 ">
+                  {message === false && (
                   <h1 class="text-2xl font-normal text-black border-b border-black">
                     Early Bird Tickets | South Asia Member Registrations Open at
                     SALC
                   </h1>
+                  )}
                 </div>
               </header>
-              <CardOne
+              {
+                message === true && (
+                  <>
+                  <CardOne
+                    title="Member"
+                    description={`Your  actual ticket cost ${currency} ${regularMemberPrice}`}
+                    discountedPrice={`${currency} ${regularMemberPrice} incl. 18% GST`}
+                    sendData={handleDataOne}
+                    counterData={counterValueTwo}
+                  />
+
+                  <CardTwo
+                    title={"Spouse/Life Partner"}
+                    description={`We have some great experiences for everyone at RIE and can help curate a holiday 
+                  for you and your SLP before or after RIE while you are in India.`}
+                    subTitle={`Bring along your Spouse / Life Partner to India!`}
+                    discountedPrice={`${currency} ${regularAddOns} incl. 18% GST`}
+                    sendData={handleDataTwo}
+                  />
+                  </>
+                )
+              }
+
+              {
+                message === false && (
+                  <>
+                   <CardOne
                 title="Member (Early Bird)"
-                description={`Your voucher of ${currency} ${voucherDiscount} has been applied as a discount on the actual ticket cost ${currency} ${regularMemberPrice}`}
-                discountedPrice={`${currency} ${partnerPrice} incl. 18% GST`}
+                description={`Your voucher of ${currency} ${earlybird_member} has been applied as a discount on the actual ticket cost ${currency} ${regularMemberPrice}`}
+                discountedPrice={`${currency} ${earlybird_member} incl. 18% GST`}
                 sendData={handleDataOne}
                 counterData={counterValueTwo}
               />
               <CardTwo
-                title="Spouse/Life Partner (Early Bird)"
+                title={"Spouse/Life Partner(Early Bird)"}
                 description={`We have some great experiences for everyone at RIE and can help curate a holiday 
               for you and your SLP before or after RIE while you are in India.`}
                 subTitle={`Bring along your Spouse / Life Partner to India!`}
-                discountedPrice={`${currency} ${partnerPrice} incl. 18% GST`}
+                discountedPrice={`${currency} ${earlybird_spouse} incl. 18% GST`}
                 sendData={handleDataTwo}
               />
+                  </>
+                )
+              }
+             
             </div>
           </div>
 
@@ -133,20 +199,29 @@ export default function Layout() {
                       <div class="bg-white shadow w-full p-6">
                         <div class="flex justify-between items-center mb-4">
                           <h2 class="text-xl text-black font-semibold">
-                            Members (Early Bird)
+                            { message === true ? 
+                            "Members (Early Bird)"
+                            : "Members"
+                            }
                           </h2>
                           <span class="text-black">
-                            {currency} {earlybird_member}
+                          {currency}
+                            {memberPrice}
                           </span>
                         </div>
                         <hr class="my-4" />
                         {counterValueTwo > 0 ? (
                           <div class="flex justify-between items-center mb-4">
                             <h2 class="text-xl text-black font-semibold">
-                              Spouse/Life Partner (Early Bird)
+                            { message === true ?
+                             "Spouse/Life Partner (Early Bird)"
+                            : "Spouse/Life Partner"
+                            }
+                              
                             </h2>
                             <span class="text-black">
-                              {currency} {earlybird_spouse}
+                              {currency} 
+                              {partnerPrice}
                             </span>
                           </div>
                         ) : null}
@@ -158,7 +233,7 @@ export default function Layout() {
                         <div class="flex justify-between items-center">
                           <h2 class="text-2xl font-semibold">Total</h2>
                           <span class="text-2xl text-black">
-                            {currency} {totalValue}
+                            {currency} {totalPrice}
                           </span>
                         </div>
                         <div class="flex justify-center mt-6">
@@ -166,7 +241,7 @@ export default function Layout() {
                           onClick={handleSubmit}>
                           Proceed to payment
                           </button> */}
-                          <Paybutton amount={earlybird_total} user={emailId} />
+                          <Paybutton amount={totalPrice} user={emailId} />
                         </div>
                       </div>
                     </>
