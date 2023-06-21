@@ -88,7 +88,7 @@ export default function Paybutton({ amount, user }) {
               <input
                 type="text"
                 name="redirect_url"
-                value={window.location.origin.concat("/payment-successed")}
+                value={"https://register.riekol.com/payment-successed"}
               />
             </td>
           </tr>
@@ -98,7 +98,7 @@ export default function Paybutton({ amount, user }) {
               <input
                 type="text"
                 name="cancel_url"
-                value={window.location.origin.concat("/payment-failed")}
+                value={"https://register.riekol.com/layout"}
               />
             </td>
           </tr>
