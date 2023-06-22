@@ -32,11 +32,11 @@ export default function CardOne({
   // console.log(counter,'counter');
 
   return (
-    <div class="w-full mx-auto bg-white shadow-md rounded-lg overflow-hidden my-2 flex">
+    <div class="w-full mx-auto bg-white shadow-md rounded-lg overflow-hidden my-2 flex justify-between">
       <div class="px-6 py-4 flex-initial">
         <h3 class="font-bold text-2xl mb-1 text-gray-900">
           {counter > 0 ? value : null}
-          {title}
+          { title}
         </h3>
         <p class="text-gray-500 text-lg">{description}</p>
         <p class="text-gray-500 text-sm">{discountedPrice}</p>
@@ -97,7 +97,7 @@ export function CardTwo({
   // console.log(counter,'counter');
 
   return (
-    <div class="w-full mx-auto bg-white shadow-md rounded-lg overflow-hidden my-2 flex">
+    <div class="w-full mx-auto bg-white shadow-md rounded-lg overflow-hidden my-2 flex justify-between">
       <div class="px-6 py-4 flex-initial">
         <h3 class="font-bold text-2xl mb-1 text-gray-900">
           {counter > 0 ? value : null}
