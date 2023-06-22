@@ -53,8 +53,8 @@ const PaymentSuccessPage = () => {
       </div>
       <div>
         <p>
-          <strong>Amount:</strong> {localStorage.getItem("currency")}{" "}
-          {localStorage.getItem("amount")}
+          <strong>Amount:</strong> {parsed.currency}&nbsp;
+          {Number(parsed.amount).toLocaleString("en-IN")}
         </p>
       </div>
       <p>
