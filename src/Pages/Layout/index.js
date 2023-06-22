@@ -91,29 +91,19 @@ export default function Layout() {
   return (
     <React.Fragment>
       <section>
-        <div className="w-screen h-screen grid grid-rows-2 text-white md:grid-cols-2">
+        <div className="w-full h-full grid grid-rows-2 text-white md:grid-cols-2">
           <div className="w-full h-full bg-gray-100 md:h-screen container">
             <div className="px-8">
               <header>
                 <div class="container mx-auto px-4 py-6 ">
-                  {message === false && (
-                  <h1 class="text-2xl font-normal text-black border-b border-black">
-                    Early Bird Tickets | South Asia Member Registrations Open at
-                    SALC
+                  
+                  <h1 class="text-xl font-normal text-black border-b border-black font-sans">
+                    Early Bird Tickets 
                   </h1>
-                  )}
-                  {message === true && (
-                  <h1 class="text-2xl font-normal text-black border-b border-black">
-                     South Asia Member Registrations Open at
-                    SALC
-                  </h1>
-                  )}
 
                 </div>
               </header>
-              {
-                message === true && (
-                  <>
+              
                   <CardOne
                     title="Member"
                     description={`Your  actual ticket cost ${currency} ${regularMemberPrice}`}
@@ -124,39 +114,12 @@ export default function Layout() {
 
                   <CardTwo
                     title={"Spouse/Life Partner"}
-                    description={`We have some great experiences for everyone at RIE and can help curate a holiday 
-                  for you and your SLP before or after RIE while you are in India.`}
+                    
                     subTitle={`Bring along your Spouse / Life Partner to India!`}
                     discountedPrice={`${currency} ${regularAddOns} incl. 18% GST`}
                     sendData={handleDataTwo}
                     counterData={counterValue}
                   />
-                  </>
-                )
-              }
-
-              {
-                message === false && (
-                  <>
-                   <CardOne
-                title="Member (Early Bird)"
-                description={`Your voucher of ${currency} ${memberPrice} has been applied as a discount on the actual ticket cost ${currency} ${regularMemberPrice}`}
-                discountedPrice={`${currency} ${memberPrice} incl. 18% GST`}
-                sendData={handleDataOne}
-                counterData={counterValueTwo}
-              />
-              <CardTwo
-                title={"Spouse/Life Partner(Early Bird)"}
-                description={`We have some great experiences for everyone at RIE and can help curate a holiday 
-              for you and your SLP before or after RIE while you are in India.`}
-                subTitle={`Bring along your Spouse / Life Partner to India!`}
-                discountedPrice={`${currency} ${partnerPrice} incl. 18% GST`}
-                sendData={handleDataTwo}
-                counterData={counterValue}
-              />
-                  </>
-                )
-              }
              
             </div>
           </div>
@@ -171,7 +134,7 @@ export default function Layout() {
               <div class="text-gray-500 min-h-screen">
                 <header class="bg-white shadow-md">
                   <div class="container mx-auto px-4 py-6">
-                    <h1 class="text-2xl font-bold">Shopping Cart</h1>
+                    <h1 class="text-2xl font-bold font-sans">Shopping Cart</h1>
                   </div>
                 </header>
 
@@ -180,11 +143,10 @@ export default function Layout() {
                     <>
                       <div class="bg-white shadow w-full p-6">
                         <div class="flex justify-between items-center mb-4">
-                          <h2 class="text-xl text-black font-semibold">
-                            { message === false ? 
-                            "Members (Early Bird)"
-                            : "Members"
-                            }
+                          <h2 class="text-lg text-black font-semibold font-sans">
+                            
+                            Members (Early Bird)
+                           
                           </h2>
                           <span class="text-black">
                           {currency}
@@ -193,12 +155,11 @@ export default function Layout() {
                         </div>
                         <hr class="my-4" />
                         {counterValueTwo > 0 ? (
-                          <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl text-black font-semibold">
-                            { message === false ?
-                             "Spouse/Life Partner (Early Bird)"
-                            : "Spouse/Life Partner"
-                            }
+                          <div class="flex justify-between items-center mb-4 ">
+                            <h2 class="text-lg text-black font-semibold font-sans">
+                            
+                             Spouse/Life Partner (Early Bird)
+                           
                               
                             </h2>
                             <span class="text-black">
@@ -208,12 +169,12 @@ export default function Layout() {
                           </div>
                         ) : null}
                         <div class="flex justify-between items-center mb-4">
-                          <h2 class="text-xl text-black font-semibold">Fees</h2>
+                          <h2 class="text-lg text-black font-semibold font-sans">Fees</h2>
                           <span class="text-black">{currency} 0.00</span>
                         </div>
                         <hr class="my-4" />
                         <div class="flex justify-between items-center">
-                          <h2 class="text-2xl font-semibold">Total</h2>
+                          <h2 class="text-2xl font-semibold font-sans">Total</h2>
                           <span class="text-2xl text-black">
                             {currency} {finalPrice}
                           </span>
@@ -229,7 +190,7 @@ export default function Layout() {
                     </>
                   ) : (
                     <>
-                      <div class="bg-white shadow w-full p-6">
+                      <div class="bg-white shadow w-full p-6 font-sans text-xl">
                         The shopping cart is empty. Please select tickets.
                       </div>
                     </>

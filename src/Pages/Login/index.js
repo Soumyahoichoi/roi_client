@@ -101,7 +101,7 @@ export default function SignIn() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="">
         <CssBaseline />
         <Box
           sx={{
@@ -115,14 +115,16 @@ export default function SignIn() {
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Rie-Kol
-          </Typography>
+          
           <Box
             component="form"
             onSubmit={handleSubmit}
             noValidate
-            sx={{ mt: 1, width: "22vw" }}
+            sx={{
+              mt: 1,
+              width: "100%", // Adjust the width based on your needs
+              maxWidth: "400px", // Set the maximum width for the form
+            }}
           >
             <TextField
               margin="normal"
@@ -141,23 +143,12 @@ export default function SignIn() {
               </span>
             )}
             <br />
-
-            {/* <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            /> */}
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               onChange={(e) => handleCheckChange(e)}
               checked={checked}
             />
-            <span className="text-gray-400">I agree to the 
+            <span className="text-gray-500 font-sans text-sm">I agree to the 
              <a href="https://www.riekol.com/event-waiver" className="text-decoration-line: underline"> Event Waiver, </a>
              <a href="https://www.riekol.com/termsofservices" className="text-decoration-line: underline"> Terms of Service, </a>
              <a href="https://www.riekol.com/privacypolicy" className="text-decoration-line: underline"> Privacy Policy </a> and
