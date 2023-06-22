@@ -71,6 +71,7 @@ export function CardTwo({
   subTitle,
   discountedPrice,
   sendData,
+  counterData,
 }) {
   const [counter, setCounter] = useState(0);
 
@@ -86,6 +87,12 @@ export function CardTwo({
   if (sendData !== undefined) {
     sendData(Number(counter));
   }
+
+  useEffect(() => {
+    if (counterData !== undefined && counterData === 0) {
+      setCounter(counterData);
+    }
+  }, [counterData]);
 
   // console.log(counter,'counter');
 
