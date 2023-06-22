@@ -1,29 +1,53 @@
 import axios from "axios";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import supabase from "../config/supabaseClient";
 
 export default function Paybutton({ amount, user }) {
   const formRef = useRef(null);
+  const [orderId, setOrderId] = useState(null);
+
   let stripeTotalAmount = amount * 100;
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     const plan = localStorage.getItem("plan");
     if (plan === "Plan 1") {
-      formRef.current.submit();
-      return;
+      const newOrderId = uuidv4();
+      const { data, error } = await supabase.from("order_details").insert([
+        {
+          email: user,
+          gateway: "CC Avenue",
+          status: "CREATED",
+          order_id: newOrderId,
+        },
+      ]);
+      if (error) {
+        return;
+      }
+      setOrderId(newOrderId);
+      console.log({ data, formRef });
+    } else {
+      axios
+        .post("https://riekolpayment.vercel.app/create-checkout-session", {
+          amount: stripeTotalAmount,
+          user: user,
+        })
+        .then((res) => {
+          if (res.data.url) {
+            window.location.href = res.data.url;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-    axios
-      .post("https://riekolpayment.vercel.app/create-checkout-session", {
-        amount: stripeTotalAmount,
-        user: user,
-      })
-      .then((res) => {
-        if (res.data.url) {
-          window.location.href = res.data.url;
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
+
+  useEffect(() => {
+    if (!!orderId && formRef && formRef.current) {
+      formRef.current.submit();
+    }
+  }, [orderId]);
+
   return (
     <>
       <div
@@ -68,7 +92,7 @@ export default function Paybutton({ amount, user }) {
           <tr>
             <td>Order Id</td>
             <td>
-              <input type="text" name="order_id" value="21234124" />
+              <input type="text" name="order_id" value={orderId} />
             </td>
           </tr>
           <tr>
