@@ -104,11 +104,7 @@ export default function Paybutton({ amount, user }) {
           <tr>
             <td>Amount</td>
             <td>
-              <input
-                type="text"
-                name="amount"
-                value={amount?.replaceAll(",", "")}
-              />
+              <input type="text" name="amount" value={amount} />
             </td>
           </tr>
           <tr>
@@ -189,11 +185,7 @@ export default function Paybutton({ amount, user }) {
           <tr>
             <td>Billing Email:</td>
             <td>
-              <input
-                type="text"
-                name="billing_email"
-                value="testing@domain.com"
-              />
+              <input type="text" name="billing_email" value={user} />
             </td>
           </tr>
           <tr>
