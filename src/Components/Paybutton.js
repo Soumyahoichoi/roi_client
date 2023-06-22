@@ -80,7 +80,11 @@ export default function Paybutton({ amount, user }) {
           <tr>
             <td>Amount</td>
             <td>
-              <input type="text" name="amount" value={amount} />
+              <input
+                type="text"
+                name="amount"
+                value={amount?.replaceAll(",", "")}
+              />
             </td>
           </tr>
           <tr>
