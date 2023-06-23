@@ -29,7 +29,7 @@ export default function Paybutton({ amount, user }) {
       axios
         .post("https://riekolpayment.vercel.app/create-checkout-session", {
           amount: stripeTotalAmount,
-          user: user,
+          email: user,
         })
         .then((res) => {
           if (res.data.url) {
