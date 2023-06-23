@@ -57,7 +57,7 @@ export default function SignIn() {
       if (found) {
         localStorage.setItem("email", email);
         // localStorage.setItem("currency", found.Plan);
-        localStorage.setItem("plan", found.Plan);
+        localStorage.setItem("plan", found.plan);
         if (found.Plan === "Plan 1") {
           localStorage.setItem("voucher", found.VoucherINR);
         } else {
