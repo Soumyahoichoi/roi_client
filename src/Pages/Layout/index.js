@@ -1,7 +1,7 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import CardOne, { CardTwo } from "../../Components/Card";
 import Paybutton from "../../Components/Paybutton";
-import supabase from "../../config/supabaseClient";
 export default function Layout() {
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
@@ -12,58 +12,89 @@ export default function Layout() {
 
   const [memberPrice, setMemberPrice] = useState(0);
   const [partnerPrice, setPartnerPrice] = useState(0);
-  const [totalPrice, setTotalPrice] = useState(0);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [currency, setCurrency] = useState("");
   const [finalPrice, setFinalPrice] = useState(0);
 
-  let regularMemberPrice, regularAddOns, currency;
+  let regularMemberPrice, regularAddOns;
   let emailId = localStorage.getItem("email");
   let plan = localStorage.getItem("plan");
   let voucherDiscount = localStorage.getItem("voucher");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data, error } = await supabase
-        .from("eo_table")
-        .select("*")
-        .eq("PlanID", plan);
-      if (error) {
-        setError("could not fetch Data!");
-        console.log(error, "error");
-        setData([]);
-      }
-      if (data) {
-        setData(data);
-        if (voucherDiscount === "null") {
-          setMemberPrice(data[0].regular_member);
-          setPartnerPrice(data[0].regular_spouse);
-          setTotalPrice(data[0].regular_total);
-          setFinalPrice(data[0].regular_member);
-        } else {
-          setMemberPrice(data[0].earlybird_member);
-          setPartnerPrice(data[0].earlybird_spouse);
-          setTotalPrice(data[0].earlybird_total);
-          setFinalPrice(data[0].earlybird_member);
-        }
-        setError(null);
-      }
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const { data, error } = await supabase
+  //       .from("eo_table")
+  //       .select("*")
+  //       .eq("PlanID", plan);
+  //     if (error) {
+  //       setError("could not fetch Data!");
+  //       console.log(error, "error");
+  //       setData([]);
+  //     }
+  //     if (data) {
+  //       setData(data);
+  //       if (voucherDiscount === "null") {
+  //         setMemberPrice(data[0].regular_member);
+  //         setPartnerPrice(data[0].regular_spouse);
+  //         setTotalPrice(data[0].regular_total);
+  //         setFinalPrice(data[0].regular_member);
+  //       } else {
+  //         setMemberPrice(data[0].earlybird_member);
+  //         setPartnerPrice(data[0].earlybird_spouse);
+  //         setTotalPrice(data[0].earlybird_total);
+  //         setFinalPrice(data[0].earlybird_member);
+  //       }
+  //       setError(null);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
 
-  if (data.length > 0) {
-    currency = data[0].Currency;
-    regularMemberPrice = data[0].regular_member;
-    regularAddOns = data[0].regular_spouse;
-  }
+  // if (data.length > 0) {
+  //   currency = data[0].Currency;
+  //   regularMemberPrice = data[0].regular_member;
+  //   regularAddOns = data[0].regular_spouse;
+  // }
 
-  useEffect(() => {
-    if (counterValueTwo > 0) {
-      setFinalPrice(totalPrice);
+  const getCalculatedAmount = () => {
+    if (counterValue + counterValueTwo > 0) {
+      setIsLoading(true);
+      axios
+        .post("https://riekolpayment.vercel.app/calculate-amount", {
+          count: counterValue + counterValueTwo,
+          email: emailId,
+        })
+        .then((response) => {
+          setIsLoading(false);
+          if (response.data) {
+            console.log(response);
+            setMemberPrice(response.data.member);
+            setPartnerPrice(response.data.spouse);
+            setCurrency(response.data.currency);
+            setFinalPrice(
+              counterValue + counterValueTwo === 1
+                ? response.data.member
+                : response.data.totalAmount
+            );
+          }
+        });
     } else {
-      setFinalPrice(memberPrice);
+      setMemberPrice(0);
+      setPartnerPrice(0);
+      setCurrency("");
+      setFinalPrice(0);
     }
-  }, [counterValueTwo]);
+  };
+
+  useEffect(() => {
+    // if (counterValueTwo > 0) {
+    //   setFinalPrice(totalPrice);
+    // } else {
+    //   setFinalPrice(memberPrice);
+    // }
+    getCalculatedAmount();
+  }, [counterValue, counterValueTwo]);
 
   const handleDataOne = (data) => {
     setCounterValue(data);
@@ -128,7 +159,11 @@ export default function Layout() {
                 </header>
 
                 <main class=" mx-auto px-4 py-6">
-                  {counterValue > 0 ? (
+                  {isLoading ? (
+                    <div class="bg-white shadow w-full p-6 font-sans text-xl">
+                      Loading...
+                    </div>
+                  ) : counterValue > 0 ? (
                     <>
                       <div class="bg-white shadow w-full p-6">
                         <div class="flex justify-between items-center mb-4">

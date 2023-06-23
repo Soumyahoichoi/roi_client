@@ -6,11 +6,8 @@ import Checkbox from "@mui/material/Checkbox";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import supabase from "../../config/supabaseClient";
@@ -47,24 +44,23 @@ export default function SignIn() {
 
   const fetchData = async () => {
     const { data, error } = await supabase
-    .from("MembersList")
-    .select("VoucherUSD,Plan,emailaddress,VoucherINR")
-    .eq("emailaddress", email);
+      .from("members_list")
+      .select("VoucherUSD,plan,emailaddress,VoucherINR")
+      .eq("emailaddress", email);
 
     if (error) {
       setEmailError("Please enter your EO email or reach your EO Chapter");
     }
     if (data) {
       const found = data.find(({ emailaddress }) => emailaddress === email);
-      
+
       if (found) {
         localStorage.setItem("email", email);
         // localStorage.setItem("currency", found.Plan);
         localStorage.setItem("plan", found.Plan);
-        if(found.Plan === "Plan 1"){
+        if (found.Plan === "Plan 1") {
           localStorage.setItem("voucher", found.VoucherINR);
-        }
-        else {
+        } else {
           localStorage.setItem("voucher", found.VoucherUSD);
         }
         navigate("/layout");
@@ -115,7 +111,7 @@ export default function SignIn() {
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
-          
+
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -148,11 +144,37 @@ export default function SignIn() {
               onChange={(e) => handleCheckChange(e)}
               checked={checked}
             />
-            <span className="text-gray-500 font-sans text-sm">I agree to the 
-             <a href="https://www.riekol.com/event-waiver" className="text-decoration-line: underline"> Event Waiver, </a>
-             <a href="https://www.riekol.com/termsofservices" className="text-decoration-line: underline"> Terms of Service, </a>
-             <a href="https://www.riekol.com/privacypolicy" className="text-decoration-line: underline"> Privacy Policy </a> and
-             <a href="https://www.riekol.com/cancellationpolicy" className="text-decoration-line: underline">  Cancellation Policy</a>
+            <span className="text-gray-500 font-sans text-sm">
+              I agree to the
+              <a
+                href="https://www.riekol.com/event-waiver"
+                className="text-decoration-line: underline"
+              >
+                {" "}
+                Event Waiver,{" "}
+              </a>
+              <a
+                href="https://www.riekol.com/termsofservices"
+                className="text-decoration-line: underline"
+              >
+                {" "}
+                Terms of Service,{" "}
+              </a>
+              <a
+                href="https://www.riekol.com/privacypolicy"
+                className="text-decoration-line: underline"
+              >
+                {" "}
+                Privacy Policy{" "}
+              </a>{" "}
+              and
+              <a
+                href="https://www.riekol.com/cancellationpolicy"
+                className="text-decoration-line: underline"
+              >
+                {" "}
+                Cancellation Policy
+              </a>
             </span>
             <br />
             {error && (
@@ -166,10 +188,8 @@ export default function SignIn() {
             >
               Proceed
             </Button>
-           
           </Box>
         </Box>
-        
       </Container>
     </ThemeProvider>
   );

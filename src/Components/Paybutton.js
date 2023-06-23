@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import supabase from "../config/supabaseClient";
 
-export default function Paybutton({ amount, user }) {
+export default function Paybutton({ amount, user, count }) {
   const formRef = useRef(null);
   const [orderId, setOrderId] = useState(null);
 
@@ -27,9 +27,9 @@ export default function Paybutton({ amount, user }) {
       console.log({ data, formRef });
     } else {
       axios
-        .post("https://riekolpayment.vercel.app/create-checkout-session", {
-          amount: stripeTotalAmount,
+        .post("http://localhost:4000/create-checkout-session", {
           email: user,
+          count,
         })
         .then((res) => {
           if (res.data.url) {
