@@ -90,6 +90,7 @@ export default function Layout() {
                 discountedPrice={`${currency} ${memberPrice} incl. 18% GST`}
                 sendData={handleDataOne}
                 counterData={counterValueTwo}
+                isLoading={isLoading}
               />
 
               <CardTwo
@@ -98,6 +99,7 @@ export default function Layout() {
                 discountedPrice={`${currency} ${partnerPrice} incl. 18% GST`}
                 sendData={handleDataTwo}
                 counterData={counterValue}
+                isLoading={isLoading}
               />
             </div>
           </div>
