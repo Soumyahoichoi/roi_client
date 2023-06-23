@@ -18,7 +18,7 @@ const PaymentSuccessPage = () => {
   };
 
   useEffect(() => {
-    if (parsed.currency.toLowerCase() === "inr") {
+    if (parsed.currency?.toLowerCase() === "inr") {
       updateOrderStatus();
     }
   }, [JSON.stringify(parsed)]);
@@ -52,22 +52,28 @@ const PaymentSuccessPage = () => {
               </h2>
               <p className="text-gray-700 text-lg mb-6">Thank you for your purchase.</p>
               <br />
+              { parsed.order_no && (
               <div>
                 <p>
                   <strong>Order ID:</strong> {parsed.order_no}
                 </p>
               </div>
+              )}
+              {parsed.reference_no && (
               <div>
                 <p>
                   <strong>Tracking ID:</strong> {parsed.reference_no}
                 </p>
               </div>
+              )}
+              {parsed.currency && (
               <div>
                 <p>
                   <strong>Amount:</strong> {parsed.currency}&nbsp;
                   {Number(parsed.amount).toLocaleString("en-IN")}
                 </p>
               </div>
+              )}
               <p>
                 <strong>Status:</strong> Your payment was successful!
               </p>
@@ -96,7 +102,7 @@ const PaymentSuccessPage = () => {
 
                 <main class=" mx-auto px-4 py-6 h-10rm ">
                   
-                <PreferanceForm />
+                <PreferanceForm  orderId={ parsed.order_no}/>
                       
                 </main>
               </div>

@@ -88,11 +88,6 @@ export default function Layout() {
   };
 
   useEffect(() => {
-    // if (counterValueTwo > 0) {
-    //   setFinalPrice(totalPrice);
-    // } else {
-    //   setFinalPrice(memberPrice);
-    // }
     getCalculatedAmount();
   }, [counterValue, counterValueTwo]);
 
@@ -128,8 +123,7 @@ export default function Layout() {
 
               <CardOne
                 title="Member"
-                description={`Your  actual ticket cost ${currency} ${regularMemberPrice}`}
-                discountedPrice={`${currency} ${regularMemberPrice} incl. 18% GST`}
+                discountedPrice={`${currency} ${memberPrice} incl. 18% GST`}
                 sendData={handleDataOne}
                 counterData={counterValueTwo}
               />
@@ -137,7 +131,7 @@ export default function Layout() {
               <CardTwo
                 title={"Spouse/Life Partner"}
                 subTitle={`Bring along your Spouse / Life Partner to India!`}
-                discountedPrice={`${currency} ${regularAddOns} incl. 18% GST`}
+                discountedPrice={`${currency} ${partnerPrice} incl. 18% GST`}
                 sendData={handleDataTwo}
                 counterData={counterValue}
               />

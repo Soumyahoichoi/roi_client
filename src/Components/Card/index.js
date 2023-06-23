@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 
 export default function CardOne({
   title,
-  description,
   discountedPrice,
   sendData,
   counterData,
@@ -34,12 +33,11 @@ export default function CardOne({
   return (
     <div class="w-full mx-auto bg-white shadow-md rounded-lg overflow-hidden my-2 flex justify-between">
       <div class="px-6 py-4 flex-initial">
-        <h3 class="font-bold text-2xl mb-1 text-gray-900">
+        <h3 class="font-semibold text-2xl mb-1 text-gray-900">
           {counter > 0 ? value : null}
           { title}
         </h3>
-        <p class="text-gray-500 text-lg">{description}</p>
-        <p class="text-gray-500 text-sm">{discountedPrice}</p>
+        <p class="text-gray-500 text-lg">{discountedPrice}</p>
       </div>
       <div class="px-3 py-3 flex-initial">
         <div class="flex space-x-4 py-8">
@@ -67,7 +65,6 @@ export default function CardOne({
 
 export function CardTwo({
   title,
-  description,
   subTitle,
   discountedPrice,
   sendData,
@@ -104,8 +101,7 @@ export function CardTwo({
           {title}
         </h3>
         <h5 class="text-lg text-gray-600 mb-2">{subTitle}</h5>
-        <p class="text-gray-500 text-lg">{description}</p>
-        <p class="text-gray-500 text-sm">{discountedPrice}</p>
+        <p class="text-gray-500 text-lg">{discountedPrice}</p>
       </div>
       <div class="px-3 py-3 flex-initial">
         <div class="flex space-x-4 py-8">

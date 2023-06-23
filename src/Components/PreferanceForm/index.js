@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { FormControl, InputLabel, MenuItem, Select, TextField, Button, Grid, OutlinedInput, Stack , Chip, FormHelperText} from '@mui/material';
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckIcon from "@mui/icons-material/Check";
+import supabase from '../../config/supabaseClient';
 
-
-const Form = () => {
+const Form = ({orderId}) => {
   const [foodPreference, setFoodPreference] = useState('');
   const [favoriteDrink, setFavoriteDrink] = useState('');
   const [otherFoodPreference, setOtherFoodPreference] = useState('');
@@ -19,11 +19,17 @@ const Form = () => {
   const [partnerFoodPreference, setPartnerFoodPreference] = useState('');
   const [wishItem, setWishItem] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (foodPreference === '' || (foodPreference === 'other' && otherFoodPreference === '') || favoriteDrink === '' || allergies === '' || superpower === '' || pitch === '' || personalDevelopment.length === 0) {
       alert('Please fill all the fields');
     }
+
+    const { data, error } = await supabase
+    .from('peference_table')
+     .insert([
+    { order_id:orderId, email: partnerEmail, contact_number: phoneNumber, food_preference: foodPreference, favourite_drink: favoriteDrink, alergy: allergies, personal_d_area: personalDevelopment, super_power: superpower, e_pitch: pitch, partner_food_preference: partnerFoodPreference, intend_to_visit: wishItem, partner_contact_number: partnerPhoneNumber},
+  ])
     // Perform any necessary form data processing or submission here
     console.log('Submitted:', { foodPreference, favoriteDrink , otherFoodPreference,allergies,superpower,pitch,personalDevelopment});
   };
