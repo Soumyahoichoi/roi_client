@@ -7,7 +7,6 @@ export default function Paybutton({ amount, user, count }) {
   const formRef = useRef(null);
   const [orderId, setOrderId] = useState(null);
 
-  let stripeTotalAmount = amount * 100;
   const handleCheckout = async () => {
     const plan = localStorage.getItem("plan");
     if (plan === "Plan 1") {
@@ -27,7 +26,7 @@ export default function Paybutton({ amount, user, count }) {
       console.log({ data, formRef });
     } else {
       axios
-        .post("http://localhost:4000/create-checkout-session", {
+        .post("https://riekolpayment.vercel.app/create-checkout-session", {
           email: user,
           count,
         })
@@ -90,6 +89,12 @@ export default function Paybutton({ amount, user, count }) {
             </td>
           </tr>
           <tr>
+            <td>Count</td>
+            <td>
+              <input type="text" name="count" value={count} />
+            </td>
+          </tr>
+          <tr>
             <td>Order Id</td>
             <td>
               <input type="text" name="order_id" value={orderId} />
@@ -101,12 +106,12 @@ export default function Paybutton({ amount, user, count }) {
               <input type="text" name="currency" value="INR" />
             </td>
           </tr>
-          <tr>
+          {/* <tr>
             <td>Amount</td>
             <td>
               <input type="text" name="amount" value={amount} />
             </td>
-          </tr>
+          </tr> */}
           <tr>
             <td>Redirect URL</td>
             <td>
