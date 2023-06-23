@@ -11,6 +11,7 @@ import TextField from "@mui/material/TextField";
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import CircularProgress from '@mui/material/CircularProgress';
 
 // function Copyright(props) {
 //   return (
@@ -39,23 +40,28 @@ export default function SignIn() {
   const [checked, setChecked] = useState(true);
   const [emailError, setEmailError] = useState(" ");
   const [error, setError] = useState(" ");
+  const [loading, setLoading] = useState(false);
   // const [data, setData] = useState([]);
   const navigate = useNavigate();
 
   const fetchData = async () => {
+    console.log('darta');
     const { data, error } = await axios.post(
       "https://riekolpayment.vercel.app/getMemberByEmail",
       {
         email,
       }
     );
-
-    if (error) {
+    
+    if (error) {  
+      setLoading(false);
+      console.log(error,'error');
       setEmailError("Please enter your EO email or reach your EO Chapter");
     }
     if (data) {
+      console.log(data,'data')
       const found = data;
-
+      setLoading(false);
       if (found) {
         localStorage.setItem("email", email);
         // localStorage.setItem("currency", found.Plan);
@@ -70,11 +76,14 @@ export default function SignIn() {
         setEmailError("Please enter your EO email or reach your EO Chapter");
       }
     }
+
+    setLoading(false);
+    setEmailError("Please enter your EO email or reach your EO Chapter");
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (email === " " || email === null) {
+    if (email === "" || email === null) {
       setEmailError("Please enter email");
       return;
     }
@@ -83,6 +92,7 @@ export default function SignIn() {
       return;
     }
     if (email && checked) {
+      setLoading(true);
       fetchData();
     }
   };
@@ -110,6 +120,8 @@ export default function SignIn() {
             justifyContent: "center",
           }}
         >
+           
+
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
@@ -191,6 +203,11 @@ export default function SignIn() {
               Proceed
             </Button>
           </Box>
+          {loading && (
+            <Box sx={{ display: 'flex' }}>
+              <CircularProgress />
+            </Box>
+           )}
         </Box>
       </Container>
     </ThemeProvider>

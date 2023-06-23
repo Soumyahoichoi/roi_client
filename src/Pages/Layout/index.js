@@ -114,7 +114,7 @@ export default function Layout() {
               <div class="text-gray-500 min-h-screen">
                 <header class="bg-white shadow-md">
                   <div class="container mx-auto px-4 py-6">
-                    <h1 class="text-2xl font-bold font-sans">Shopping Cart</h1>
+                    <h1 class="text-2xl font-bold font-sans">Summary</h1>
                   </div>
                 </header>
 

@@ -77,7 +77,7 @@ const PaymentSuccessPage = () => {
                   </div>
                 </header> */}
 
-                <main class=" mx-auto px-4 py-6 h-10rm ">
+                <main class=" mx-auto px-12 py-10">
                   <PreferanceForm orderId={parsed.order_no} />
                 </main>
               </div>

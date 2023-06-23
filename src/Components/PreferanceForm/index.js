@@ -86,13 +86,31 @@ const Form = ({ orderId }) => {
     "Holistic living /Spirituality",
   ];
 
+  function isValidEmail(email) {
+    let mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return mailformat.test(email);
+  }
+
+  const handleChange = event => {
+    console.log('hi');
+    if (!isValidEmail(event.target.value)) {
+      setError('Email is invalid');
+    } else {
+      setError(null);
+    }
+
+    setPartnerEmail(event.target.value);
+  };
+
+  console.log(error,'error');
+
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={2} alignItems="center" justify="center">
         <Grid item xs={12}>
           <TextField
             required
-            inputProps={{ type: "number" }}
+            inputProps={{ type: "number" , maxLength: 15}}
             id="phoneNumber"
             label="Phone Number"
             variant="outlined"
@@ -100,6 +118,9 @@ const Form = ({ orderId }) => {
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
           />
+          <FormHelperText>
+            Please enter your phone number with country code
+          </FormHelperText>
         </Grid>
         <Grid item xs={12}>
           <FormControl variant="outlined" fullWidth>
@@ -120,6 +141,9 @@ const Form = ({ orderId }) => {
               <MenuItem value="other">Other (Specify)</MenuItem>
             </Select>
           </FormControl>
+          <FormHelperText>
+            Please select your food preference
+          </FormHelperText>
         </Grid>
         {foodPreference === "other" && (
           <Grid item xs={12}>
@@ -144,6 +168,9 @@ const Form = ({ orderId }) => {
             value={favoriteDrink}
             onChange={(e) => setFavoriteDrink(e.target.value)}
           />
+          <FormHelperText>
+            Please enter your favorite drink (alcoholic or non-alcoholic)
+          </FormHelperText>
         </Grid>
 
         <Grid item xs={12}>
@@ -156,6 +183,9 @@ const Form = ({ orderId }) => {
             value={allergies}
             onChange={(e) => setAllergies(e.target.value)}
           />
+          <FormHelperText>
+            Please specify if you have any allergies
+          </FormHelperText>
         </Grid>
 
         <Grid item xs={12}>
@@ -218,6 +248,9 @@ const Form = ({ orderId }) => {
             value={superpower}
             onChange={(e) => setSuperpower(e.target.value)}
           />
+          <FormHelperText>
+            Please enter your superpower (something you are really good at)
+          </FormHelperText>
         </Grid>
         <Grid item xs={12}>
           <TextField
@@ -229,6 +262,9 @@ const Form = ({ orderId }) => {
             required
             onChange={(e) => setPitch(e.target.value)}
           />
+          <FormHelperText>
+            Please enter your elevator pitch (something you would like to share)
+          </FormHelperText>
         </Grid>
 
         {/* If Spouse is Selected */}
@@ -237,13 +273,17 @@ const Form = ({ orderId }) => {
           <TextField
             required
             id="phoneNumber"
-            inputProps={{ type: "email" }}
+            inputProps={{ type: "email" , maxLength: 30}}
             label="Partner's Email ID"
             variant="outlined"
             fullWidth
             value={partnerEmail}
-            onChange={(e) => setPartnerEmail(e.target.value)}
+            onChange={handleChange }
           />
+          <FormHelperText>
+            Please enter your partner's email ID
+          </FormHelperText>
+          {error && (<FormHelperText error>Please enter a valid email ID</FormHelperText>)}
         </Grid>
 
         <Grid item xs={12}>
@@ -257,13 +297,16 @@ const Form = ({ orderId }) => {
             value={partnerPhoneNumber}
             onChange={(e) => setPartnerPhoneNumber(e.target.value)}
           />
+          <FormHelperText>
+            Please enter your partner's phone number with country code
+          </FormHelperText>
         </Grid>
 
         <Grid item xs={12}>
           <FormControl variant="outlined" fullWidth>
             <InputLabel id="partner-foodPreference-label">
               {" "}
-              Partner's Food Preference
+              Partner's Preference
             </InputLabel>
             <Select
               labelId="partner-foodPreference-label"
@@ -278,11 +321,14 @@ const Form = ({ orderId }) => {
               <MenuItem value="non-vegetarian">Non Vegetarian</MenuItem>
               <MenuItem value="vegan">Vegan</MenuItem>
               <MenuItem value="gluten-free">Gluten Free</MenuItem>
-              <MenuItem value="other">Other (Specify)</MenuItem>
+              <MenuItem value="partnerOther">Other (Specify)</MenuItem>
             </Select>
           </FormControl>
+          <FormHelperText>
+            Please select your partner's food preference
+          </FormHelperText>
         </Grid>
-        {foodPreference === "other" && (
+        {partnerFoodPreference === "partnerOther" && (
           <Grid item xs={12}>
             <TextField
               required
@@ -307,7 +353,7 @@ const Form = ({ orderId }) => {
             onChange={(e) => setWishItem(e.target.value)}
           />
           <FormHelperText>
-            The one thing I wish to definitely see in Kolkata RIE
+            The one thing You wish to definitely see in Kolkata RIE
           </FormHelperText>
         </Grid>
 
