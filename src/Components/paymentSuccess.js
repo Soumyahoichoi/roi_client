@@ -59,6 +59,11 @@ const PaymentSuccessPage = () => {
                 <p className="text-gray-700">
                   <strong>Status:</strong> Your payment was successful!
                 </p>
+                <br />
+                <h2 className="text-gray-600 text-2xl mb-6 text-center">
+                   Please fill out all the details in the form to complete the Registration.
+                </h2>
+                <br />
               </div>
             </div>
           </div>
