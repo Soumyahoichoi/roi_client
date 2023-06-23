@@ -8,9 +8,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
+import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import supabase from "../../config/supabaseClient";
 
 // function Copyright(props) {
 //   return (
@@ -35,7 +35,7 @@ import supabase from "../../config/supabaseClient";
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const [email, setEmail] = useState(" ");
+  const [email, setEmail] = useState("");
   const [checked, setChecked] = useState(true);
   const [emailError, setEmailError] = useState(" ");
   const [error, setError] = useState(" ");
@@ -43,16 +43,18 @@ export default function SignIn() {
   const navigate = useNavigate();
 
   const fetchData = async () => {
-    const { data, error } = await supabase
-      .from("members_list")
-      .select("VoucherUSD,plan,emailaddress,VoucherINR")
-      .eq("emailaddress", email);
+    const { data, error } = await axios.post(
+      "https://riekolpayment.vercel.app/getMemberByEmail",
+      {
+        email,
+      }
+    );
 
     if (error) {
       setEmailError("Please enter your EO email or reach your EO Chapter");
     }
     if (data) {
-      const found = data.find(({ emailaddress }) => emailaddress === email);
+      const found = data;
 
       if (found) {
         localStorage.setItem("email", email);
