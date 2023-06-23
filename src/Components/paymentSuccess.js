@@ -46,11 +46,13 @@ const PaymentSuccessPage = () => {
           <strong>Order ID:</strong> {parsed.order_no}
         </p>
       </div>
-      <div>
-        <p>
-          <strong>Tracking ID:</strong> {parsed.reference_no}
-        </p>
-      </div>
+      {parsed.reference_no && (
+        <div>
+          <p>
+            <strong>Tracking ID:</strong> {parsed.reference_no}
+          </p>
+        </div>
+      )}
       <div>
         <p>
           <strong>Amount:</strong> {parsed.currency}&nbsp;
