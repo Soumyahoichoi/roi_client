@@ -1,47 +1,81 @@
-import React, { useState } from 'react';
-import { FormControl, InputLabel, MenuItem, Select, TextField, Button, Grid, OutlinedInput, Stack , Chip, FormHelperText} from '@mui/material';
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckIcon from "@mui/icons-material/Check";
-import supabase from '../../config/supabaseClient';
-import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+import {
+  Button,
+  Chip,
+  FormControl,
+  FormHelperText,
+  Grid,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  Stack,
+  TextField,
+} from "@mui/material";
+import axios from "axios";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
-const Form = ({orderId}) => {
-  const [foodPreference, setFoodPreference] = useState('');
-  const [favoriteDrink, setFavoriteDrink] = useState('');
-  const [otherFoodPreference, setOtherFoodPreference] = useState('');
-  const [allergies, setAllergies] = useState('');
-  const [superpower, setSuperpower] = useState('');
-  const [pitch, setPitch] = useState('');
+const Form = ({ orderId }) => {
+  const [foodPreference, setFoodPreference] = useState("");
+  const [favoriteDrink, setFavoriteDrink] = useState("");
+  const [otherFoodPreference, setOtherFoodPreference] = useState("");
+  const [allergies, setAllergies] = useState("");
+  const [superpower, setSuperpower] = useState("");
+  const [pitch, setPitch] = useState("");
   const [personalDevelopment, setPersonalDevelopment] = useState([]);
   const [error, setError] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [partnerPhoneNumber, setPartnerPhoneNumber] = useState('');
-  const [partnerEmail, setPartnerEmail] = useState('');
-  const [partnerFoodPreference, setPartnerFoodPreference] = useState('');
-  const [wishItem, setWishItem] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [partnerPhoneNumber, setPartnerPhoneNumber] = useState("");
+  const [partnerEmail, setPartnerEmail] = useState("");
+  const [partnerFoodPreference, setPartnerFoodPreference] = useState("");
+  const [wishItem, setWishItem] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (foodPreference === '' || (foodPreference === 'other' && otherFoodPreference === '') || favoriteDrink === '' || allergies === '' || superpower === '' || pitch === '' || personalDevelopment.length === 0) {
-      alert('Please fill all the fields');
+    if (
+      foodPreference === "" ||
+      (foodPreference === "other" && otherFoodPreference === "") ||
+      favoriteDrink === "" ||
+      allergies === "" ||
+      superpower === "" ||
+      pitch === "" ||
+      personalDevelopment.length === 0
+    ) {
+      alert("Please fill all the fields");
     }
 
-    const { data, error } = await supabase
-    .from('peference_table')
-     .insert([
-    { order_id:orderId, email: partnerEmail, contact_number: phoneNumber, food_preference: foodPreference, favourite_drink: favoriteDrink, alergy: allergies, personal_d_area: personalDevelopment, super_power: superpower, e_pitch: pitch, partner_food_preference: partnerFoodPreference, intend_to_visit: wishItem, partner_contact_number: partnerPhoneNumber},
-  ])
-    Swal.fire({
-      icon: 'success',
-      title: 'Your form has been submitted successfully',
-      showConfirmButton: false,
-      timer: 1500
-    })
-    setTimeout(() => {
-        navigate('/');
-    }, 1500);
+    const createPreferenceResponse = await axios.post(
+      "https://riekolpayment.vercel.app/createPreference",
+      {
+        order_id: orderId,
+        email: partnerEmail,
+        contact_number: phoneNumber,
+        food_preference: foodPreference,
+        favourite_drink: favoriteDrink,
+        alergy: allergies,
+        personal_d_area: personalDevelopment,
+        super_power: superpower,
+        e_pitch: pitch,
+        partner_food_preference: partnerFoodPreference,
+        intend_to_visit: wishItem,
+        partner_contact_number: partnerPhoneNumber,
+      }
+    );
+    if (createPreferenceResponse.data) {
+      Swal.fire({
+        icon: "success",
+        title: "Your form has been submitted successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
+    }
   };
 
   const names = [
@@ -49,24 +83,24 @@ const Form = ({orderId}) => {
     "Soft skills ( negotiation / communication / Team Building)",
     "Personal wealth management",
     "Time management",
-    "Holistic living /Spirituality"
+    "Holistic living /Spirituality",
   ];
 
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={2} alignItems="center" justify="center">
-      <Grid item xs={12}>
-            <TextField
-              required
-              inputProps={{ type: 'number' }}
-              id="phoneNumber"
-              label="Phone Number"
-              variant="outlined"
-              fullWidth
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
-          </Grid>
+        <Grid item xs={12}>
+          <TextField
+            required
+            inputProps={{ type: "number" }}
+            id="phoneNumber"
+            label="Phone Number"
+            variant="outlined"
+            fullWidth
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+          />
+        </Grid>
         <Grid item xs={12}>
           <FormControl variant="outlined" fullWidth>
             <InputLabel id="foodPreference-label">Food Preference</InputLabel>
@@ -87,7 +121,7 @@ const Form = ({orderId}) => {
             </Select>
           </FormControl>
         </Grid>
-        {foodPreference === 'other' && (
+        {foodPreference === "other" && (
           <Grid item xs={12}>
             <TextField
               required
@@ -111,7 +145,7 @@ const Form = ({orderId}) => {
             onChange={(e) => setFavoriteDrink(e.target.value)}
           />
         </Grid>
-        
+
         <Grid item xs={12}>
           <TextField
             id="allergies"
@@ -162,12 +196,17 @@ const Form = ({orderId}) => {
                   sx={{ justifyContent: "space-between" }}
                 >
                   {name}
-                  {personalDevelopment.includes(name) ? <CheckIcon color="info" /> : null}
+                  {personalDevelopment.includes(name) ? (
+                    <CheckIcon color="info" />
+                  ) : null}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-          <FormHelperText>What are the two most important areas of personal development that you would like to seek</FormHelperText>
+          <FormHelperText>
+            What are the two most important areas of personal development that
+            you would like to seek
+          </FormHelperText>
         </Grid>
         <Grid item xs={12}>
           <TextField
@@ -195,35 +234,37 @@ const Form = ({orderId}) => {
         {/* If Spouse is Selected */}
 
         <Grid item xs={12}>
-            <TextField
-              required
-              id="phoneNumber"
-              inputProps={{ type: 'email' }}
-              label="Partner's Email ID"
-              variant="outlined"
-              fullWidth
-              value={partnerEmail}
-              onChange={(e) => setPartnerEmail(e.target.value)}
-            />
-          </Grid>
+          <TextField
+            required
+            id="phoneNumber"
+            inputProps={{ type: "email" }}
+            label="Partner's Email ID"
+            variant="outlined"
+            fullWidth
+            value={partnerEmail}
+            onChange={(e) => setPartnerEmail(e.target.value)}
+          />
+        </Grid>
 
         <Grid item xs={12}>
-            <TextField
-              required
-              id="phoneNumber"
-              inputProps={{ type: 'number' }}
-              label="Partner's Phone Number"
-              variant="outlined"
-              fullWidth
-              value={partnerPhoneNumber}
-              onChange={(e) => setPartnerPhoneNumber(e.target.value)}
-            />
-          </Grid>
-
+          <TextField
+            required
+            id="phoneNumber"
+            inputProps={{ type: "number" }}
+            label="Partner's Phone Number"
+            variant="outlined"
+            fullWidth
+            value={partnerPhoneNumber}
+            onChange={(e) => setPartnerPhoneNumber(e.target.value)}
+          />
+        </Grid>
 
         <Grid item xs={12}>
           <FormControl variant="outlined" fullWidth>
-            <InputLabel id="partner-foodPreference-label"> Partner's Food Preference</InputLabel>
+            <InputLabel id="partner-foodPreference-label">
+              {" "}
+              Partner's Food Preference
+            </InputLabel>
             <Select
               labelId="partner-foodPreference-label"
               id="foodPreference"
@@ -241,7 +282,7 @@ const Form = ({orderId}) => {
             </Select>
           </FormControl>
         </Grid>
-        {foodPreference === 'other' && (
+        {foodPreference === "other" && (
           <Grid item xs={12}>
             <TextField
               required
@@ -255,20 +296,22 @@ const Form = ({orderId}) => {
           </Grid>
         )}
 
-           <Grid item xs={12}>
-            <TextField
-              required
-              id="wishItem"
-              label="Intend to visit"
-              variant="outlined"
-              fullWidth
-              value={wishItem}
-              onChange={(e) => setWishItem(e.target.value)}
-            />
-            <FormHelperText>The one thing I wish to definitely see in Kolkata RIE</FormHelperText>
-          </Grid>
+        <Grid item xs={12}>
+          <TextField
+            required
+            id="wishItem"
+            label="Intend to visit"
+            variant="outlined"
+            fullWidth
+            value={wishItem}
+            onChange={(e) => setWishItem(e.target.value)}
+          />
+          <FormHelperText>
+            The one thing I wish to definitely see in Kolkata RIE
+          </FormHelperText>
+        </Grid>
 
-        <Grid item xs={12} style={{ textAlign: 'center' }}>
+        <Grid item xs={12} style={{ textAlign: "center" }}>
           <Button variant="contained" color="primary" type="submit">
             Submit
           </Button>
