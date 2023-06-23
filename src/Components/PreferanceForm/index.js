@@ -3,6 +3,8 @@ import { FormControl, InputLabel, MenuItem, Select, TextField, Button, Grid, Out
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckIcon from "@mui/icons-material/Check";
 import supabase from '../../config/supabaseClient';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 const Form = ({orderId}) => {
   const [foodPreference, setFoodPreference] = useState('');
@@ -18,6 +20,7 @@ const Form = ({orderId}) => {
   const [partnerEmail, setPartnerEmail] = useState('');
   const [partnerFoodPreference, setPartnerFoodPreference] = useState('');
   const [wishItem, setWishItem] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,8 +33,15 @@ const Form = ({orderId}) => {
      .insert([
     { order_id:orderId, email: partnerEmail, contact_number: phoneNumber, food_preference: foodPreference, favourite_drink: favoriteDrink, alergy: allergies, personal_d_area: personalDevelopment, super_power: superpower, e_pitch: pitch, partner_food_preference: partnerFoodPreference, intend_to_visit: wishItem, partner_contact_number: partnerPhoneNumber},
   ])
-    // Perform any necessary form data processing or submission here
-    console.log('Submitted:', { foodPreference, favoriteDrink , otherFoodPreference,allergies,superpower,pitch,personalDevelopment});
+    Swal.fire({
+      icon: 'success',
+      title: 'Your form has been submitted successfully',
+      showConfirmButton: false,
+      timer: 1500
+    })
+    setTimeout(() => {
+        navigate('/');
+    }, 1500);
   };
 
   const names = [
@@ -48,6 +58,7 @@ const Form = ({orderId}) => {
       <Grid item xs={12}>
             <TextField
               required
+              inputProps={{ type: 'number' }}
               id="phoneNumber"
               label="Phone Number"
               variant="outlined"
@@ -187,6 +198,7 @@ const Form = ({orderId}) => {
             <TextField
               required
               id="phoneNumber"
+              inputProps={{ type: 'email' }}
               label="Partner's Email ID"
               variant="outlined"
               fullWidth
@@ -199,6 +211,7 @@ const Form = ({orderId}) => {
             <TextField
               required
               id="phoneNumber"
+              inputProps={{ type: 'number' }}
               label="Partner's Phone Number"
               variant="outlined"
               fullWidth
