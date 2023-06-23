@@ -1,27 +1,10 @@
 import queryString from "query-string";
-import React, { useEffect } from "react";
+import React from "react";
 import PreferanceForm from "../Components/PreferanceForm";
-import supabase from "../config/supabaseClient";
 
 const PaymentSuccessPage = () => {
   const parsed = queryString.parse(window.location.search);
-
   console.log({ parsed });
-
-  const updateOrderStatus = async () => {
-    if (parsed.order_no) {
-      const { data, error } = await supabase
-        .from("order_details")
-        .update({ status: "PAYMENT SUCCESSFULL" })
-        .eq("order_id", parsed.order_no);
-    }
-  };
-
-  useEffect(() => {
-    if (parsed.currency?.toLowerCase() === "inr") {
-      updateOrderStatus();
-    }
-  }, [JSON.stringify(parsed)]);
 
   return (
     <React.Fragment>

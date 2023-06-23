@@ -21,42 +21,6 @@ export default function Layout() {
   let plan = localStorage.getItem("plan");
   let voucherDiscount = localStorage.getItem("voucher");
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const { data, error } = await supabase
-  //       .from("eo_table")
-  //       .select("*")
-  //       .eq("PlanID", plan);
-  //     if (error) {
-  //       setError("could not fetch Data!");
-  //       console.log(error, "error");
-  //       setData([]);
-  //     }
-  //     if (data) {
-  //       setData(data);
-  //       if (voucherDiscount === "null") {
-  //         setMemberPrice(data[0].regular_member);
-  //         setPartnerPrice(data[0].regular_spouse);
-  //         setTotalPrice(data[0].regular_total);
-  //         setFinalPrice(data[0].regular_member);
-  //       } else {
-  //         setMemberPrice(data[0].earlybird_member);
-  //         setPartnerPrice(data[0].earlybird_spouse);
-  //         setTotalPrice(data[0].earlybird_total);
-  //         setFinalPrice(data[0].earlybird_member);
-  //       }
-  //       setError(null);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
-
-  // if (data.length > 0) {
-  //   currency = data[0].Currency;
-  //   regularMemberPrice = data[0].regular_member;
-  //   regularAddOns = data[0].regular_spouse;
-  // }
-
   const getCalculatedAmount = () => {
     if (counterValue + counterValueTwo > 0) {
       setIsLoading(true);
