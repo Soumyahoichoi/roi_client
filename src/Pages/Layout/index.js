@@ -205,6 +205,7 @@ export default function Layout() {
                             plan={plan}
                             amount={finalPrice}
                             user={emailId}
+                            count={counterValue + counterValueTwo}
                           />
                         </div>
                       </div>
