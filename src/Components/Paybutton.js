@@ -1,7 +1,5 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import supabase from "../config/supabaseClient";
 
 export default function Paybutton({ amount, user, count }) {
   const formRef = useRef(null);
@@ -10,20 +8,17 @@ export default function Paybutton({ amount, user, count }) {
   const handleCheckout = async () => {
     const plan = localStorage.getItem("plan");
     if (plan === "Plan 1") {
-      const newOrderId = uuidv4();
-      const { data, error } = await supabase.from("order_details").insert([
+      const newOrderResponse = await axios.post(
+        "https://riekolpayment.vercel.app/ccavCreateOrder",
         {
-          email: user,
-          gateway: "CC Avenue",
-          status: "CREATED",
-          order_id: newOrderId,
-        },
-      ]);
-      if (error) {
+          user,
+        }
+      );
+
+      if (!newOrderResponse.data) {
         return;
       }
-      setOrderId(newOrderId);
-      console.log({ data, formRef });
+      setOrderId(newOrderResponse.data.newOrderId);
     } else {
       axios
         .post("https://riekolpayment.vercel.app/create-checkout-session", {
