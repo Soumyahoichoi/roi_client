@@ -17,7 +17,9 @@ const PaymentSuccessPage = () => {
   };
 
   useEffect(() => {
-    updateOrderStatus();
+    if (parsed.currency.toLowerCase() === "inr") {
+      updateOrderStatus();
+    }
   }, [JSON.stringify(parsed)]);
 
   return (
