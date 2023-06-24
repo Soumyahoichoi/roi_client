@@ -1,3 +1,4 @@
+import { Box, CircularProgress } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import CardOne, { CardTwo } from "../../Components/Card";
@@ -15,6 +16,12 @@ export default function Layout() {
   const [isLoading, setIsLoading] = useState(false);
   const [currency, setCurrency] = useState("");
   const [finalPrice, setFinalPrice] = useState(0);
+  const [memberTypeIsEarlyBird, setMemberTypeIsEarlyBird] = useState(false);
+
+  const [
+    initialTicketPriceHasbeenFetched,
+    setInitialTicketPriceHasbeenFetched,
+  ] = useState(false);
 
   let regularMemberPrice, regularAddOns;
   let emailId = localStorage.getItem("email");
@@ -22,20 +29,31 @@ export default function Layout() {
   let voucherDiscount = localStorage.getItem("voucher");
 
   const getCalculatedAmount = () => {
-    if (counterValue + counterValueTwo > 0) {
-      setIsLoading(true);
+    if (
+      counterValue + counterValueTwo > 0 ||
+      !initialTicketPriceHasbeenFetched
+    ) {
+      if (initialTicketPriceHasbeenFetched) {
+        setIsLoading(true);
+      }
       axios
         .post("https://riekolpayment.vercel.app/calculate-amount", {
-          count: counterValue + counterValueTwo,
+          count: !initialTicketPriceHasbeenFetched
+            ? 2
+            : counterValue + counterValueTwo,
           email: emailId,
         })
         .then((response) => {
           setIsLoading(false);
+          setInitialTicketPriceHasbeenFetched(true);
           if (response.data) {
             console.log(response);
             setMemberPrice(response.data.member);
             setPartnerPrice(response.data.spouse);
             setCurrency(response.data.currency);
+            setMemberTypeIsEarlyBird(
+              response.data.cap.toLowerCase() === "earlybird"
+            );
             setFinalPrice(
               counterValue + counterValueTwo === 1
                 ? response.data.member
@@ -44,10 +62,10 @@ export default function Layout() {
           }
         });
     } else {
-      setMemberPrice(0);
-      setPartnerPrice(0);
-      setCurrency("");
-      setFinalPrice(0);
+      // setMemberPrice(0);
+      // setPartnerPrice(0);
+      // setFinalPrice(0);
+      // setCurrency("");
     }
   };
 
@@ -80,27 +98,34 @@ export default function Layout() {
               <header>
                 <div class="container mx-auto px-4 py-6 ">
                   <h1 class="text-xl font-normal text-black border-b border-black font-sans">
-                    Early Bird Tickets
+                    Tickets
                   </h1>
                 </div>
               </header>
+              {!initialTicketPriceHasbeenFetched ? (
+                <Box display="flex" justifyContent={"center"}>
+                  <CircularProgress sx={{ color: "#454545" }} />
+                </Box>
+              ) : (
+                <>
+                  <CardOne
+                    title="Member"
+                    discountedPrice={`${currency} ${memberPrice} incl. 18% GST`}
+                    sendData={handleDataOne}
+                    counterData={counterValueTwo}
+                    isLoading={isLoading}
+                  />
 
-              <CardOne
-                title="Member"
-                discountedPrice={`${currency} ${memberPrice} incl. 18% GST`}
-                sendData={handleDataOne}
-                counterData={counterValueTwo}
-                isLoading={isLoading}
-              />
-
-              <CardTwo
-                title={"Spouse/Life Partner"}
-                subTitle={`Bring along your Spouse / Life Partner to India!`}
-                discountedPrice={`${currency} ${partnerPrice} incl. 18% GST`}
-                sendData={handleDataTwo}
-                counterData={counterValue}
-                isLoading={isLoading}
-              />
+                  <CardTwo
+                    title={"Spouse/Life Partner"}
+                    subTitle={`Bring along your Spouse / Life Partner to India!`}
+                    discountedPrice={`${currency} ${partnerPrice} incl. 18% GST`}
+                    sendData={handleDataTwo}
+                    counterData={counterValue}
+                    isLoading={isLoading}
+                  />
+                </>
+              )}
             </div>
           </div>
 
@@ -128,7 +153,8 @@ export default function Layout() {
                       <div class="bg-white shadow w-full p-6">
                         <div class="flex justify-between items-center mb-4">
                           <h2 class="text-lg text-black font-semibold font-sans">
-                            Members (Early Bird)
+                            Member
+                            {memberTypeIsEarlyBird ? " (Early Bird)" : ""}
                           </h2>
                           <span class="text-black">
                             {currency}
@@ -137,29 +163,27 @@ export default function Layout() {
                         </div>
                         <hr class="my-4" />
                         {counterValueTwo > 0 ? (
-                          <div class="flex justify-between items-center mb-4 ">
-                            <h2 class="text-lg text-black font-semibold font-sans">
-                              Spouse/Life Partner (Early Bird)
-                            </h2>
-                            <span class="text-black">
-                              {currency}
-                              {partnerPrice}
-                            </span>
-                          </div>
+                          <>
+                            <div class="flex justify-between items-center mb-4 ">
+                              <h2 class="text-lg text-black font-semibold font-sans">
+                                Spouse/Life Partner
+                                {memberTypeIsEarlyBird ? " (Early Bird)" : ""}
+                              </h2>
+                              <span class="text-black">
+                                {currency}
+                                {partnerPrice}
+                              </span>
+                            </div>
+                            <hr className="my-4" />
+                          </>
                         ) : null}
-                        <div class="flex justify-between items-center mb-4">
-                          <h2 class="text-lg text-black font-semibold font-sans">
-                            Fees
-                          </h2>
-                          <span class="text-black">{currency} 0.00</span>
-                        </div>
-                        <hr class="my-4" />
                         <div class="flex justify-between items-center">
                           <h2 class="text-2xl font-semibold font-sans">
                             Total
                           </h2>
                           <span class="text-2xl text-black">
-                            {currency} {finalPrice}
+                            {currency}&nbsp;
+                            {finalPrice} (inc. of GST)
                           </span>
                         </div>
                         <div class="flex justify-center mt-6">
