@@ -1,8 +1,10 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckIcon from "@mui/icons-material/Check";
 import {
+  Box,
   Button,
   Chip,
+  CircularProgress,
   FormControl,
   FormHelperText,
   Grid,
@@ -14,11 +16,11 @@ import {
   TextField,
 } from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const Form = ({ orderId }) => {
+const Form = ({ orderId, count }) => {
   const [foodPreference, setFoodPreference] = useState("");
   const [favoriteDrink, setFavoriteDrink] = useState("");
   const [otherFoodPreference, setOtherFoodPreference] = useState("");
@@ -33,7 +35,18 @@ const Form = ({ orderId }) => {
   const [partnerFoodPreference, setPartnerFoodPreference] = useState("");
   const [wishItem, setWishItem] = useState("");
   const navigate = useNavigate();
-  const count = Number(localStorage.getItem("count"));
+  const [isFetchingDetails, setIsFetchingDetails] = useState(false);
+
+  const hasJsonStructure = (str) => {
+    if (typeof str !== "string") return false;
+    try {
+      const result = JSON.parse(str);
+      const type = Object.prototype.toString.call(result);
+      return type === "[object Object]" || type === "[object Array]";
+    } catch (err) {
+      return false;
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,7 +71,7 @@ const Form = ({ orderId }) => {
         food_preference: foodPreference,
         favourite_drink: favoriteDrink,
         alergy: allergies,
-        personal_d_area: personalDevelopment,
+        personal_d_area: JSON.stringify(personalDevelopment),
         super_power: superpower,
         e_pitch: pitch,
         partner_food_preference: partnerFoodPreference,
@@ -103,9 +116,54 @@ const Form = ({ orderId }) => {
     setPartnerEmail(event.target.value);
   };
 
+  const getPreferenceByOrderId = () => {
+    setIsFetchingDetails(true);
+    axios
+      .post("http://localhost:4000/getPreferenceByOrderId", {
+        order_id: orderId,
+      })
+      .then((response) => {
+        setIsFetchingDetails(false);
+        if (response.data) {
+          console.log(response.data);
+          if (response.data.id) {
+            setFoodPreference(response.data.food_preference);
+            setFavoriteDrink(response.data.food_preference);
+            setAllergies(response.data.alergy);
+            setSuperpower(response.data.super_power);
+            setPitch(response.data.pitch);
+            setPersonalDevelopment(
+              !!response.data.personal_d_area &&
+                hasJsonStructure(response.data.personal_d_area)
+                ? JSON.parse(response.data.personal_d_area)
+                : []
+            );
+            setPhoneNumber(response.data.contact_number);
+            setPartnerPhoneNumber(response.data.partner_contact_number);
+            setPartnerEmail(response.data.email);
+            setPartnerFoodPreference(response.data.partner_food_preference);
+            setWishItem(response.data.intend_to_visit);
+          }
+        }
+      });
+  };
+
+  useEffect(() => {
+    getPreferenceByOrderId();
+  }, []);
+
   console.log(error, "error");
 
-  return (
+  return isFetchingDetails ? (
+    <Box
+      height="90vh"
+      display={"flex"}
+      justifyContent={"center"}
+      alignItems={"center"}
+    >
+      <CircularProgress />
+    </Box>
+  ) : (
     <form onSubmit={handleSubmit}>
       <h2 className="text-1xl font-bold text-gray-900 mb-5">
         Preference Registration
@@ -137,7 +195,6 @@ const Form = ({ orderId }) => {
               label="Food Preference"
               required
             >
-              <MenuItem value="">Select an option</MenuItem>
               <MenuItem value="vegetarian">Vegetarian</MenuItem>
               <MenuItem value="non-vegetarian">Non Vegetarian</MenuItem>
               <MenuItem value="vegan">Vegan</MenuItem>
@@ -325,7 +382,6 @@ const Form = ({ orderId }) => {
                   required
                   variant="standard"
                 >
-                  <MenuItem value="">Select an option</MenuItem>
                   <MenuItem value="vegetarian">Vegetarian</MenuItem>
                   <MenuItem value="non-vegetarian">Non Vegetarian</MenuItem>
                   <MenuItem value="vegan">Vegan</MenuItem>
