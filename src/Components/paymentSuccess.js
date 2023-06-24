@@ -1,3 +1,4 @@
+import { Grid } from "@mui/material";
 import queryString from "query-string";
 import React from "react";
 import PreferanceForm from "../Components/PreferanceForm";
@@ -5,12 +6,11 @@ import PreferanceForm from "../Components/PreferanceForm";
 const PaymentSuccessPage = () => {
   const parsed = queryString.parse(window.location.search);
   console.log({ parsed });
-
   return (
     <React.Fragment>
       <section>
-        <div className=" grid grid-rows-2 text-white md:grid-cols-2 w-full h-full">
-          <div className="w-full h-full bg-gray-100 md:h-screen container">
+        <Grid container className="text-white w-full h-full">
+          <Grid item xs={12} md={6} className="w-full h-full bg-gray-100">
             <div className="px-8">
               <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
                 <svg
@@ -61,21 +61,38 @@ const PaymentSuccessPage = () => {
                 </p>
                 <br />
                 <h2 className="text-gray-600 text-2xl mb-6 text-center">
-                   Please fill out all the details in the form to complete the Registration.
+                  Please fill out all the details in the form to complete the
+                  Registration.
                 </h2>
                 <br />
               </div>
             </div>
-          </div>
+          </Grid>
 
-          <div className="w-full h-full bg-gray-200 md:h-screen container">
+          <Grid
+            item
+            xs={12}
+            md={6}
+            className="w-full h-full"
+            sx={{
+              overflowY: window.innerWidth <= 900 ? "auto" : "scroll",
+              maxHeight: window.innerWidth <= 900 ? "100%" : "100vh",
+              boxShadow: "0 0 30px 0 #d8e1ff !important",
+              "& .MuiFormLabel-root": {
+                color: "#111",
+              },
+              "& #development-areas": {
+                left: "-14px !important",
+              },
+            }}
+          >
             {/* 
              Shopping Cart
              Purchase Overview
              */}
             <div className="w-full h-full">
               {/* <Addtocart /> */}
-              <div class="text-gray-500 min-h-screen">
+              <div class="text-gray-500">
                 {/* <header class="bg-white shadow-md">
                   <div class="container mx-auto px-4 py-6">
                     <h1 class="text-2xl font-bold font-sans">Please select the fields as per your prference and submit the form</h1>
@@ -87,8 +104,8 @@ const PaymentSuccessPage = () => {
                 </main>
               </div>
             </div>
-          </div>
-        </div>
+          </Grid>
+        </Grid>
       </section>
     </React.Fragment>
   );
