@@ -33,6 +33,7 @@ const Form = ({ orderId }) => {
   const [partnerFoodPreference, setPartnerFoodPreference] = useState("");
   const [wishItem, setWishItem] = useState("");
   const navigate = useNavigate();
+  const count = Number(localStorage.getItem("count"));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -270,79 +271,86 @@ const Form = ({ orderId }) => {
         </Grid>
 
         {/* If Spouse is Selected */}
+        {count === 2 && (
+          <>
+            <Grid item xs={12}>
+              <TextField
+                required
+                id="phoneNumber"
+                inputProps={{ type: "email", maxLength: 30 }}
+                label="Partner's Email ID"
+                variant="standard"
+                fullWidth
+                value={partnerEmail}
+                onChange={handleChange}
+              />
+              <FormHelperText>
+                Please enter your partner's email ID
+              </FormHelperText>
+              {error && (
+                <FormHelperText error>
+                  Please enter a valid email ID
+                </FormHelperText>
+              )}
+            </Grid>
 
-        <Grid item xs={12}>
-          <TextField
-            required
-            id="phoneNumber"
-            inputProps={{ type: "email", maxLength: 30 }}
-            label="Partner's Email ID"
-            variant="standard"
-            fullWidth
-            value={partnerEmail}
-            onChange={handleChange}
-          />
-          <FormHelperText>Please enter your partner's email ID</FormHelperText>
-          {error && (
-            <FormHelperText error>Please enter a valid email ID</FormHelperText>
-          )}
-        </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                id="phoneNumber"
+                inputProps={{ type: "number" }}
+                label="Partner's Phone Number"
+                variant="standard"
+                fullWidth
+                value={partnerPhoneNumber}
+                onChange={(e) => setPartnerPhoneNumber(e.target.value)}
+              />
+              <FormHelperText>
+                Please enter your partner's phone number with country code
+              </FormHelperText>
+            </Grid>
 
-        <Grid item xs={12}>
-          <TextField
-            required
-            id="phoneNumber"
-            inputProps={{ type: "number" }}
-            label="Partner's Phone Number"
-            variant="standard"
-            fullWidth
-            value={partnerPhoneNumber}
-            onChange={(e) => setPartnerPhoneNumber(e.target.value)}
-          />
-          <FormHelperText>
-            Please enter your partner's phone number with country code
-          </FormHelperText>
-        </Grid>
-
-        <Grid item xs={12}>
-          <FormControl variant="standard" fullWidth>
-            <InputLabel id="partner-foodPreference-label">
-              {" "}
-              Partner's Preference
-            </InputLabel>
-            <Select
-              labelId="partner-foodPreference-label"
-              id="foodPreference"
-              value={partnerFoodPreference}
-              onChange={(e) => setPartnerFoodPreference(e.target.value)}
-              label="Food Preference"
-              required
-              variant="standard"
-            >
-              <MenuItem value="">Select an option</MenuItem>
-              <MenuItem value="vegetarian">Vegetarian</MenuItem>
-              <MenuItem value="non-vegetarian">Non Vegetarian</MenuItem>
-              <MenuItem value="vegan">Vegan</MenuItem>
-              <MenuItem value="gluten-free">Gluten Free</MenuItem>
-              <MenuItem value="partnerOther">Other (Specify)</MenuItem>
-            </Select>
-          </FormControl>
-          <FormHelperText>
-            Please select your partner's food preference
-          </FormHelperText>
-        </Grid>
-        {partnerFoodPreference === "partnerOther" && (
-          <Grid item xs={12}>
-            <TextField
-              required
-              id="partnerOtherFoodPreference"
-              label="Specify Other Food Preference"
-              variant="standard"
-              fullWidth
-              value={otherFoodPreference}
-              onChange={(e) => setOtherFoodPreference(e.target.value)}
-            />
-          </Grid>
+            <Grid item xs={12}>
+              <FormControl variant="standard" fullWidth>
+                <InputLabel id="partner-foodPreference-label">
+                  {" "}
+                  Partner's Preference
+                </InputLabel>
+                <Select
+                  labelId="partner-foodPreference-label"
+                  id="foodPreference"
+                  value={partnerFoodPreference}
+                  onChange={(e) => setPartnerFoodPreference(e.target.value)}
+                  label="Food Preference"
+                  required
+                  variant="standard"
+                >
+                  <MenuItem value="">Select an option</MenuItem>
+                  <MenuItem value="vegetarian">Vegetarian</MenuItem>
+                  <MenuItem value="non-vegetarian">Non Vegetarian</MenuItem>
+                  <MenuItem value="vegan">Vegan</MenuItem>
+                  <MenuItem value="gluten-free">Gluten Free</MenuItem>
+                  <MenuItem value="partnerOther">Other (Specify)</MenuItem>
+                </Select>
+              </FormControl>
+              <FormHelperText>
+                Please select your partner's food preference
+              </FormHelperText>
+            </Grid>
+            {partnerFoodPreference === "partnerOther" && (
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  id="partnerOtherFoodPreference"
+                  label="Specify Other Food Preference"
+                  variant="standard"
+                  fullWidth
+                  value={otherFoodPreference}
+                  onChange={(e) => setOtherFoodPreference(e.target.value)}
+                />
+              </Grid>
+            )}
+          </>
         )}
 
         <Grid item xs={12}>

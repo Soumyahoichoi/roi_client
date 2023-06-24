@@ -1,24 +1,27 @@
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 
-export default function Paybutton({ amount, user, count }) {
+export default function Paybutton({ user, count }) {
   const formRef = useRef(null);
-  const [orderId, setOrderId] = useState(null);
+  // const [orderId, setOrderId] = useState(null);
 
   const handleCheckout = async () => {
     const plan = localStorage.getItem("plan");
-    if (plan === "Plan 1") {
-      const newOrderResponse = await axios.post(
-        "https://riekolpayment.vercel.app/ccavCreateOrder",
-        {
-          user,
-        }
-      );
+    localStorage.setItem("count", count);
 
-      if (!newOrderResponse.data) {
-        return;
-      }
-      setOrderId(newOrderResponse.data.newOrderId);
+    if (plan === "Plan 1") {
+      formRef.current.submit();
+      // const newOrderResponse = await axios.post(
+      //   "https://riekolpayment.vercel.app/ccavCreateOrder",
+      //   {
+      //     user,
+      //   }
+      // );
+
+      // if (!newOrderResponse.data) {
+      //   return;
+      // }
+      // setOrderId(newOrderResponse.data.newOrderId);
     } else {
       axios
         .post("https://riekolpayment.vercel.app/create-checkout-session", {
@@ -36,11 +39,11 @@ export default function Paybutton({ amount, user, count }) {
     }
   };
 
-  useEffect(() => {
-    if (!!orderId && formRef && formRef.current) {
-      formRef.current.submit();
-    }
-  }, [orderId]);
+  // useEffect(() => {
+  //   if (!!orderId && formRef && formRef.current) {
+  //     formRef.current.submit();
+  //   }
+  // }, [orderId]);
 
   return (
     <>
@@ -89,12 +92,12 @@ export default function Paybutton({ amount, user, count }) {
               <input type="text" name="count" value={count} />
             </td>
           </tr>
-          <tr>
+          {/* <tr>
             <td>Order Id</td>
             <td>
               <input type="text" name="order_id" value={orderId} />
             </td>
-          </tr>
+          </tr> */}
           <tr>
             <td>Currency</td>
             <td>
