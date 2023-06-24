@@ -6,6 +6,8 @@ export default function CardOne({
   sendData,
   counterData,
   isLoading,
+  voucher,
+  currency,
 }) {
   const [counter, setCounter] = useState(0);
 
@@ -39,6 +41,15 @@ export default function CardOne({
           {title}
         </h3>
         <p class="text-gray-500 text-lg">{discountedPrice}</p>
+        {voucher > 0 && (
+          <p class="text-gray-500 text-xs mt-2">
+            Discount voucher of{" "}
+            <strong>
+              {currency} {voucher}
+            </strong>{" "}
+            has been applied!
+          </p>
+        )}
       </div>
       <div class="px-3 py-3 flex-initial">
         <div class="flex space-x-4 py-8">
@@ -70,6 +81,8 @@ export function CardTwo({
   sendData,
   counterData,
   isLoading,
+  voucher,
+  currency,
 }) {
   const [counter, setCounter] = useState(0);
 
@@ -103,6 +116,15 @@ export function CardTwo({
         </h3>
         <h5 class="text-lg text-gray-600 mb-2">{subTitle}</h5>
         <p class="text-gray-500 text-lg">{discountedPrice}</p>
+        {voucher > 0 && (
+          <p class="text-gray-500 text-xs mt-2">
+            Discount voucher of{" "}
+            <strong>
+              {currency} {voucher}
+            </strong>{" "}
+            has been applied!
+          </p>
+        )}
       </div>
       <div class="px-3 py-3 flex-initial">
         <div class="flex space-x-4 py-8">

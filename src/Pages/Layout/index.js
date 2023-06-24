@@ -8,9 +8,9 @@ export default function Layout() {
   const [data, setData] = useState([]);
   const [message, setMessage] = useState(false);
 
+  const voucher = localStorage.getItem("voucher") || 0;
   const [counterValue, setCounterValue] = useState(0);
   const [counterValueTwo, setCounterValueTwo] = useState(0);
-
   const [memberPrice, setMemberPrice] = useState(0);
   const [partnerPrice, setPartnerPrice] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -114,6 +114,8 @@ export default function Layout() {
                     sendData={handleDataOne}
                     counterData={counterValueTwo}
                     isLoading={isLoading}
+                    voucher={voucher}
+                    currency={currency}
                   />
 
                   <CardTwo
@@ -123,6 +125,8 @@ export default function Layout() {
                     sendData={handleDataTwo}
                     counterData={counterValue}
                     isLoading={isLoading}
+                    voucher={voucher}
+                    currency={currency}
                   />
                 </>
               )}
