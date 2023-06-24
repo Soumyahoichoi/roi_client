@@ -38,11 +38,13 @@ export default function CardOne({
 
   return (
     <div
-      class={`w-full bg-white mx-auto shadow-md rounded-lg overflow-hidden my-2 flex justify-between`}
+      class={`w-full ${
+        candidateIsMember ? "bg-[#a5f1bf]" : "bg-[#fff]"
+      } mx-auto shadow-md rounded-2xl overflow-hidden my-2 flex justify-between`}
     >
       <div class="px-6 py-4 flex-initial">
         <h3 class="font-semibold text-2xl mb-1 text-gray-900">
-          {counter > 0 ? value : null}
+          {counter > 0 && !candidateIsMember ? value : null}
           {title}
         </h3>
         <p class="text-gray-500 text-lg">{discountedPrice}</p>
@@ -92,19 +94,24 @@ export function CardTwo({
   currency,
   memberTicketCount,
   setMemberTicketCount,
+  candidateIsMember,
+  setSpouseTicketCount,
 }) {
   const [counter, setCounter] = useState(0);
 
   const handleIncrement = () => {
     if (memberTicketCount === 0) {
-      setCounter(2);
-      setMemberTicketCount(1);
+      setCounter(1);
+      if (!candidateIsMember) {
+        setMemberTicketCount(1);
+      }
     }
-    setCounter(1);
+    if (!candidateIsMember) setCounter(1);
   };
 
   const handleDecrement = () => {
     setCounter(counter - 1);
+    setSpouseTicketCount(0);
   };
 
   const value = `${counter}x`;
@@ -121,7 +128,7 @@ export function CardTwo({
   // console.log(counter,'counter');
 
   return (
-    <div class="w-full mx-auto bg-white shadow-md rounded-lg overflow-hidden my-2 flex justify-between">
+    <div class="w-full mx-auto bg-white shadow-md rounded-2xl overflow-hidden my-2 flex justify-between">
       <div class="px-6 py-4 flex-initial">
         <h3 class="font-bold text-2xl mb-1 text-gray-900">
           {counter > 0 ? value : null}

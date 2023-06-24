@@ -140,6 +140,7 @@ export default function Layout() {
                     voucher={voucher}
                     currency={currency}
                     candidateIsMember={candidateIsMember}
+                    setSpouseTicketCount={setCounterValueTwo}
                   />
                 </>
               )}
@@ -223,8 +224,8 @@ export default function Layout() {
                     </>
                   ) : (
                     <>
-                      <div class="bg-white shadow w-full p-6 font-sans text-xl">
-                        The shopping cart is empty. Please select tickets.
+                      <div class="bg-white shadow w-full p-6 font-sans text-xl rounded-2xl">
+                        Your cart is empty. Please select tickets.
                       </div>
                     </>
                   )}
