@@ -66,6 +66,7 @@ export default function SignIn() {
         navigate(
           `/payment-successed?order_no=${order.order_id}&amount=${order.amount}`
         );
+        return false;
       } else if (
         previousOrdersList.length === 1 &&
         previousOrdersList[0].candidate === "member"
@@ -87,7 +88,6 @@ export default function SignIn() {
     );
 
     if (error) {
-      setLoading(false);
       console.log(error, "error");
       setEmailError("Please enter your EO email or reach your EO Chapter");
     }
@@ -203,6 +203,8 @@ export default function SignIn() {
             <span className="text-gray-500 font-sans text-sm">
               I agree to the
               <a
+                target="_blank"
+                rel="noreferrer"
                 href="https://www.riekol.com/event-waiver"
                 className="text-decoration-line: underline"
               >
@@ -210,6 +212,8 @@ export default function SignIn() {
                 Event Waiver,{" "}
               </a>
               <a
+                target="_blank"
+                rel="noreferrer"
                 href="https://www.riekol.com/termsofservices"
                 className="text-decoration-line: underline"
               >
@@ -217,6 +221,8 @@ export default function SignIn() {
                 Terms of Service,{" "}
               </a>
               <a
+                target="_blank"
+                rel="noreferrer"
                 href="https://www.riekol.com/privacypolicy"
                 className="text-decoration-line: underline"
               >
@@ -225,6 +231,8 @@ export default function SignIn() {
               </a>{" "}
               and
               <a
+                target="_blank"
+                rel="noreferrer"
                 href="https://www.riekol.com/cancellationpolicy"
                 className="text-decoration-line: underline"
               >

@@ -1,13 +1,15 @@
 import axios from "axios";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 
 export default function Paybutton({ user, count }) {
   const formRef = useRef(null);
   // const [orderId, setOrderId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCheckout = async () => {
     const plan = localStorage.getItem("plan");
     localStorage.setItem("count", count);
+    setIsLoading(true);
 
     if (plan === "Plan 1") {
       formRef.current.submit();
@@ -51,7 +53,7 @@ export default function Paybutton({ user, count }) {
         onClick={handleCheckout}
         className="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-1/2 text-center cursor-pointer"
       >
-        Checkout
+        {isLoading ? "Loading..." : "Checkout"}
       </div>
       <form
         style={{ display: "none" }}

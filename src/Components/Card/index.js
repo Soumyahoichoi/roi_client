@@ -50,7 +50,7 @@ export default function CardOne({
         <p class="text-gray-500 text-lg">{discountedPrice}</p>
         {voucher > 0 && (
           <p class="text-gray-500 text-xs mt-2">
-            Discount voucher of{" "}
+            Voucher of{" "}
             <strong>
               {currency} {voucher}
             </strong>{" "}
@@ -138,7 +138,7 @@ export function CardTwo({
         <p class="text-gray-500 text-lg">{discountedPrice}</p>
         {voucher > 0 && (
           <p class="text-gray-500 text-xs mt-2">
-            Discount voucher of{" "}
+            Voucher of{" "}
             <strong>
               {currency} {voucher}
             </strong>{" "}
