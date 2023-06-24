@@ -3,6 +3,7 @@ import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
+import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -11,7 +12,6 @@ import TextField from "@mui/material/TextField";
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CircularProgress from '@mui/material/CircularProgress';
 
 // function Copyright(props) {
 //   return (
@@ -44,34 +44,78 @@ export default function SignIn() {
   // const [data, setData] = useState([]);
   const navigate = useNavigate();
 
+  const allowUserToCheckout = (previousOrdersList = []) => {
+    console.log({
+      previousOrdersList,
+    });
+
+    //   let amount =
+    //   count === 1
+    //     ? calculateCheckoutAmount.member
+    //     : calculateCheckoutAmount.totalAmount;
+    // let candidate = count === 2 ? "both" : "member";
+    let reference_id = null;
+
+    if (previousOrdersList.length > 0) {
+      if (
+        (previousOrdersList.length === 1 &&
+          previousOrdersList[0].candidate === "both") ||
+        previousOrdersList.length === 2
+      ) {
+        const order = previousOrdersList[previousOrdersList.length - 1];
+        navigate(
+          `/payment-successed?order_no=${order.order_id}&amount=${order.amount}`
+        );
+      } else if (
+        previousOrdersList.length === 1 &&
+        previousOrdersList[0].candidate === "member"
+      ) {
+        localStorage.setItem("candidate", previousOrdersList[0].candidate);
+      }
+    }
+
+    return true;
+  };
+
   const fetchData = async () => {
-    console.log('darta');
+    localStorage.removeItem("candidate");
     const { data, error } = await axios.post(
       "https://riekolpayment.vercel.app/getMemberByEmail",
       {
         email,
       }
     );
-    
-    if (error) {  
+
+    if (error) {
       setLoading(false);
-      console.log(error,'error');
+      console.log(error, "error");
       setEmailError("Please enter your EO email or reach your EO Chapter");
     }
     if (data) {
-      console.log(data,'data')
+      console.log(data, "data");
       const found = data;
       setLoading(false);
       if (found) {
-        localStorage.setItem("email", email);
-        // localStorage.setItem("currency", found.Plan);
-        localStorage.setItem("plan", found.plan);
-        if (found.Plan === "Plan 1") {
-          localStorage.setItem("voucher", found.VoucherINR);
-        } else {
-          localStorage.setItem("voucher", found.VoucherUSD);
+        const checkForExistingOrderByEmailResponse = await axios.post(
+          "http://localhost:4000/checkForExistingOrderByEmail",
+          {
+            email,
+          }
+        );
+
+        if (
+          allowUserToCheckout(checkForExistingOrderByEmailResponse.data.data)
+        ) {
+          localStorage.setItem("email", email);
+          // localStorage.setItem("currency", found.Plan);
+          localStorage.setItem("plan", found.plan);
+          if (found.Plan === "Plan 1") {
+            localStorage.setItem("voucher", found.VoucherINR);
+          } else {
+            localStorage.setItem("voucher", found.VoucherUSD);
+          }
+          navigate("/layout");
         }
-        navigate("/layout");
       } else {
         setEmailError("Please enter your EO email or reach your EO Chapter");
       }
@@ -120,8 +164,6 @@ export default function SignIn() {
             justifyContent: "center",
           }}
         >
-           
-
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
@@ -204,10 +246,10 @@ export default function SignIn() {
             </Button>
           </Box>
           {loading && (
-            <Box sx={{ display: 'flex' }}>
+            <Box sx={{ display: "flex" }}>
               <CircularProgress />
             </Box>
-           )}
+          )}
         </Box>
       </Container>
     </ThemeProvider>

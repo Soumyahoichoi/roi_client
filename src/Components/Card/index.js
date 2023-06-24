@@ -8,6 +8,8 @@ export default function CardOne({
   isLoading,
   voucher,
   currency,
+  candidateIsMember,
+  setSpouseTicketCount,
 }) {
   const [counter, setCounter] = useState(0);
 
@@ -17,6 +19,7 @@ export default function CardOne({
 
   const handleDecrement = () => {
     setCounter(counter - 1);
+    setSpouseTicketCount(0);
   };
 
   const value = `${counter}x`;
@@ -34,7 +37,9 @@ export default function CardOne({
   // console.log(counter,'counter');
 
   return (
-    <div class="w-full mx-auto bg-white shadow-md rounded-lg overflow-hidden my-2 flex justify-between">
+    <div
+      class={`w-full bg-white mx-auto shadow-md rounded-lg overflow-hidden my-2 flex justify-between`}
+    >
       <div class="px-6 py-4 flex-initial">
         <h3 class="font-semibold text-2xl mb-1 text-gray-900">
           {counter > 0 ? value : null}
@@ -51,25 +56,27 @@ export default function CardOne({
           </p>
         )}
       </div>
-      <div class="px-3 py-3 flex-initial">
-        <div class="flex space-x-4 py-8">
-          <button
-            class="bg-gray-300 shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full w-12 h-12 disabled:opacity-50"
-            onClick={handleDecrement}
-            disabled={counter === 0 || isLoading}
-          >
-            -
-          </button>
-          <p class="text-gray-500 text-2xl px-2 py-2">{counter}</p>
-          <button
-            class="bg-gray-300  shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full  w-12 h-12 disabled:opacity-50"
-            onClick={handleIncrement}
-            disabled={counter === 1 || isLoading}
-          >
-            +
-          </button>
+      {!candidateIsMember && (
+        <div class="px-3 py-3 flex-initial">
+          <div class="flex space-x-4 py-8">
+            <button
+              class="bg-gray-300 shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full w-12 h-12 disabled:opacity-50"
+              onClick={handleDecrement}
+              disabled={counter === 0 || isLoading}
+            >
+              -
+            </button>
+            <p class="text-gray-500 text-2xl px-2 py-2">{counter}</p>
+            <button
+              class="bg-gray-300  shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full  w-12 h-12 disabled:opacity-50"
+              onClick={handleIncrement}
+              disabled={counter === 1 || isLoading}
+            >
+              +
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -83,11 +90,17 @@ export function CardTwo({
   isLoading,
   voucher,
   currency,
+  memberTicketCount,
+  setMemberTicketCount,
 }) {
   const [counter, setCounter] = useState(0);
 
   const handleIncrement = () => {
-    setCounter(counter + 1);
+    if (memberTicketCount === 0) {
+      setCounter(2);
+      setMemberTicketCount(1);
+    }
+    setCounter(1);
   };
 
   const handleDecrement = () => {

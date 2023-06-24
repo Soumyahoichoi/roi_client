@@ -27,6 +27,7 @@ export default function Layout() {
   let emailId = localStorage.getItem("email");
   let plan = localStorage.getItem("plan");
   let voucherDiscount = localStorage.getItem("voucher");
+  const candidateIsMember = localStorage.getItem("candidate") === "member";
 
   const getCalculatedAmount = () => {
     if (
@@ -54,9 +55,16 @@ export default function Layout() {
             setMemberTypeIsEarlyBird(
               response.data.cap.toLowerCase() === "earlybird"
             );
+            console.log({
+              candidateIsMember,
+              counterValue,
+              counterValueTwo,
+            });
             setFinalPrice(
               counterValue + counterValueTwo === 1
-                ? response.data.member
+                ? !candidateIsMember
+                  ? response.data.member
+                  : response.data.spouse
                 : response.data.totalAmount
             );
           }
@@ -112,10 +120,12 @@ export default function Layout() {
                     title="Member"
                     discountedPrice={`${currency} ${memberPrice} incl. 18% GST`}
                     sendData={handleDataOne}
-                    counterData={counterValueTwo}
+                    counterData={counterValue}
                     isLoading={isLoading}
                     voucher={voucher}
                     currency={currency}
+                    candidateIsMember={candidateIsMember}
+                    setSpouseTicketCount={setCounterValueTwo}
                   />
 
                   <CardTwo
@@ -123,10 +133,13 @@ export default function Layout() {
                     subTitle={`Bring along your Spouse / Life Partner to India!`}
                     discountedPrice={`${currency} ${partnerPrice} incl. 18% GST`}
                     sendData={handleDataTwo}
-                    counterData={counterValue}
+                    memberTicketCount={counterValue}
+                    setMemberTicketCount={setCounterValue}
+                    counterData={counterValueTwo}
                     isLoading={isLoading}
                     voucher={voucher}
                     currency={currency}
+                    candidateIsMember={candidateIsMember}
                   />
                 </>
               )}
@@ -152,20 +165,24 @@ export default function Layout() {
                     <div class="bg-white shadow w-full p-6 font-sans text-xl">
                       Loading...
                     </div>
-                  ) : counterValue > 0 ? (
+                  ) : counterValue + counterValueTwo > 0 ? (
                     <>
                       <div class="bg-white shadow w-full p-6">
-                        <div class="flex justify-between items-center mb-4">
-                          <h2 class="text-lg text-black font-semibold font-sans">
-                            Member
-                            {memberTypeIsEarlyBird ? " (Early Bird)" : ""}
-                          </h2>
-                          <span class="text-black">
-                            {currency}
-                            {memberPrice}
-                          </span>
-                        </div>
-                        <hr class="my-4" />
+                        {counterValue > 0 && (
+                          <>
+                            <div class="flex justify-between items-center mb-4">
+                              <h2 class="text-lg text-black font-semibold font-sans">
+                                Member
+                                {memberTypeIsEarlyBird ? " (Early Bird)" : ""}
+                              </h2>
+                              <span class="text-black">
+                                {currency}
+                                {memberPrice}
+                              </span>
+                            </div>
+                            <hr class="my-4" />
+                          </>
+                        )}
                         {counterValueTwo > 0 ? (
                           <>
                             <div class="flex justify-between items-center mb-4 ">
