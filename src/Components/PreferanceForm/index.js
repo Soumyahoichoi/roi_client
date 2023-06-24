@@ -119,7 +119,7 @@ const Form = ({ orderId, count }) => {
   const getPreferenceByOrderId = () => {
     setIsFetchingDetails(true);
     axios
-      .post("http://localhost:4000/getPreferenceByOrderId", {
+      .post("https://riekolpayment.vercel.app/getPreferenceByOrderId", {
         order_id: orderId,
       })
       .then((response) => {
@@ -131,7 +131,7 @@ const Form = ({ orderId, count }) => {
             setFavoriteDrink(response.data.food_preference);
             setAllergies(response.data.alergy);
             setSuperpower(response.data.super_power);
-            setPitch(response.data.pitch);
+            setPitch(response.data.e_pitch);
             setPersonalDevelopment(
               !!response.data.personal_d_area &&
                 hasJsonStructure(response.data.personal_d_area)
@@ -328,87 +328,87 @@ const Form = ({ orderId, count }) => {
         </Grid>
 
         {/* If Spouse is Selected */}
-        {count === 2 && (
-          <>
-            <Grid item xs={12}>
-              <TextField
-                required
-                id="phoneNumber"
-                inputProps={{ type: "email", maxLength: 30 }}
-                label="Partner's Email ID"
-                variant="standard"
-                fullWidth
-                value={partnerEmail}
-                onChange={handleChange}
-              />
-              <FormHelperText>
-                Please enter your partner's email ID
-              </FormHelperText>
-              {error && (
-                <FormHelperText error>
-                  Please enter a valid email ID
-                </FormHelperText>
-              )}
-            </Grid>
+        {/* {count === 2 && (
+        )} */}
 
-            <Grid item xs={12}>
-              <TextField
-                required
-                id="phoneNumber"
-                inputProps={{ type: "number" }}
-                label="Partner's Phone Number"
-                variant="standard"
-                fullWidth
-                value={partnerPhoneNumber}
-                onChange={(e) => setPartnerPhoneNumber(e.target.value)}
-              />
-              <FormHelperText>
-                Please enter your partner's phone number with country code
+        <>
+          <Grid item xs={12}>
+            <TextField
+              required
+              id="phoneNumber"
+              inputProps={{ type: "email", maxLength: 30 }}
+              label="Partner's Email ID"
+              variant="standard"
+              fullWidth
+              value={partnerEmail}
+              onChange={handleChange}
+            />
+            <FormHelperText>
+              Please enter your partner's email ID
+            </FormHelperText>
+            {error && (
+              <FormHelperText error>
+                Please enter a valid email ID
               </FormHelperText>
-            </Grid>
-
-            <Grid item xs={12}>
-              <FormControl variant="standard" fullWidth>
-                <InputLabel id="partner-foodPreference-label">
-                  {" "}
-                  Partner's Preference
-                </InputLabel>
-                <Select
-                  labelId="partner-foodPreference-label"
-                  id="foodPreference"
-                  value={partnerFoodPreference}
-                  onChange={(e) => setPartnerFoodPreference(e.target.value)}
-                  label="Food Preference"
-                  required
-                  variant="standard"
-                >
-                  <MenuItem value="vegetarian">Vegetarian</MenuItem>
-                  <MenuItem value="non-vegetarian">Non Vegetarian</MenuItem>
-                  <MenuItem value="vegan">Vegan</MenuItem>
-                  <MenuItem value="gluten-free">Gluten Free</MenuItem>
-                  <MenuItem value="partnerOther">Other (Specify)</MenuItem>
-                </Select>
-              </FormControl>
-              <FormHelperText>
-                Please select your partner's food preference
-              </FormHelperText>
-            </Grid>
-            {partnerFoodPreference === "partnerOther" && (
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  id="partnerOtherFoodPreference"
-                  label="Specify Other Food Preference"
-                  variant="standard"
-                  fullWidth
-                  value={otherFoodPreference}
-                  onChange={(e) => setOtherFoodPreference(e.target.value)}
-                />
-              </Grid>
             )}
-          </>
-        )}
+          </Grid>
 
+          <Grid item xs={12}>
+            <TextField
+              required
+              id="phoneNumber"
+              inputProps={{ type: "number" }}
+              label="Partner's Phone Number"
+              variant="standard"
+              fullWidth
+              value={partnerPhoneNumber}
+              onChange={(e) => setPartnerPhoneNumber(e.target.value)}
+            />
+            <FormHelperText>
+              Please enter your partner's phone number with country code
+            </FormHelperText>
+          </Grid>
+
+          <Grid item xs={12}>
+            <FormControl variant="standard" fullWidth>
+              <InputLabel id="partner-foodPreference-label">
+                {" "}
+                Partner's Preference
+              </InputLabel>
+              <Select
+                labelId="partner-foodPreference-label"
+                id="foodPreference"
+                value={partnerFoodPreference}
+                onChange={(e) => setPartnerFoodPreference(e.target.value)}
+                label="Food Preference"
+                required
+                variant="standard"
+              >
+                <MenuItem value="vegetarian">Vegetarian</MenuItem>
+                <MenuItem value="non-vegetarian">Non Vegetarian</MenuItem>
+                <MenuItem value="vegan">Vegan</MenuItem>
+                <MenuItem value="gluten-free">Gluten Free</MenuItem>
+                <MenuItem value="partnerOther">Other (Specify)</MenuItem>
+              </Select>
+            </FormControl>
+            <FormHelperText>
+              Please select your partner's food preference
+            </FormHelperText>
+          </Grid>
+          {partnerFoodPreference === "partnerOther" && (
+            <Grid item xs={12}>
+              <TextField
+                required
+                id="partnerOtherFoodPreference"
+                label="Specify Other Food Preference"
+                variant="standard"
+                fullWidth
+                value={otherFoodPreference}
+                onChange={(e) => setOtherFoodPreference(e.target.value)}
+              />
+            </Grid>
+          )}
+        </>
         <Grid item xs={12}>
           <TextField
             required

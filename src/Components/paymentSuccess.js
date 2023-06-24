@@ -13,7 +13,7 @@ const PaymentSuccessPage = () => {
   const fetchOrderDetails = () => {
     setIsFetchingDetails(true);
     axios
-      .post("http://localhost:4000/getOrderByOrderId", {
+      .post("https://riekolpayment.vercel.app/getOrderByOrderId", {
         order_id: parsed.order_no,
       })
       .then((response) => {
