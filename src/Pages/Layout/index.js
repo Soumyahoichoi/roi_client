@@ -17,6 +17,14 @@ export default function Layout() {
   const [currency, setCurrency] = useState("");
   const [finalPrice, setFinalPrice] = useState(0);
   const [memberTypeIsEarlyBird, setMemberTypeIsEarlyBird] = useState(false);
+  const [calculatedAmount, setCalculatedAmount] = useState({
+    member: 0,
+    spouse: 0,
+    totalAmount: 0,
+    currency: "",
+    cap: "",
+    plan: "",
+  });
 
   const [
     initialTicketPriceHasbeenFetched,
@@ -48,25 +56,20 @@ export default function Layout() {
           setIsLoading(false);
           setInitialTicketPriceHasbeenFetched(true);
           if (response.data) {
-            console.log(response);
             setMemberPrice(response.data.member);
             setPartnerPrice(response.data.spouse);
             setCurrency(response.data.currency);
             setMemberTypeIsEarlyBird(
               response.data.cap.toLowerCase() === "earlybird"
             );
-            console.log({
-              candidateIsMember,
-              counterValue,
-              counterValueTwo,
-            });
-            setFinalPrice(
-              counterValue + counterValueTwo === 1
-                ? !candidateIsMember
-                  ? response.data.member
-                  : response.data.spouse
-                : response.data.totalAmount
-            );
+            setCalculatedAmount(response.data);
+            // setFinalPrice(
+            //   counterValue + counterValueTwo === 1
+            //     ? !candidateIsMember
+            //       ? response.data.member
+            //       : response.data.spouse
+            //     : response.data.totalAmount
+            // );
           }
         });
     } else {
@@ -76,6 +79,24 @@ export default function Layout() {
       // setCurrency("");
     }
   };
+
+  useEffect(() => {
+    setFinalPrice(
+      counterValue + counterValueTwo === 1
+        ? !candidateIsMember
+          ? calculatedAmount.member
+          : calculatedAmount.spouse
+        : calculatedAmount.totalAmount
+    );
+
+    return () => {};
+  }, [candidateIsMember, counterValue, counterValueTwo, calculatedAmount]);
+
+  console.log({
+    candidateIsMember,
+    counterValue,
+    counterValueTwo,
+  });
 
   useEffect(() => {
     getCalculatedAmount();
@@ -102,7 +123,7 @@ export default function Layout() {
       <section>
         <div className="w-full h-full grid grid-rows-2 text-white md:grid-cols-2">
           <div className="w-full h-full bg-gray-100 md:h-screen container">
-            <div className="px-8">
+            <Box minWidth={"36rem"} className="px-8">
               <header>
                 <div class="container mx-auto px-4 py-6 ">
                   <h1 class="text-xl font-normal text-black border-b border-black font-sans">
@@ -131,28 +152,32 @@ export default function Layout() {
                     candidateIsMember={candidateIsMember}
                     setSpouseTicketCount={setCounterValueTwo}
                   />
-                  <Box mt={2} />
-                  <CardTwo
-                    title={"Spouse/Life Partner"}
-                    subTitle={`Bring along your Spouse / Life Partner to India!`}
-                    discountedPrice={`${currency} ${partnerPrice}${
-                      currency.toLowerCase().includes("inr")
-                        ? " incl. 18% GST"
-                        : ""
-                    }`}
-                    sendData={handleDataTwo}
-                    memberTicketCount={counterValue}
-                    setMemberTicketCount={setCounterValue}
-                    counterData={counterValueTwo}
-                    isLoading={isLoading}
-                    voucher={voucher}
-                    currency={currency}
-                    candidateIsMember={candidateIsMember}
-                    setSpouseTicketCount={setCounterValueTwo}
-                  />
+                  {counterValue === 1 && (
+                    <>
+                      <Box mt={2} />
+                      <CardTwo
+                        title={"Spouse/Life Partner"}
+                        subTitle={`Bring along your Spouse / Life Partner to India!`}
+                        discountedPrice={`${currency} ${partnerPrice}${
+                          currency.toLowerCase().includes("inr")
+                            ? " incl. 18% GST"
+                            : ""
+                        }`}
+                        sendData={handleDataTwo}
+                        memberTicketCount={counterValue}
+                        setMemberTicketCount={setCounterValue}
+                        counterData={counterValueTwo}
+                        isLoading={isLoading}
+                        voucher={voucher}
+                        currency={currency}
+                        candidateIsMember={candidateIsMember}
+                        setSpouseTicketCount={setCounterValueTwo}
+                      />
+                    </>
+                  )}
                 </>
               )}
-            </div>
+            </Box>
           </div>
 
           <div className="w-full h-full bg-gray-200 md:h-screen container">

@@ -18,7 +18,7 @@ export default function CardOne({
   };
 
   const handleDecrement = () => {
-    setCounter(counter - 1);
+    setCounter(0);
     setSpouseTicketCount(0);
   };
 
@@ -40,14 +40,21 @@ export default function CardOne({
     <div
       onClick={
         !isLoading
-          ? !candidateIsMember &&
-            (counter === 0 ? handleIncrement : handleDecrement)
+          ? !candidateIsMember
+            ? counter === 0
+              ? handleIncrement
+              : handleDecrement
+            : undefined
           : undefined
       }
       class={`w-full ${
         candidateIsMember ? "bg-[#a5f1bf]" : "bg-[#fff]"
       } mx-auto shadow-md rounded-2xl overflow-hidden my-2 flex justify-between ${
-        !isLoading ? "cursor-pointer" : "opacity-40 cursor-wait"
+        !isLoading
+          ? !candidateIsMember
+            ? "cursor-pointer"
+            : ""
+          : "opacity-40 cursor-wait"
       }
       outline outline-[${
         !candidateIsMember && counter === 1 ? "#a5f1bf" : "transparent"
@@ -121,7 +128,7 @@ export function CardTwo({
   };
 
   const handleDecrement = () => {
-    setCounter(counter - 1);
+    setCounter(0);
     setSpouseTicketCount(0);
   };
 
