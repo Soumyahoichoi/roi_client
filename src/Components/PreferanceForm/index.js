@@ -23,7 +23,10 @@ import Swal from "sweetalert2";
 const Form = ({ orderId, count }) => {
   const [foodPreference, setFoodPreference] = useState("");
   const [favoriteDrink, setFavoriteDrink] = useState("");
-  const [otherFoodPreference, setOtherFoodPreference] = useState("");
+  const [memberOtherFoodPreference, setMemberOtherFoodPreference] =
+    useState("");
+  const [partnerOtherFoodPreference, setPartnerOtherFoodPreference] =
+    useState("");
   const [allergies, setAllergies] = useState("");
   const [superpower, setSuperpower] = useState("");
   const [pitch, setPitch] = useState("");
@@ -53,7 +56,7 @@ const Form = ({ orderId, count }) => {
     e.preventDefault();
     if (
       foodPreference === "" ||
-      (foodPreference === "other" && otherFoodPreference === "") ||
+      (foodPreference === "other" && partnerOtherFoodPreference === "") ||
       favoriteDrink === "" ||
       allergies === "" ||
       superpower === "" ||
@@ -215,8 +218,8 @@ const Form = ({ orderId, count }) => {
               label="Specify Other Food Preference"
               variant="standard"
               fullWidth
-              value={otherFoodPreference}
-              onChange={(e) => setOtherFoodPreference(e.target.value)}
+              value={memberOtherFoodPreference}
+              onChange={(e) => setMemberOtherFoodPreference(e.target.value)}
             />
           </Grid>
         )}
@@ -406,8 +409,8 @@ const Form = ({ orderId, count }) => {
                 label="Specify Other Food Preference"
                 variant="standard"
                 fullWidth
-                value={otherFoodPreference}
-                onChange={(e) => setOtherFoodPreference(e.target.value)}
+                value={partnerOtherFoodPreference}
+                onChange={(e) => setPartnerOtherFoodPreference(e.target.value)}
               />
             </Grid>
           )}
