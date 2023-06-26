@@ -152,29 +152,25 @@ export default function Layout() {
                     candidateIsMember={candidateIsMember}
                     setSpouseTicketCount={setCounterValueTwo}
                   />
-                  {counterValue === 1 && (
-                    <>
-                      <Box mt={2} />
-                      <CardTwo
-                        title={"Spouse/Life Partner"}
-                        subTitle={`Bring along your Spouse / Life Partner to India!`}
-                        discountedPrice={`${currency} ${partnerPrice}${
-                          currency.toLowerCase().includes("inr")
-                            ? " incl. 18% GST"
-                            : ""
-                        }`}
-                        sendData={handleDataTwo}
-                        memberTicketCount={counterValue}
-                        setMemberTicketCount={setCounterValue}
-                        counterData={counterValueTwo}
-                        isLoading={isLoading}
-                        voucher={voucher}
-                        currency={currency}
-                        candidateIsMember={candidateIsMember}
-                        setSpouseTicketCount={setCounterValueTwo}
-                      />
-                    </>
-                  )}
+                  <Box mt={2} />
+                  <CardTwo
+                    title={"Spouse/Life Partner"}
+                    subTitle={`Bring along your Spouse / Life Partner to India!`}
+                    discountedPrice={`${currency} ${partnerPrice}${
+                      currency.toLowerCase().includes("inr")
+                        ? " incl. 18% GST"
+                        : ""
+                    }`}
+                    sendData={handleDataTwo}
+                    memberTicketCount={counterValue}
+                    setMemberTicketCount={setCounterValue}
+                    counterData={counterValueTwo}
+                    isLoading={isLoading}
+                    voucher={voucher}
+                    currency={currency}
+                    candidateIsMember={candidateIsMember}
+                    setSpouseTicketCount={setCounterValueTwo}
+                  />
                 </>
               )}
             </Box>

@@ -48,17 +48,18 @@ export default function CardOne({
           : undefined
       }
       class={`w-full ${
-        candidateIsMember ? "bg-[#a5f1bf]" : "bg-[#fff]"
+        candidateIsMember
+          ? "bg-[#a5f1bf]"
+          : counter === 1
+          ? "bg-[#a5f1bf]"
+          : "bg-[#fff]"
       } mx-auto shadow-md rounded-2xl overflow-hidden my-2 flex justify-between ${
         !isLoading
           ? !candidateIsMember
             ? "cursor-pointer"
             : ""
           : "opacity-40 cursor-wait"
-      }
-      outline outline-[${
-        !candidateIsMember && counter === 1 ? "#a5f1bf" : "transparent"
-      }] hover:outline-offset-3 hover:outline-3`}
+      }`}
     >
       <div class="px-6 py-4 flex-initial">
         <h3 class="font-semibold text-2xl mb-1 text-gray-900">
@@ -154,11 +155,11 @@ export function CardTwo({
             : handleDecrement
           : undefined
       }
-      class={`w-full mx-auto bg-white shadow-md rounded-2xl overflow-hidden my-2 flex justify-between ${
+      class={`w-full mx-auto ${
+        counter === 1 ? "bg-[#a5f1bf]" : "bg-white"
+      } shadow-md rounded-2xl overflow-hidden my-2 flex justify-between ${
         !isLoading ? "cursor-pointer" : "opacity-40 cursor-wait"
-      } outline outline-[${
-        counter === 1 ? "#a5f1bf" : "transparent"
-      }] hover:outline-offset-3 hover:outline-3`}
+      }`}
     >
       <div class="px-6 py-4 flex-initial">
         <h3 class="font-bold text-2xl mb-1 text-gray-900">
