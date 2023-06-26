@@ -57,7 +57,7 @@ export default function CardOne({
         !isLoading
           ? !candidateIsMember
             ? "cursor-pointer"
-            : ""
+            : "cursor-not-allowed"
           : "opacity-40 cursor-wait"
       }`}
     >
