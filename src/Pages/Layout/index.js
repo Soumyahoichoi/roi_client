@@ -118,7 +118,11 @@ export default function Layout() {
                 <>
                   <CardOne
                     title="Member"
-                    discountedPrice={`${currency} ${memberPrice} incl. 18% GST`}
+                    discountedPrice={`${currency} ${memberPrice}${
+                      currency.toLowerCase().includes("inr")
+                        ? " incl. 18% GST"
+                        : ""
+                    }`}
                     sendData={handleDataOne}
                     counterData={counterValue}
                     isLoading={isLoading}
@@ -127,11 +131,15 @@ export default function Layout() {
                     candidateIsMember={candidateIsMember}
                     setSpouseTicketCount={setCounterValueTwo}
                   />
-
+                  <Box mt={2} />
                   <CardTwo
                     title={"Spouse/Life Partner"}
                     subTitle={`Bring along your Spouse / Life Partner to India!`}
-                    discountedPrice={`${currency} ${partnerPrice} incl. 18% GST`}
+                    discountedPrice={`${currency} ${partnerPrice}${
+                      currency.toLowerCase().includes("inr")
+                        ? " incl. 18% GST"
+                        : ""
+                    }`}
                     sendData={handleDataTwo}
                     memberTicketCount={counterValue}
                     setMemberTicketCount={setCounterValue}
@@ -205,7 +213,10 @@ export default function Layout() {
                           </h2>
                           <span class="text-2xl text-black">
                             {currency}&nbsp;
-                            {finalPrice} (inc. of GST)
+                            {finalPrice}
+                            {currency.toLowerCase().includes("inr")
+                              ? " (inc. of GST)"
+                              : ""}
                           </span>
                         </div>
                         <div class="flex justify-center mt-6">

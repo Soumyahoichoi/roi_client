@@ -36,6 +36,7 @@ const Form = ({ orderId, count }) => {
   const [wishItem, setWishItem] = useState("");
   const navigate = useNavigate();
   const [isFetchingDetails, setIsFetchingDetails] = useState(false);
+  const [isSavingData, setIsSavingData] = useState(false);
 
   const hasJsonStructure = (str) => {
     if (typeof str !== "string") return false;
@@ -62,6 +63,7 @@ const Form = ({ orderId, count }) => {
       alert("Please fill all the fields");
     }
 
+    setIsSavingData(true);
     const createPreferenceResponse = await axios.post(
       "https://riekolpayment.vercel.app/createPreference",
       {
@@ -79,6 +81,7 @@ const Form = ({ orderId, count }) => {
         partner_contact_number: partnerPhoneNumber,
       }
     );
+    setIsSavingData(false);
     if (createPreferenceResponse.data) {
       Swal.fire({
         icon: "success",
@@ -425,8 +428,15 @@ const Form = ({ orderId, count }) => {
         </Grid>
 
         <Grid item xs={12} style={{ textAlign: "center" }}>
-          <Button variant="contained" fullWidth color="primary" type="submit">
-            Submit
+          <Button
+            variant="contained"
+            fullWidth
+            color="primary"
+            disabled={isSavingData}
+            type="submit"
+          >
+            {isSavingData && <CircularProgress size={18} sx={{ mr: 1 }} />}
+            {isSavingData ? "Saving..." : "Submit"}
           </Button>
         </Grid>
       </Grid>
