@@ -67,7 +67,7 @@ export default function CardOne({
           {title}
         </h3>
         <p class="text-gray-500 text-lg">{discountedPrice}</p>
-        {voucher > 0 && (
+        {voucher && (
           <p class="text-gray-500 text-xs mt-2">
             Voucher of{" "}
             <strong>
@@ -168,7 +168,7 @@ export function CardTwo({
         </h3>
         <h5 class="text-lg text-gray-600 mb-2">{subTitle}</h5>
         <p class="text-gray-500 text-lg">{discountedPrice}</p>
-        {voucher > 0 && (
+        {voucher && (
           <p class="text-gray-500 text-xs mt-2">
             Voucher of{" "}
             <strong>

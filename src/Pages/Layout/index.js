@@ -8,7 +8,7 @@ export default function Layout() {
   const [data, setData] = useState([]);
   const [message, setMessage] = useState(false);
 
-  const voucher = localStorage.getItem("voucher") || 0;
+  const voucher = localStorage.getItem("voucher");
   const [counterValue, setCounterValue] = useState(0);
   const [counterValueTwo, setCounterValueTwo] = useState(0);
   const [memberPrice, setMemberPrice] = useState(0);
@@ -147,7 +147,7 @@ export default function Layout() {
                     sendData={handleDataOne}
                     counterData={counterValue}
                     isLoading={isLoading}
-                    voucher={Number(voucher)}
+                    voucher={voucher}
                     currency={currency}
                     candidateIsMember={candidateIsMember}
                     setSpouseTicketCount={setCounterValueTwo}
@@ -166,7 +166,7 @@ export default function Layout() {
                     setMemberTicketCount={setCounterValue}
                     counterData={counterValueTwo}
                     isLoading={isLoading}
-                    voucher={Number(voucher)}
+                    voucher={voucher}
                     currency={currency}
                     candidateIsMember={candidateIsMember}
                     setSpouseTicketCount={setCounterValueTwo}
