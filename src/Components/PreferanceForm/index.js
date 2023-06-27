@@ -477,7 +477,7 @@ const Form = ({ orderId, count }) => {
                   <MenuItem value="non-vegetarian">Non Vegetarian</MenuItem>
                   <MenuItem value="vegan">Vegan</MenuItem>
                   <MenuItem value="gluten-free">Gluten Free</MenuItem>
-                  <MenuItem value="partnerOther">Other (Specify)</MenuItem>
+                  <MenuItem value="other">Other (Specify)</MenuItem>
                 </Select>
               </FormControl>
             )}
@@ -493,7 +493,7 @@ const Form = ({ orderId, count }) => {
           </FormHelperText>
         </Grid>
 
-        {watch("partnerFoodPreference") === "partnerOther" && (
+        {watch("partnerFoodPreference") === "other" && (
           <Grid item xs={12}>
             <Controller
               control={control}
