@@ -109,7 +109,7 @@ export default function SignIn() {
           localStorage.setItem("email", email);
           // localStorage.setItem("currency", found.Plan);
           localStorage.setItem("plan", found.plan);
-          if (found.Plan === "Plan 1") {
+          if (found.plan === "Plan 1") {
             localStorage.setItem("voucher", found.VoucherINR);
           } else {
             localStorage.setItem("voucher", found.VoucherUSD);

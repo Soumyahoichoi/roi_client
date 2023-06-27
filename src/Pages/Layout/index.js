@@ -147,7 +147,7 @@ export default function Layout() {
                     sendData={handleDataOne}
                     counterData={counterValue}
                     isLoading={isLoading}
-                    voucher={voucher}
+                    voucher={Number(voucher)}
                     currency={currency}
                     candidateIsMember={candidateIsMember}
                     setSpouseTicketCount={setCounterValueTwo}
@@ -166,7 +166,7 @@ export default function Layout() {
                     setMemberTicketCount={setCounterValue}
                     counterData={counterValueTwo}
                     isLoading={isLoading}
-                    voucher={voucher}
+                    voucher={Number(voucher)}
                     currency={currency}
                     candidateIsMember={candidateIsMember}
                     setSpouseTicketCount={setCounterValueTwo}
