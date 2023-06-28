@@ -8,6 +8,7 @@ import {
   FormHelperText,
   Grid,
   Input,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
@@ -54,7 +55,7 @@ const Form = ({ orderId, count }) => {
     const formDatas = JSON.stringify({
       order_id: orderId,
       email: email,
-      contact_number: `${countryCode} ${phoneNumber}`,
+      contact_number: `+${countryCode}${phoneNumber}`,
       food_preference: foodPreference,
       favourite_drink: favoriteDrink,
       alergy: allergies,
@@ -63,7 +64,7 @@ const Form = ({ orderId, count }) => {
       e_pitch: pitch,
       partner_food_preference: partnerFoodPreference,
       intend_to_visit: wishItem,
-      partner_contact_number: partnerPhoneNumber,
+      partner_contact_number: `+${countryCode}${partnerPhoneNumber}`,
       member_other_food_preference: otherFoodPreference || "",
       partner_other_food_preference: partnerOtherFoodPreference || "",
     });
@@ -129,19 +130,26 @@ const Form = ({ orderId, count }) => {
               <Controller
                 control={control}
                 name="countryCode"
-                defaultValue="+91" // Set the default country code here
+                defaultValue="91" // Set the default country code here
+                rules={{
+                  required: "This field is required.",
+                  pattern: /^[0-9]{1,3}$/,
+                }}
                 render={({ field }) => (
                   <TextField
-                    select
+                    required
                     label="Country Code"
                     variant="standard"
                     fullWidth
+                    error={Boolean(errors.countryCode)}
+                    helperText={errors.countryCode?.message}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">+</InputAdornment>
+                      ),
+                    }}
                     {...field}
-                  >
-                    <MenuItem value="+91">+91</MenuItem>
-                    <MenuItem value="+1">+1</MenuItem>
-                    {/* Add more country codes as needed */}
-                  </TextField>
+                  />
                 )}
               />
             </Grid>
@@ -413,19 +421,26 @@ const Form = ({ orderId, count }) => {
               <Controller
                 control={control}
                 name="countryCode"
-                defaultValue="+91" // Set the default country code here
+                defaultValue="91" // Set the default country code here
+                rules={{
+                  required: "This field is required.",
+                  pattern: /^[0-9]{1,3}$/,
+                }}
                 render={({ field }) => (
                   <TextField
-                    select
+                    required
                     label="Country Code"
                     variant="standard"
                     fullWidth
+                    error={Boolean(errors.countryCode)}
+                    helperText={errors.countryCode?.message}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">+</InputAdornment>
+                      ),
+                    }}
                     {...field}
-                  >
-                    <MenuItem value="+91">+91</MenuItem>
-                    <MenuItem value="+1">+1</MenuItem>
-                    {/* Add more country codes as needed */}
-                  </TextField>
+                  />
                 )}
               />
             </Grid>
