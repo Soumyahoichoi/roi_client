@@ -1,4 +1,4 @@
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -12,6 +12,9 @@ import TextField from "@mui/material/TextField";
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../../assets/RIE-KOL-Logo.png"
+import './style.css';
+import { IconButton } from "@mui/material";
 
 // function Copyright(props) {
 //   return (
@@ -164,9 +167,10 @@ export default function SignIn() {
             justifyContent: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
+
+          <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+            <img src={logo} alt="Logo" className="logo-avatar" />
+          </div>
 
           <Box
             component="form"
@@ -195,18 +199,24 @@ export default function SignIn() {
               </span>
             )}
             <br />
+            <Box sx={{  
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
+            }}>
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               onChange={(e) => handleCheckChange(e)}
               checked={checked}
+              sx={{mx: 0}}
             />
-            <span className="text-gray-500 font-sans text-sm">
+            <div className="text-gray-500 font-sans text-sm">
               I agree to the
               <a
                 target="_blank"
                 rel="noreferrer"
                 href="https://www.riekol.com/event-waiver"
-                className="text-decoration-line: underline"
+                className="text-gray-800"
               >
                 {" "}
                 Event Waiver,{" "}
@@ -215,7 +225,7 @@ export default function SignIn() {
                 target="_blank"
                 rel="noreferrer"
                 href="https://www.riekol.com/termsofservices"
-                className="text-decoration-line: underline"
+                className="text-gray-800"
               >
                 {" "}
                 Terms of Service,{" "}
@@ -224,7 +234,7 @@ export default function SignIn() {
                 target="_blank"
                 rel="noreferrer"
                 href="https://www.riekol.com/privacypolicy"
-                className="text-decoration-line: underline"
+                className="text-gray-800 px-1"
               >
                 {" "}
                 Privacy Policy{" "}
@@ -234,12 +244,13 @@ export default function SignIn() {
                 target="_blank"
                 rel="noreferrer"
                 href="https://www.riekol.com/cancellationpolicy"
-                className="text-decoration-line: underline"
+                className="text-gray-800"
               >
                 {" "}
                 Cancellation Policy
               </a>
-            </span>
+            </div>
+            </Box>
             <br />
             {error && (
               <span style={{ color: "red", fontSize: "12px" }}>{error}</span>

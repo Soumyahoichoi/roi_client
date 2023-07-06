@@ -69,15 +69,18 @@ export default function CardOne({
         <p class="text-gray-500 text-lg">{discountedPrice}</p>
         {voucher && (
           <p class="text-gray-500 text-xs mt-2">
-            Voucher of{" "}
+            Your voucher of {" "}
             <strong>
               {currency} {voucher}
             </strong>{" "}
-            has been applied!
+            has been applied as a discount on the actual ticket cost 
+            <strong>
+              {currency} {discountedPrice}
+            </strong>{" "}
           </p>
         )}
       </div>
-      {/* {!candidateIsMember && (
+      {!candidateIsMember && (
         <div class="px-3 py-3 flex-initial">
           <div class="flex space-x-4 py-8">
             <button
@@ -97,7 +100,7 @@ export default function CardOne({
             </button>
           </div>
         </div>
-      )} */}
+      )}
     </div>
   );
 }
@@ -178,7 +181,7 @@ export function CardTwo({
           </p>
         )}
       </div>
-      {/* <div class="px-3 py-3 flex-initial">
+      <div class="px-3 py-3 flex-initial">
         <div class="flex space-x-4 py-8">
           <button
             class="bg-gray-300 shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full w-12 h-12 disabled:opacity-50"
@@ -196,7 +199,7 @@ export function CardTwo({
             +
           </button>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }

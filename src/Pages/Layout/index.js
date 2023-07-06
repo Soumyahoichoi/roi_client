@@ -123,14 +123,14 @@ export default function Layout() {
       <section>
         <div className="w-full h-full grid grid-rows-2 text-white md:grid-cols-2">
           <div className="w-full h-full bg-gray-100 md:h-screen container">
-            <Box minWidth={"36rem"} className="px-8">
-              <header>
+            <Box minWidth={"40rem"} className="px-8">
+              {/* <header>
                 <div class="container mx-auto px-4 py-6 ">
                   <h1 class="text-xl font-normal text-black border-b border-black font-sans">
                     Tickets
                   </h1>
                 </div>
-              </header>
+              </header> */}
               {!initialTicketPriceHasbeenFetched ? (
                 <Box display="flex" justifyContent={"center"}>
                   <CircularProgress sx={{ color: "#454545" }} />
@@ -155,7 +155,7 @@ export default function Layout() {
                   <Box mt={2} />
                   <CardTwo
                     title={"Spouse/Life Partner"}
-                    subTitle={`Bring along your Spouse / Life Partner to India!`}
+                    // subTitle={`Bring along your Spouse / Life Partner to India!`}
                     discountedPrice={`${currency} ${partnerPrice}${
                       currency.toLowerCase().includes("inr")
                         ? " incl. 18% GST"
