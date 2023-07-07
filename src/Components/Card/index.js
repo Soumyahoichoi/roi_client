@@ -39,15 +39,6 @@ export default function CardOne({
 
   return (
     <div
-      onClick={
-        !isLoading
-          ? !candidateIsMember
-            ? counter === 0
-              ? handleIncrement
-              : handleDecrement
-            : undefined
-          : undefined
-      }
       class={`w-full ${
         candidateIsMember ? "bg-[#a5f1bf]" : "bg-[#fff]"
       } mx-auto shadow-md rounded-2xl overflow-hidden my-2 flex justify-between ${
@@ -62,7 +53,7 @@ export default function CardOne({
         <p class="text-gray-500 text-lg">
           {isIndianCurrency
             ? `${currency} ${calculateAmountWithoutGst(basePrice)}`
-            : basePrice}
+            : `${currency} ${basePrice}`}
         </p>
         {voucher !== "null" ? (
           <p class="text-gray-500 text-xs mt-2">
@@ -84,7 +75,15 @@ export default function CardOne({
                   ? "cursor-not-allowed"
                   : "cursor-pointer"
               }`}
-              onClick={handleDecrement}
+              onClick={
+                !isLoading
+                  ? !candidateIsMember
+                    ? counter === 0
+                      ? handleIncrement
+                      : handleDecrement
+                    : undefined
+                  : undefined
+              }
               disabled={counter === 0 || isLoading}
             >
               -
@@ -96,7 +95,15 @@ export default function CardOne({
                   ? "cursor-not-allowed"
                   : "cursor-pointer"
               }`}
-              onClick={handleIncrement}
+              onClick={
+                !isLoading
+                  ? !candidateIsMember
+                    ? counter === 0
+                      ? handleIncrement
+                      : handleDecrement
+                    : undefined
+                  : undefined
+              }
               disabled={counter === 1 || isLoading}
             >
               +
@@ -156,13 +163,6 @@ export function CardTwo({
 
   return (
     <div
-      onClick={
-        !isLoading
-          ? counter === 0
-            ? handleIncrement
-            : handleDecrement
-          : undefined
-      }
       class={`w-full mx-auto bg-white shadow-md rounded-2xl overflow-hidden my-2 flex justify-between ${
         !isLoading ? "" : "opacity-40 cursor-wait"
       }`}
@@ -176,7 +176,7 @@ export function CardTwo({
         <p class="text-gray-500 text-lg">
           {isIndianCurrency
             ? `${currency} ${calculateAmountWithoutGst(basePrice)}`
-            : basePrice}
+            : `${currency} ${basePrice}`}
         </p>
         {voucher !== "null" ? (
           <p class="text-gray-500 text-xs mt-2">
@@ -196,7 +196,13 @@ export function CardTwo({
                 ? "cursor-not-allowed"
                 : "cursor-pointer"
             }`}
-            onClick={handleDecrement}
+            onClick={
+              !isLoading
+                ? counter === 0
+                  ? handleIncrement
+                  : handleDecrement
+                : undefined
+            }
             disabled={counter === 0 || isLoading}
           >
             -
@@ -208,7 +214,13 @@ export function CardTwo({
                 ? "cursor-not-allowed"
                 : "cursor-pointer"
             }`}
-            onClick={handleIncrement}
+            onClick={
+              !isLoading
+                ? counter === 0
+                  ? handleIncrement
+                  : handleDecrement
+                : undefined
+            }
             disabled={counter === 1 || isLoading}
           >
             +
