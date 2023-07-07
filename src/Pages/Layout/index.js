@@ -279,7 +279,7 @@ export default function Layout() {
                             {finalPrice}
                             {currency.toLowerCase().includes("inr")
                               ? " (inc. of GST)"
-                              : ""}
+                              : " (inc. of all taxes)"}
                           </span>
                         </div>
                         <div class="flex justify-center mt-6">
