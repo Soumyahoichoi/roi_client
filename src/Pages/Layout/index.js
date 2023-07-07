@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Grid } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import CardOne, { CardTwo } from "../../Components/Card";
@@ -137,11 +137,17 @@ export default function Layout() {
   return (
     <React.Fragment>
       <section>
-        <div className="w-full h-full grid grid-rows-2 text-white md:grid-cols-2">
-          <div className="w-full h-full bg-gray-100 md:h-screen container">
-            <Box 
-            // minWidth={"40rem"} 
-            className="px-8 pb-80">
+        <Grid container className="w-full h-full text-white">
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            className="w-full h-full bg-gray-100 md:h-screen container"
+          >
+            <Box
+              // minWidth={"40rem"}
+              className="px-8 py-10 md:pb-80"
+            >
               {/* <header>
                 <div class="container mx-auto px-4 py-6 ">
                   <h1 class="text-xl font-normal text-black border-b border-black font-sans">
@@ -192,9 +198,14 @@ export default function Layout() {
                 </>
               )}
             </Box>
-          </div>
+          </Grid>
 
-          <div className="w-full h-full bg-gray-200 md:h-screen container">
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            className="w-full h-full bg-gray-200 md:h-screen container"
+          >
             {/* 
              Shopping Cart
              Purchase Overview
@@ -308,8 +319,8 @@ export default function Layout() {
                 </main>
               </div>
             </div>
-          </div>
-        </div>
+          </Grid>
+        </Grid>
       </section>
     </React.Fragment>
   );
