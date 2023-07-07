@@ -1,6 +1,6 @@
 import { Box, CircularProgress } from "@mui/material";
 import axios from "axios";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import CardOne, { CardTwo } from "../../Components/Card";
 import Paybutton from "../../Components/Paybutton";
 export default function Layout() {
@@ -36,11 +36,6 @@ export default function Layout() {
   let plan = localStorage.getItem("plan");
   let voucherDiscount = localStorage.getItem("voucher");
   const candidateIsMember = localStorage.getItem("candidate") === "member";
-
-  const isIndianCurrency = useMemo(
-    () => currency.toLowerCase().includes("₹"),
-    [currency]
-  );
 
   const getCalculatedAmount = () => {
     if (
@@ -83,12 +78,6 @@ export default function Layout() {
       // setFinalPrice(0);
       // setCurrency("");
     }
-  };
-
-  const calculateAmountWithoutGst = (amount) => {
-    const gstPercentage = 18;
-
-    return amount - amount * (gstPercentage / 100);
   };
 
   useEffect(() => {
@@ -150,11 +139,11 @@ export default function Layout() {
                 <>
                   <CardOne
                     title="Member"
-                    discountedPrice={`${currency}${
-                      isIndianCurrency
-                        ? calculateAmountWithoutGst(memberPrice)
-                        : memberPrice
-                    }${isIndianCurrency ? " incl. 18% GST" : ""}`}
+                    discountedPrice={`${currency} ${memberPrice}${
+                      currency.toLowerCase().includes("inr")
+                        ? " incl. 18% GST"
+                        : ""
+                    }`}
                     sendData={handleDataOne}
                     counterData={counterValue}
                     isLoading={isLoading}
@@ -167,11 +156,11 @@ export default function Layout() {
                   <CardTwo
                     title={"Spouse/Life Partner"}
                     // subTitle={`Bring along your Spouse / Life Partner to India!`}
-                    discountedPrice={`${currency}${
-                      isIndianCurrency
-                        ? calculateAmountWithoutGst(partnerPrice)
-                        : partnerPrice
-                    }${isIndianCurrency ? " incl. 18% GST" : ""}`}
+                    discountedPrice={`${currency} ${partnerPrice}${
+                      currency.toLowerCase().includes("inr")
+                        ? " incl. 18% GST"
+                        : ""
+                    }`}
                     sendData={handleDataTwo}
                     memberTicketCount={counterValue}
                     setMemberTicketCount={setCounterValue}
@@ -218,9 +207,7 @@ export default function Layout() {
                               </h2>
                               <span class="text-black">
                                 {currency}
-                                {isIndianCurrency
-                                  ? calculateAmountWithoutGst(memberPrice)
-                                  : memberPrice}
+                                {memberPrice}
                               </span>
                             </div>
                             <hr class="my-4" />
@@ -235,9 +222,7 @@ export default function Layout() {
                               </h2>
                               <span class="text-black">
                                 {currency}
-                                {isIndianCurrency
-                                  ? calculateAmountWithoutGst(partnerPrice)
-                                  : partnerPrice}
+                                {partnerPrice}
                               </span>
                             </div>
                             <hr className="my-4" />
@@ -267,9 +252,11 @@ export default function Layout() {
                             Total
                           </h2>
                           <span class="text-2xl text-black">
-                            {currency}
+                            {currency}&nbsp;
                             {finalPrice}
-                            {isIndianCurrency ? " (inc. of GST)" : ""}
+                            {currency.toLowerCase().includes("inr")
+                              ? " (inc. of GST)"
+                              : ""}
                           </span>
                         </div>
                         <div class="flex justify-center mt-6">
