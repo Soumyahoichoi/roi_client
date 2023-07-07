@@ -59,20 +59,20 @@ export default function CardOne({
               {currency}{voucher}
             </strong>{" "}
             has been applied as a discount on the actual ticket cost{" "}
-            <strong>
+            {/* <strong>
               {isIndianCurrency
                 ? `${currency}${calculateAmountWithoutGst(basePrice)}`
                 : basePrice}
-            </strong>{" "}
+            </strong>{" "} */}
             <strong>{discountedPrice}</strong>{" "}
           </p>
         ) : null}
         
-        <p class="text-gray-500 text-lg">
+        {/* <p class="text-gray-500 text-lg">
           {isIndianCurrency
             ? `${currency}${calculateAmountWithoutGst(basePrice)}`
             : `${currency}${basePrice}`}
-        </p>
+        </p> */}
         
       </div>
       {!candidateIsMember && (
@@ -189,15 +189,6 @@ export function CardTwo({
             ? `${currency} ${calculateAmountWithoutGst(basePrice)}`
             : `${currency} ${basePrice}`}
         </p>
-        {voucher !== "null" ? (
-          <p class="text-gray-500 text-xs mt-2">
-            Your voucher of{" "}
-            <strong>
-              {currency} {voucher}
-            </strong>{" "}
-            has been applied as a discount on the actual ticket cost{" "}
-            <strong>{discountedPrice}</strong>{" "}
-          </p>
         ) : null} */}
       </div>
       <div class="px-3 py-3 flex-initial">
