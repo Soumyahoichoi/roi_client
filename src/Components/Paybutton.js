@@ -85,12 +85,12 @@ export default function Paybutton({ user, count }) {
               <input type="text" name="order_id" value={orderId} />
             </td>
           </tr> */}
-          <tr>
+          {/* <tr>
             <td>Currency</td>
             <td>
               <input type="text" name="currency" value="INR" />
             </td>
-          </tr>
+          </tr> */}
           {/* <tr>
             <td>Amount</td>
             <td>
