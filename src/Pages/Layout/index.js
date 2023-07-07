@@ -139,7 +139,7 @@ export default function Layout() {
                 <>
                   <CardOne
                     title="Member"
-                    discountedPrice={`${currency} ${memberPrice}${
+                    discountedPrice={`${currency}${memberPrice}${
                       currency.toLowerCase().includes("inr")
                         ? " incl. 18% GST"
                         : ""
@@ -156,7 +156,7 @@ export default function Layout() {
                   <CardTwo
                     title={"Spouse/Life Partner"}
                     // subTitle={`Bring along your Spouse / Life Partner to India!`}
-                    discountedPrice={`${currency} ${partnerPrice}${
+                    discountedPrice={`${currency}${partnerPrice}${
                       currency.toLowerCase().includes("inr")
                         ? " incl. 18% GST"
                         : ""

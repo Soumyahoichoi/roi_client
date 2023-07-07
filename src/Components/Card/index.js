@@ -69,14 +69,13 @@ export default function CardOne({
         <p class="text-gray-500 text-lg">{discountedPrice}</p>
         {voucher && (
           <p class="text-gray-500 text-xs mt-2">
-            Your voucher of {" "}
+            Your voucher of{" "}
             <strong>
-              {currency} {voucher}
+              {currency}
+              {voucher}
             </strong>{" "}
-            has been applied as a discount on the actual ticket cost 
-            <strong>
-              {currency} {discountedPrice}
-            </strong>{" "}
+            has been applied as a discount on the actual ticket cost{" "}
+            <strong>{discountedPrice}</strong>{" "}
           </p>
         )}
       </div>
