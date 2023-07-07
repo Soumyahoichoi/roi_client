@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { calculateAmountWithoutGst } from "../../utils";
 
 export default function CardOne({
   title,
@@ -10,6 +11,8 @@ export default function CardOne({
   currency,
   candidateIsMember,
   setSpouseTicketCount,
+  basePrice,
+  isIndianCurrency,
 }) {
   const [counter, setCounter] = useState(0);
 
@@ -67,16 +70,18 @@ export default function CardOne({
         <p class="text-gray-500 text-lg">{discountedPrice}</p>
         {voucher !== "null" ? (
           <p class="text-gray-500 text-xs mt-2">
-            Your voucher of {" "}
+            Your voucher of{" "}
             <strong>
               {currency} {voucher}
             </strong>{" "}
-            has been applied as a discount on the actual ticket cost 
+            has been applied as a discount on the actual ticket cost{" "}
             <strong>
-              {currency} {discountedPrice}
+              {isIndianCurrency
+                ? `${currency} ${calculateAmountWithoutGst(basePrice)}`
+                : basePrice}
             </strong>{" "}
           </p>
-        ): null}
+        ) : null}
       </div>
       {!candidateIsMember && (
         <div class="px-3 py-3 flex-initial">
@@ -116,6 +121,8 @@ export function CardTwo({
   setMemberTicketCount,
   candidateIsMember,
   setSpouseTicketCount,
+  basePrice,
+  isIndianCurrency,
 }) {
   const [counter, setCounter] = useState(0);
 

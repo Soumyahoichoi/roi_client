@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import CardOne, { CardTwo } from "../../Components/Card";
 import Paybutton from "../../Components/Paybutton";
+import { calculateAmountWithoutGst } from "../../utils";
 export default function Layout() {
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
@@ -42,6 +43,13 @@ export default function Layout() {
     [currency]
   );
 
+  const getCurrencySymbol = (currency) => {
+    if (currency.toLowerCase().includes("inr")) {
+      return "₹";
+    }
+    return currency;
+  };
+
   const getCalculatedAmount = () => {
     if (
       counterValue + counterValueTwo > 0 ||
@@ -63,7 +71,7 @@ export default function Layout() {
           if (response.data) {
             setMemberPrice(response.data.member);
             setPartnerPrice(response.data.spouse);
-            setCurrency(response.data.currency);
+            setCurrency(getCurrencySymbol(response.data.currency));
             setMemberTypeIsEarlyBird(
               response.data.cap.toLowerCase() === "earlybird"
             );
@@ -83,12 +91,6 @@ export default function Layout() {
       // setFinalPrice(0);
       // setCurrency("");
     }
-  };
-
-  const calculateAmountWithoutGst = (amount) => {
-    const gstPercentage = 18;
-
-    return (amount / (100 + gstPercentage)) * 100;
   };
 
   useEffect(() => {
@@ -151,9 +153,7 @@ export default function Layout() {
                   <CardOne
                     title="Member"
                     discountedPrice={`${currency} ${memberPrice}${
-                      currency.toLowerCase().includes("inr")
-                        ? " incl. 18% GST"
-                        : ""
+                      isIndianCurrency ? " incl. 18% GST" : ""
                     }`}
                     sendData={handleDataOne}
                     counterData={counterValue}
@@ -162,15 +162,15 @@ export default function Layout() {
                     currency={currency}
                     candidateIsMember={candidateIsMember}
                     setSpouseTicketCount={setCounterValueTwo}
+                    basePrice={memberPrice}
+                    isIndianCurrency={isIndianCurrency}
                   />
                   <Box mt={2} />
                   <CardTwo
                     title={"Spouse/Life Partner"}
                     // subTitle={`Bring along your Spouse / Life Partner to India!`}
                     discountedPrice={`${currency} ${partnerPrice}${
-                      currency.toLowerCase().includes("inr")
-                        ? " incl. 18% GST"
-                        : ""
+                      isIndianCurrency ? " incl. 18% GST" : ""
                     }`}
                     sendData={handleDataTwo}
                     memberTicketCount={counterValue}
@@ -181,6 +181,8 @@ export default function Layout() {
                     currency={currency}
                     candidateIsMember={candidateIsMember}
                     setSpouseTicketCount={setCounterValueTwo}
+                    basePrice={partnerPrice}
+                    isIndianCurrency={isIndianCurrency}
                   />
                 </>
               )}
