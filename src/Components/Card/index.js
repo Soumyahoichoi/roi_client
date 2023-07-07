@@ -180,11 +180,12 @@ export function CardTwo({
         </p>
         {voucher !== "null" ? (
           <p class="text-gray-500 text-xs mt-2">
-            Voucher of{" "}
+            Your voucher of{" "}
             <strong>
               {currency} {voucher}
             </strong>{" "}
-            has been applied!
+            has been applied as a discount on the actual ticket cost{" "}
+            <strong>{discountedPrice}</strong>{" "}
           </p>
         ) : null}
       </div>
