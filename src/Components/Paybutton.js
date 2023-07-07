@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import "./playButton.css";
 
 export default function Paybutton({ user, count }) {
   const formRef = useRef(null);
@@ -36,7 +37,7 @@ export default function Paybutton({ user, count }) {
     <>
       <div
         onClick={handleCheckout}
-        className="bg-black hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded w-1/2 text-center cursor-pointer text-2xl"
+        className="pay-button"
       >
         {isLoading ? "Loading..." : "Checkout"}
       </div>

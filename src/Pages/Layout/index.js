@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import CardOne, { CardTwo } from "../../Components/Card";
 import Paybutton from "../../Components/Paybutton";
 import { calculateAmountWithoutGst } from "../../utils";
+import "./style.css";
 export default function Layout() {
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
@@ -163,9 +164,10 @@ export default function Layout() {
                 <>
                   <CardOne
                     title="Member"
-                    discountedPrice={`${currency}${memberPrice}${
-                      isIndianCurrency ? " incl. 18% GST" : ""
-                    }`}
+                    discountedPrice={`${currency}${memberPrice}`}
+                    // ${
+                    //   isIndianCurrency ? " incl. 18% GST" : ""
+                    // }`}
                     sendData={handleDataOne}
                     counterData={counterValue}
                     isLoading={isLoading}
@@ -180,9 +182,10 @@ export default function Layout() {
                   <CardTwo
                     title={"Spouse/Life Partner"}
                     // subTitle={`Bring along your Spouse / Life Partner to India!`}
-                    discountedPrice={`${currency}${partnerPrice}${
-                      isIndianCurrency ? " incl. 18% GST" : ""
-                    }`}
+                    discountedPrice={`${currency}${partnerPrice}`}
+                    // ${
+                    //   isIndianCurrency ? " incl. 18% GST" : ""
+                    // }`}
                     sendData={handleDataTwo}
                     memberTicketCount={counterValue}
                     setMemberTicketCount={setCounterValue}
@@ -219,9 +222,9 @@ export default function Layout() {
                   </div>
                 </header>
 
-                <main class=" mx-auto px-4 py-6">
+                <main class=" mx-auto px-2 py-6">
                   {isLoading ? (
-                    <div class="bg-white shadow w-full p-6 font-sans text-xl">
+                    <div class="bg-white shadow w-full p-4 font-sans text-xl">
                       Loading...
                     </div>
                   ) : counterValue + counterValueTwo > 0 ? (
@@ -230,7 +233,7 @@ export default function Layout() {
                         {counterValue > 0 && (
                           <>
                             <div class="flex justify-between items-center mb-4">
-                              <h2 class="text-lg text-black font-semibold font-sans">
+                              <h2 class="title_layout">
                                 Member
                                 {memberTypeIsEarlyBird ? " (Early Bird)" : ""}
                               </h2>
@@ -247,7 +250,7 @@ export default function Layout() {
                         {counterValueTwo > 0 ? (
                           <>
                             <div class="flex justify-between items-center mb-4 ">
-                              <h2 class="text-lg text-black font-semibold font-sans">
+                              <h2 class="title_layout">
                                 Spouse/Life Partner
                                 {memberTypeIsEarlyBird ? " (Early Bird)" : ""}
                               </h2>
@@ -267,7 +270,7 @@ export default function Layout() {
                         {currency === "₹" && (
                           <>
                             <div class="flex justify-between items-center mb-4">
-                              <h2 class="text-lg text-black font-semibold font-sans">
+                              <h2 class="title_layout">
                                 GST 18%
                                 {/* {memberTypeIsEarlyBird ? " (Early Bird)" : ""} */}
                               </h2>
@@ -287,7 +290,7 @@ export default function Layout() {
                           <h2 class="text-2xl font-semibold font-sans">
                             Total
                           </h2>
-                          <span class="text-2xl text-black">
+                          <span class="total_price">
                             {currency}&nbsp;
                             {finalPrice}
                             {currency.toLowerCase().includes("₹")

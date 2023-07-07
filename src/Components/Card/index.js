@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { calculateAmountWithoutGst } from "../../utils";
-
+import './style.css';
 export default function CardOne({
   title,
   discountedPrice,
@@ -39,14 +39,14 @@ export default function CardOne({
 
   return (
     <div
-      class={`w-full ${
+      className={` custom-class ${
         candidateIsMember ? "bg-[#a5f1bf]" : "bg-[#fff]"
-      } mx-auto shadow-md rounded-2xl overflow-hidden my-2 flex justify-between ${
+      }  ${
         !isLoading ? "" : "opacity-40 cursor-wait"
       }`}
     >
       <div class="px-6 py-4 flex-initial">
-        <h3 class="font-semibold text-2xl mb-1 text-gray-900">
+        <h3 className="title">
           {counter > 0 && !candidateIsMember ? value : null}
           {" "}{title}
         </h3>
@@ -64,7 +64,9 @@ export default function CardOne({
                 ? `${currency}${calculateAmountWithoutGst(basePrice)}`
                 : basePrice}
             </strong>{" "} */}
-            <strong>{discountedPrice}</strong>{" "}
+            <p class="text-gray-500 text-lg">{discountedPrice}{" "}
+            {isIndianCurrency ? <span className="text">incl. 18% GST</span> : ""}
+            </p>
           </p>
         ) : null}
         
@@ -77,7 +79,7 @@ export default function CardOne({
       </div>
       {!candidateIsMember && (
         <div class="px-3 py-3 flex-initial">
-          <div class="flex space-x-4 py-8">
+          <div className="button_container">
             <button
               class={`bg-gray-300 shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full w-12 h-12 disabled:opacity-50 ${
                 counter === 0 || isLoading
@@ -172,17 +174,17 @@ export function CardTwo({
 
   return (
     <div
-      class={`w-full mx-auto bg-white shadow-md rounded-2xl overflow-hidden my-2 flex justify-between ${
-        !isLoading ? "" : "opacity-40 cursor-wait"
-      }`}
+      className="custom-class"
     >
       <div class="px-6 py-4 flex-initial">
-        <h3 class="font-bold text-2xl mb-1 text-gray-900">
+        <h3 className="title">
           {counter > 0 ? value : null} {" "}
           {title}
         </h3>
         <h5 class="text-lg text-gray-600 mb-2">{subTitle}</h5>
-        <p class="text-gray-500 text-lg">{discountedPrice}</p>
+        <p class="text-gray-500 text-lg">{discountedPrice}{" "}
+        {isIndianCurrency ? <span className="text">incl. 18% GST</span> : ""}
+        </p>
         {/* {voucher !== "null" ? (
         <p class="text-gray-500 text-lg">
           {isIndianCurrency
@@ -192,7 +194,7 @@ export function CardTwo({
         ) : null} */}
       </div>
       <div class="px-3 py-3 flex-initial">
-        <div class="flex space-x-4 py-8">
+        <div className="button_container">
           <button
             class={`bg-gray-300 shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full w-12 h-12 disabled:opacity-50 ${
               counter === 0 || isLoading

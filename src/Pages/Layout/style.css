@@ -18,3 +18,30 @@
   align-items: center;
   justify-content: space-between;
 }
+.total_price{
+  font-size: 24px;
+  font-weight: 500;
+  color: #000;
+}
+
+.title_layout{
+  font-size: 20px;
+  font-weight: 500;
+  color: #000;
+}
+
+
+@media screen  and (max-width: 500px) {
+  .total_price{
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+  }
+  .title_layout{
+    font-size: 18px;
+    font-weight: 500;
+    color: #000;
+  }
+  
+}
+  
