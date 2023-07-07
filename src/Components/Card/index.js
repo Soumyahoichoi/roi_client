@@ -49,17 +49,9 @@ export default function CardOne({
           : undefined
       }
       class={`w-full ${
-        candidateIsMember
-          ? "bg-[#a5f1bf]"
-          : counter === 1
-          ? "bg-[#a5f1bf]"
-          : "bg-[#fff]"
+        candidateIsMember ? "bg-[#a5f1bf]" : "bg-[#fff]"
       } mx-auto shadow-md rounded-2xl overflow-hidden my-2 flex justify-between ${
-        !isLoading
-          ? !candidateIsMember
-            ? "cursor-pointer"
-            : "cursor-not-allowed"
-          : "opacity-40 cursor-wait"
+        !isLoading ? "" : "opacity-40 cursor-wait"
       }`}
     >
       <div class="px-6 py-4 flex-initial">
@@ -67,7 +59,11 @@ export default function CardOne({
           {counter > 0 && !candidateIsMember ? value : null}
           {title}
         </h3>
-        <p class="text-gray-500 text-lg">{discountedPrice}</p>
+        <p class="text-gray-500 text-lg">
+          {isIndianCurrency
+            ? `${currency} ${calculateAmountWithoutGst(basePrice)}`
+            : basePrice}
+        </p>
         {voucher !== "null" ? (
           <p class="text-gray-500 text-xs mt-2">
             Your voucher of{" "}
@@ -75,11 +71,7 @@ export default function CardOne({
               {currency} {voucher}
             </strong>{" "}
             has been applied as a discount on the actual ticket cost{" "}
-            <strong>
-              {isIndianCurrency
-                ? `${currency} ${calculateAmountWithoutGst(basePrice)}`
-                : basePrice}
-            </strong>{" "}
+            <strong>{discountedPrice}</strong>{" "}
           </p>
         ) : null}
       </div>
@@ -87,7 +79,11 @@ export default function CardOne({
         <div class="px-3 py-3 flex-initial">
           <div class="flex space-x-4 py-8">
             <button
-              class="bg-gray-300 shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full w-12 h-12 disabled:opacity-50"
+              class={`bg-gray-300 shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full w-12 h-12 disabled:opacity-50 ${
+                counter === 0 || isLoading
+                  ? "cursor-not-allowed"
+                  : "cursor-pointer"
+              }`}
               onClick={handleDecrement}
               disabled={counter === 0 || isLoading}
             >
@@ -95,7 +91,11 @@ export default function CardOne({
             </button>
             <p class="text-gray-500 text-2xl px-2 py-2">{counter}</p>
             <button
-              class="bg-gray-300  shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full  w-12 h-12 disabled:opacity-50"
+              class={`bg-gray-300  shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full  w-12 h-12 disabled:opacity-50 ${
+                counter === 1 || isLoading
+                  ? "cursor-not-allowed"
+                  : "cursor-pointer"
+              }`}
               onClick={handleIncrement}
               disabled={counter === 1 || isLoading}
             >
@@ -163,10 +163,8 @@ export function CardTwo({
             : handleDecrement
           : undefined
       }
-      class={`w-full mx-auto ${
-        counter === 1 ? "bg-[#a5f1bf]" : "bg-white"
-      } shadow-md rounded-2xl overflow-hidden my-2 flex justify-between ${
-        !isLoading ? "cursor-pointer" : "opacity-40 cursor-wait"
+      class={`w-full mx-auto bg-white shadow-md rounded-2xl overflow-hidden my-2 flex justify-between ${
+        !isLoading ? "" : "opacity-40 cursor-wait"
       }`}
     >
       <div class="px-6 py-4 flex-initial">
@@ -175,7 +173,11 @@ export function CardTwo({
           {title}
         </h3>
         <h5 class="text-lg text-gray-600 mb-2">{subTitle}</h5>
-        <p class="text-gray-500 text-lg">{discountedPrice}</p>
+        <p class="text-gray-500 text-lg">
+          {isIndianCurrency
+            ? `${currency} ${calculateAmountWithoutGst(basePrice)}`
+            : basePrice}
+        </p>
         {voucher !== "null" ? (
           <p class="text-gray-500 text-xs mt-2">
             Voucher of{" "}
@@ -189,7 +191,11 @@ export function CardTwo({
       <div class="px-3 py-3 flex-initial">
         <div class="flex space-x-4 py-8">
           <button
-            class="bg-gray-300 shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full w-12 h-12 disabled:opacity-50"
+            class={`bg-gray-300 shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full w-12 h-12 disabled:opacity-50 ${
+              counter === 0 || isLoading
+                ? "cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
             onClick={handleDecrement}
             disabled={counter === 0 || isLoading}
           >
@@ -197,7 +203,11 @@ export function CardTwo({
           </button>
           <p class="text-gray-500 text-2xl px-2 py-2">{counter}</p>
           <button
-            class="bg-gray-300  shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full  w-12 h-12 disabled:opacity-50"
+            class={`bg-gray-300  shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full  w-12 h-12 disabled:opacity-50 ${
+              counter === 1 || isLoading
+                ? "cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
             onClick={handleIncrement}
             disabled={counter === 1 || isLoading}
           >
