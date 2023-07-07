@@ -47,6 +47,9 @@ export default function Layout() {
     if (currency.toLowerCase().includes("inr")) {
       return "₹";
     }
+    if (currency.toLowerCase().includes("usd")) {
+      return "$";
+    }
     return currency;
   };
 
