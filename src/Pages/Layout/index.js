@@ -136,7 +136,9 @@ export default function Layout() {
       <section>
         <div className="w-full h-full grid grid-rows-2 text-white md:grid-cols-2">
           <div className="w-full h-full bg-gray-100 md:h-screen container">
-            <Box minWidth={"40rem"} className="px-8">
+            <Box 
+            // minWidth={"40rem"} 
+            className="px-8 pb-80">
               {/* <header>
                 <div class="container mx-auto px-4 py-6 ">
                   <h1 class="text-xl font-normal text-black border-b border-black font-sans">
@@ -152,7 +154,7 @@ export default function Layout() {
                 <>
                   <CardOne
                     title="Member"
-                    discountedPrice={`${currency} ${memberPrice}${
+                    discountedPrice={`${currency}${memberPrice}${
                       isIndianCurrency ? " incl. 18% GST" : ""
                     }`}
                     sendData={handleDataOne}
@@ -169,7 +171,7 @@ export default function Layout() {
                   <CardTwo
                     title={"Spouse/Life Partner"}
                     // subTitle={`Bring along your Spouse / Life Partner to India!`}
-                    discountedPrice={`${currency} ${partnerPrice}${
+                    discountedPrice={`${currency}${partnerPrice}${
                       isIndianCurrency ? " incl. 18% GST" : ""
                     }`}
                     sendData={handleDataTwo}

@@ -65,23 +65,24 @@ export default function CardOne({
       <div class="px-6 py-4 flex-initial">
         <h3 class="font-semibold text-2xl mb-1 text-gray-900">
           {counter > 0 && !candidateIsMember ? value : null}
-          {title}
+          {" "}{title}
         </h3>
-        <p class="text-gray-500 text-lg">{discountedPrice}</p>
+        
         {voucher !== "null" ? (
-          <p class="text-gray-500 text-xs mt-2">
+          <p class="text-gray-500 text-xs my-2">
             Your voucher of{" "}
             <strong>
-              {currency} {voucher}
+              {currency}{voucher}
             </strong>{" "}
             has been applied as a discount on the actual ticket cost{" "}
             <strong>
               {isIndianCurrency
-                ? `${currency} ${calculateAmountWithoutGst(basePrice)}`
+                ? `${currency}${calculateAmountWithoutGst(basePrice)}`
                 : basePrice}
             </strong>{" "}
           </p>
         ) : null}
+        <p class="text-gray-500 text-lg">{discountedPrice}</p>
       </div>
       {!candidateIsMember && (
         <div class="px-3 py-3 flex-initial">
@@ -171,12 +172,12 @@ export function CardTwo({
     >
       <div class="px-6 py-4 flex-initial">
         <h3 class="font-bold text-2xl mb-1 text-gray-900">
-          {counter > 0 ? value : null}
+          {counter > 0 ? value : null} {" "}
           {title}
         </h3>
         <h5 class="text-lg text-gray-600 mb-2">{subTitle}</h5>
         <p class="text-gray-500 text-lg">{discountedPrice}</p>
-        {voucher !== "null" ? (
+        {/* {voucher !== "null" ? (
           <p class="text-gray-500 text-xs mt-2">
             Voucher of{" "}
             <strong>
@@ -184,7 +185,7 @@ export function CardTwo({
             </strong>{" "}
             has been applied!
           </p>
-        ) : null}
+        ) : null} */}
       </div>
       <div class="px-3 py-3 flex-initial">
         <div class="flex space-x-4 py-8">
