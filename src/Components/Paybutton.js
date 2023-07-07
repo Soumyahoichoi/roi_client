@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useRef, useState } from "react";
 
 export default function Paybutton({ user, count }) {
@@ -24,20 +23,6 @@ export default function Paybutton({ user, count }) {
       //   return;
       // }
       // setOrderId(newOrderResponse.data.newOrderId);
-    } else {
-      axios
-        .post("https://riekolpayment.vercel.app/create-checkout-session", {
-          email: user,
-          count,
-        })
-        .then((res) => {
-          if (res.data.url) {
-            window.location.href = res.data.url;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     }
   };
 
