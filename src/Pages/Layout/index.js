@@ -47,6 +47,9 @@ export default function Layout() {
     if (currency.toLowerCase().includes("inr")) {
       return "₹";
     }
+    if (currency.toLowerCase().includes("usd")) {
+      return "$";
+    }
     return currency;
   };
 
@@ -222,7 +225,9 @@ export default function Layout() {
                               </h2>
                               <span class="text-black">
                                 {currency}
-                                {memberPrice}
+                                {isIndianCurrency
+                                  ? calculateAmountWithoutGst(memberPrice)
+                                  : memberPrice}{" "}
                               </span>
                             </div>
                             <hr class="my-4" />
@@ -237,7 +242,9 @@ export default function Layout() {
                               </h2>
                               <span class="text-black">
                                 {currency}
-                                {partnerPrice}
+                                {isIndianCurrency
+                                  ? calculateAmountWithoutGst(partnerPrice)
+                                  : partnerPrice}{" "}
                               </span>
                             </div>
                             <hr className="my-4" />

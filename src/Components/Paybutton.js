@@ -10,20 +10,20 @@ export default function Paybutton({ user, count }) {
     localStorage.setItem("count", count);
     setIsLoading(true);
 
-    if (plan === "Plan 1") {
-      formRef.current.submit();
-      // const newOrderResponse = await axios.post(
-      //   "https://riekolpayment.vercel.app/ccavCreateOrder",
-      //   {
-      //     user,
-      //   }
-      // );
+    formRef.current.submit();
+    // if (plan === "Plan 1") {
+    // const newOrderResponse = await axios.post(
+    //   "https://riekolpayment.vercel.app/ccavCreateOrder",
+    //   {
+    //     user,
+    //   }
+    // );
 
-      // if (!newOrderResponse.data) {
-      //   return;
-      // }
-      // setOrderId(newOrderResponse.data.newOrderId);
-    }
+    // if (!newOrderResponse.data) {
+    //   return;
+    // }
+    // setOrderId(newOrderResponse.data.newOrderId);
+    // }
   };
 
   // useEffect(() => {
@@ -85,12 +85,12 @@ export default function Paybutton({ user, count }) {
               <input type="text" name="order_id" value={orderId} />
             </td>
           </tr> */}
-          <tr>
+          {/* <tr>
             <td>Currency</td>
             <td>
               <input type="text" name="currency" value="INR" />
             </td>
-          </tr>
+          </tr> */}
           {/* <tr>
             <td>Amount</td>
             <td>
