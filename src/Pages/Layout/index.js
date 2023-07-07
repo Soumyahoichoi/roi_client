@@ -1,6 +1,6 @@
 import { Box, CircularProgress } from "@mui/material";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import CardOne, { CardTwo } from "../../Components/Card";
 import Paybutton from "../../Components/Paybutton";
 export default function Layout() {
@@ -36,6 +36,11 @@ export default function Layout() {
   let plan = localStorage.getItem("plan");
   let voucherDiscount = localStorage.getItem("voucher");
   const candidateIsMember = localStorage.getItem("candidate") === "member";
+
+  const isIndianCurrency = useMemo(
+    () => currency.toLowerCase().includes("₹"),
+    [currency]
+  );
 
   const getCalculatedAmount = () => {
     if (
@@ -78,6 +83,12 @@ export default function Layout() {
       // setFinalPrice(0);
       // setCurrency("");
     }
+  };
+
+  const calculateAmountWithoutGst = (amount) => {
+    const gstPercentage = 18;
+
+    return (amount / (100 + gstPercentage)) * 100;
   };
 
   useEffect(() => {
@@ -230,9 +241,9 @@ export default function Layout() {
                         ) : null}
 
                         {/* GST */}
-                        
+
                         {currency === "₹" && (
-                              <>
+                          <>
                             <div class="flex justify-between items-center mb-4">
                               <h2 class="text-lg text-black font-semibold font-sans">
                                 GST 18%
@@ -240,11 +251,14 @@ export default function Layout() {
                               </h2>
                               <span class="text-black">
                                 {currency}
-                                GST price
+                                {isIndianCurrency
+                                  ? finalPrice -
+                                    calculateAmountWithoutGst(finalPrice)
+                                  : finalPrice}{" "}
                               </span>
                             </div>
                             <hr class="my-4" />
-                            </>
+                          </>
                         )}
 
                         <div class="flex justify-between items-center">
