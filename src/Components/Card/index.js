@@ -53,7 +53,7 @@ export default function CardOne({
         
         
         {voucher !== "null" ? (
-          <p class="text-gray-500 text-xs my-2">
+          <p class="text-gray-500 text-md my-2">
             Your voucher of{" "}
             <strong>
               {currency}{voucher}
@@ -70,8 +70,8 @@ export default function CardOne({
         
         <p class="text-gray-500 text-lg">
           {isIndianCurrency
-            ? `${currency} ${calculateAmountWithoutGst(basePrice)}`
-            : `${currency} ${basePrice}`}
+            ? `${currency}${calculateAmountWithoutGst(basePrice)}`
+            : `${currency}${basePrice}`}
         </p>
         
       </div>
