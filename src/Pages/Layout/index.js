@@ -279,7 +279,7 @@ export default function Layout() {
                           <span class="text-2xl text-black">
                             {currency}&nbsp;
                             {finalPrice}
-                            {currency.toLowerCase().includes("inr")
+                            {currency.toLowerCase().includes("₹")
                               ? " (inc. of GST)"
                               : " (inc. of all taxes)"}
                           </span>
