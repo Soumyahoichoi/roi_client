@@ -228,6 +228,25 @@ export default function Layout() {
                             <hr className="my-4" />
                           </>
                         ) : null}
+
+                        {/* GST */}
+                        
+                        {currency === "₹" && (
+                              <>
+                            <div class="flex justify-between items-center mb-4">
+                              <h2 class="text-lg text-black font-semibold font-sans">
+                                GST 18%
+                                {/* {memberTypeIsEarlyBird ? " (Early Bird)" : ""} */}
+                              </h2>
+                              <span class="text-black">
+                                {currency}
+                                GST price
+                              </span>
+                            </div>
+                            <hr class="my-4" />
+                            </>
+                        )}
+
                         <div class="flex justify-between items-center">
                           <h2 class="text-2xl font-semibold font-sans">
                             Total
