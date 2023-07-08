@@ -145,13 +145,28 @@ export default function Layout() {
             sm={6}
             className="w-full h-full bg-gray-100 md:h-screen container"
           >
-            <Box
+            <div className=" w-full h-full">
+              {/* header */}
+              <header class="bg-white shadow-md">
+                  <div class="container mx-auto px-4 py-6">
+                    <h1 class="text-lg font-bold font-sans text-black">
+                    RIE Kolkata 2024 01/11/2024 until 01/14/2024
+                    </h1>
+                  </div>
+                  <div>
+                    <p class="text-md font-semibold font-sans text-gray-500 text-center">
+                        Select tickets
+                    </p>
+                  </div>
+                </header>
+                
+            <div
               // minWidth={"40rem"}
-              className="px-8 py-10 md:pb-80"
+              className="flex flex-col justify-center items-center  px-8 py-10 md:pb-20"
             >
               {/* <header>
                 <div class="container mx-auto px-4 py-6 ">
-                  <h1 class="text-xl font-normal text-black border-b border-black font-sans">
+                  <h1 class="text-xl font-normal text-black border-b border-black font-sans text-left">
                     Tickets
                   </h1>
                 </div>
@@ -200,7 +215,8 @@ export default function Layout() {
                   />
                 </>
               )}
-            </Box>
+            </div>
+            </div>
           </Grid>
 
           <Grid
@@ -213,23 +229,26 @@ export default function Layout() {
              Shopping Cart
              Purchase Overview
              */}
-            <div className="w-full h-full">
+            <div className="w-full h-full bg-white">
               {/* <Addtocart /> */}
               <div class="text-gray-500 min-h-screen">
-                <header class="bg-white shadow-md">
-                  <div class="container mx-auto px-4 py-6">
-                    <h1 class="text-2xl font-bold font-sans">Summary</h1>
-                  </div>
-                </header>
+                <header>
+                <div class="container mx-auto px-4 py-2 ">
+                  <h1 class="text-xl font-normal text-black  font-sans">
+                    Summary
+                  </h1>
+                </div>
+                <hr class="my-4 color:black" />
+              </header>
 
-                <main class=" mx-auto px-2 py-6">
+                <main class=" mx-auto px-2 py-2">
                   {isLoading ? (
-                    <div class="bg-white shadow w-full p-4 font-sans text-xl">
+                    <div class="bg-white w-full p-4 font-sans text-xl text-gray-400">
                       Loading...
                     </div>
                   ) : counterValue + counterValueTwo > 0 ? (
                     <>
-                      <div class="bg-white shadow w-full p-6">
+                      <div class="bg-white w-full p-6">
                         {counterValue > 0 && (
                           <>
                             <div class="flex justify-between items-center mb-4">
@@ -314,7 +333,7 @@ export default function Layout() {
                     </>
                   ) : (
                     <>
-                      <div class="bg-white shadow w-full p-6 font-sans text-xl rounded-2xl">
+                      <div class=" w-full p-6 font-sans text-xl rounded-2xl text-gray-400">
                         Your cart is empty. Please select tickets.
                       </div>
                     </>
