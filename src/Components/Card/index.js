@@ -30,7 +30,7 @@ export default function CardOne({
     sendData(counter);
   }
 
-  // console.log(counterData, "counter");
+  console.log(discountedPrice, "counter");
   useEffect(() => {
     if (counterData !== undefined && counterData > 0) {
       setCounter(counterData);
@@ -59,16 +59,18 @@ export default function CardOne({
               {currency}{voucher}
             </strong>{" "}
             has been applied as a discount on the actual ticket cost{" "}
-            {/* <strong>
+            <strong>
               {isIndianCurrency
                 ? `${currency}${calculateAmountWithoutGst(basePrice)}`
                 : basePrice}
-            </strong>{" "} */}
-            <p class="text-gray-500 text-lg">{discountedPrice}{" "}
-            {isIndianCurrency ? <span className="text">incl. 18% GST</span> : ""}
-            </p>
+            </strong>{" "}
+            
           </p>
         ) : null}
+
+            <p class="text-gray-500 text-lg">{discountedPrice}{" "}
+            {isIndianCurrency ? <span className="text">incl. 18% GST</span> : <span className="text">inc. of all taxes</span>}
+            </p>
         
         {/* <p class="text-gray-500 text-lg">
           {isIndianCurrency
@@ -183,7 +185,7 @@ export function CardTwo({
         </h3>
         <h5 class="text-lg text-gray-600 mb-2">{subTitle}</h5>
         <p class="text-gray-500 text-lg">{discountedPrice}{" "}
-        {isIndianCurrency ? <span className="text">incl. 18% GST</span> : ""}
+        {isIndianCurrency ? <span className="text">incl. 18% GST</span> : <span className="text">inc. of all taxes</span>}
         </p>
         {/* {voucher !== "null" ? (
         <p class="text-gray-500 text-lg">
