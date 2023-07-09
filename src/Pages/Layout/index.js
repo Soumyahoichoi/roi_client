@@ -1,14 +1,11 @@
-import { Box, CircularProgress } from "@mui/material";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Box, CircularProgress } from "@mui/material";
+
 import CardOne, { CardTwo } from "../../Components/Card";
 import Paybutton from "../../Components/Paybutton";
-export default function Layout() {
-  const [error, setError] = useState(null);
-  const [data, setData] = useState([]);
-  const [message, setMessage] = useState(false);
 
-  const voucher = localStorage.getItem("voucher");
+export default function Layout() {
   const [counterValue, setCounterValue] = useState(0);
   const [counterValueTwo, setCounterValueTwo] = useState(0);
   const [memberPrice, setMemberPrice] = useState(0);
@@ -16,7 +13,6 @@ export default function Layout() {
   const [isLoading, setIsLoading] = useState(false);
   const [currency, setCurrency] = useState("");
   const [finalPrice, setFinalPrice] = useState(0);
-  const [memberTypeIsEarlyBird, setMemberTypeIsEarlyBird] = useState(false);
   const [calculatedAmount, setCalculatedAmount] = useState({
     member: 0,
     spouse: 0,
@@ -31,10 +27,8 @@ export default function Layout() {
     setInitialTicketPriceHasbeenFetched,
   ] = useState(false);
 
-  let regularMemberPrice, regularAddOns;
-  let emailId = localStorage.getItem("email");
-  let plan = localStorage.getItem("plan");
-  let voucherDiscount = localStorage.getItem("voucher");
+  const emailId = localStorage.getItem("email");
+  const plan = localStorage.getItem("plan");
   const candidateIsMember = localStorage.getItem("candidate") === "member";
 
   const getCalculatedAmount = () => {
@@ -59,24 +53,9 @@ export default function Layout() {
             setMemberPrice(response.data.member);
             setPartnerPrice(response.data.spouse);
             setCurrency(response.data.currency);
-            setMemberTypeIsEarlyBird(
-              response.data.cap.toLowerCase() === "earlybird"
-            );
             setCalculatedAmount(response.data);
-            // setFinalPrice(
-            //   counterValue + counterValueTwo === 1
-            //     ? !candidateIsMember
-            //       ? response.data.member
-            //       : response.data.spouse
-            //     : response.data.totalAmount
-            // );
           }
         });
-    } else {
-      // setMemberPrice(0);
-      // setPartnerPrice(0);
-      // setFinalPrice(0);
-      // setCurrency("");
     }
   };
 
@@ -88,15 +67,7 @@ export default function Layout() {
           : calculatedAmount.spouse
         : calculatedAmount.totalAmount
     );
-
-    return () => {};
   }, [candidateIsMember, counterValue, counterValueTwo, calculatedAmount]);
-
-  console.log({
-    candidateIsMember,
-    counterValue,
-    counterValueTwo,
-  });
 
   useEffect(() => {
     getCalculatedAmount();
@@ -110,163 +81,123 @@ export default function Layout() {
     setCounterValueTwo(data);
   };
 
-  useEffect(() => {
-    if (voucherDiscount === "null") {
-      setMessage(true);
-    } else {
-      setMessage(false);
-    }
-  }, []);
-
   return (
-    <React.Fragment>
-      <section>
-        <div className="w-full h-full grid grid-rows-2 text-white md:grid-cols-2">
-          <div className="w-full h-full bg-gray-100 md:h-screen container">
-            <Box minWidth={"40rem"} className="px-8">
-              {/* <header>
-                <div class="container mx-auto px-4 py-6 ">
-                  <h1 class="text-xl font-normal text-black border-b border-black font-sans">
-                    Tickets
-                  </h1>
+    <>
+      <div className="w-full f-full flex flex-col md:flex-row md:h-screen">
+        <div className="w-full h-full bg-gray-100">
+          <header class="bg-white shadow-md text-gray-500">
+            <div class="ml-5 mx-auto px-4 py-6">
+              <h1 class="text-2xl font-bold font-sans">RIE Kolkata 2024</h1>
+            </div>
+          </header>
+          <main class="mx-auto p-6">
+            {!initialTicketPriceHasbeenFetched ? (
+              <Box display="flex" justifyContent={"center"}>
+                <CircularProgress sx={{ color: "#454545" }} />
+              </Box>
+            ) : (
+              <>
+                <CardOne
+                  title="Member"
+                  discountedPrice={<>{currency} {memberPrice}{currency.toLowerCase().includes("inr") ? <span className="text-sm">&nbsp;incl. 18% GST</span>: <></>}</>}
+                  sendData={handleDataOne}
+                  counterData={counterValue}
+                  isLoading={isLoading}
+                  candidateIsMember={candidateIsMember}
+                  setSpouseTicketCount={setCounterValueTwo}
+                />
+                <Box mt={2} />
+                <CardTwo
+                  title="Spouse/Life Partner"
+                  discountedPrice={<>{currency} {partnerPrice}{currency.toLowerCase().includes("inr") ? <span className="text-sm">&nbsp;incl. 18% GST</span>: <></>}</>}
+                  sendData={handleDataTwo}
+                  memberTicketCount={counterValue}
+                  setMemberTicketCount={setCounterValue}
+                  counterData={counterValueTwo}
+                  isLoading={isLoading}
+                  candidateIsMember={candidateIsMember}
+                  setSpouseTicketCount={setCounterValueTwo}
+                />
+              </>
+            )}
+          </main>
+        </div>
+
+        <div className="w-full h-full bg-gray-200">
+          <div className="w-full h-full">
+            <div class="text-gray-500">
+              <header class="bg-white shadow-md">
+                <div class="container mx-auto px-4 py-6">
+                  <h1 class="text-2xl font-bold font-sans">Summary</h1>
                 </div>
-              </header> */}
-              {!initialTicketPriceHasbeenFetched ? (
-                <Box display="flex" justifyContent={"center"}>
-                  <CircularProgress sx={{ color: "#454545" }} />
-                </Box>
-              ) : (
-                <>
-                  <CardOne
-                    title="Member"
-                    discountedPrice={`${currency} ${memberPrice}${
-                      currency.toLowerCase().includes("inr")
-                        ? " incl. 18% GST"
-                        : ""
-                    }`}
-                    sendData={handleDataOne}
-                    counterData={counterValue}
-                    isLoading={isLoading}
-                    voucher={voucher}
-                    currency={currency}
-                    candidateIsMember={candidateIsMember}
-                    setSpouseTicketCount={setCounterValueTwo}
-                  />
-                  <Box mt={2} />
-                  <CardTwo
-                    title={"Spouse/Life Partner"}
-                    // subTitle={`Bring along your Spouse / Life Partner to India!`}
-                    discountedPrice={`${currency} ${partnerPrice}${
-                      currency.toLowerCase().includes("inr")
-                        ? " incl. 18% GST"
-                        : ""
-                    }`}
-                    sendData={handleDataTwo}
-                    memberTicketCount={counterValue}
-                    setMemberTicketCount={setCounterValue}
-                    counterData={counterValueTwo}
-                    isLoading={isLoading}
-                    voucher={voucher}
-                    currency={currency}
-                    candidateIsMember={candidateIsMember}
-                    setSpouseTicketCount={setCounterValueTwo}
-                  />
-                </>
-              )}
-            </Box>
-          </div>
+              </header>
 
-          <div className="w-full h-full bg-gray-200 md:h-screen container">
-            {/* 
-             Shopping Cart
-             Purchase Overview
-             */}
-            <div className="w-full h-full">
-              {/* <Addtocart /> */}
-              <div class="text-gray-500 min-h-screen">
-                <header class="bg-white shadow-md">
-                  <div class="container mx-auto px-4 py-6">
-                    <h1 class="text-2xl font-bold font-sans">Summary</h1>
+              <main class="mx-auto p-6">
+                {isLoading ? (
+                  <div class="bg-white shadow w-full p-6 font-sans text-xl rounded-2xl">
+                    Loading...
                   </div>
-                </header>
-
-                <main class=" mx-auto px-4 py-6">
-                  {isLoading ? (
-                    <div class="bg-white shadow w-full p-6 font-sans text-xl">
-                      Loading...
-                    </div>
-                  ) : counterValue + counterValueTwo > 0 ? (
-                    <>
-                      <div class="bg-white shadow w-full p-6">
-                        {counterValue > 0 && (
-                          <>
-                            <div class="flex justify-between items-center mb-4">
-                              <h2 class="text-lg text-black font-semibold font-sans">
-                                Member
-                                {memberTypeIsEarlyBird ? " (Early Bird)" : ""}
-                              </h2>
-                              <span class="text-black">
-                                {currency}
-                                {memberPrice}
-                              </span>
-                            </div>
-                            <hr class="my-4" />
-                          </>
-                        )}
-                        {counterValueTwo > 0 ? (
-                          <>
-                            <div class="flex justify-between items-center mb-4 ">
-                              <h2 class="text-lg text-black font-semibold font-sans">
-                                Spouse/Life Partner
-                                {memberTypeIsEarlyBird ? " (Early Bird)" : ""}
-                              </h2>
-                              <span class="text-black">
-                                {currency}
-                                {partnerPrice}
-                              </span>
-                            </div>
-                            <hr className="my-4" />
-                          </>
-                        ) : null}
-                        <div class="flex justify-between items-center">
-                          <h2 class="text-2xl font-semibold font-sans">
-                            Total
+                ) : counterValue + counterValueTwo > 0 ? (
+                  <div class="bg-white shadow w-full p-6 rounded-2xl">
+                    {counterValue > 0 && (
+                      <>
+                        <div class="flex justify-between items-center mb-4">
+                          <h2 class="text-lg text-black font-semibold font-sans">
+                            Member
                           </h2>
-                          <span class="text-2xl text-black">
+                          <span class="text-black">
                             {currency}&nbsp;
-                            {finalPrice}
-                            {currency.toLowerCase().includes("inr")
-                              ? " (inc. of GST)"
-                              : ""}
+                            {memberPrice}
                           </span>
                         </div>
-                        <div class="flex justify-center mt-6">
-                          {/* <button class="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-1/2 text-center"
-                          onClick={handleSubmit}>
-                          Proceed to payment
-                          </button> */}
-                          <Paybutton
-                            plan={plan}
-                            amount={finalPrice}
-                            user={emailId}
-                            count={counterValue + counterValueTwo}
-                          />
+                        <hr class="my-4" />
+                      </>
+                    )}
+                    {counterValueTwo > 0 ? (
+                      <>
+                        <div class="flex justify-between items-center mb-4 ">
+                          <h2 class="text-lg text-black font-semibold font-sans">
+                            Spouse/Life Partner
+                          </h2>
+                          <span class="text-black">
+                            {currency}&nbsp;
+                            {partnerPrice}
+                          </span>
                         </div>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div class="bg-white shadow w-full p-6 font-sans text-xl rounded-2xl">
-                        Your cart is empty. Please select tickets.
-                      </div>
-                    </>
-                  )}
-                </main>
-              </div>
+                        <hr className="my-4" />
+                      </>
+                    ) : null}
+                    <div class="flex justify-between items-center">
+                      <h2 class="text-2xl font-semibold font-sans">
+                        Total
+                      </h2>
+                      <span class="text-2xl text-black">
+                        {currency}&nbsp;
+                        {finalPrice}
+                      </span>
+                    </div>
+                    <div class="flex justify-center mt-6">
+                      <Paybutton
+                        plan={plan}
+                        amount={finalPrice}
+                        user={emailId}
+                        count={counterValue + counterValueTwo}
+                      />
+                    </div>
+                    <div className="flex justify-center mt-4"><span className="w-3/4 text-center">We will reserve your tickets for you. You will have 15 minutes to complete the order.</span></div>
+                  </div>
+                ) : (
+                  <>
+                    <div class="bg-white shadow w-full p-6 font-sans text-xl rounded-2xl">
+                      Your cart is empty. Please select tickets.
+                    </div>
+                  </>
+                )}
+              </main>
             </div>
           </div>
         </div>
-      </section>
-    </React.Fragment>
+      </div>
+    </>
   );
 }

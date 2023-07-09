@@ -200,9 +200,9 @@ export default function SignIn() {
             )}
             <br />
             <Box sx={{  
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center"
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
             }}>
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -210,43 +210,40 @@ export default function SignIn() {
               checked={checked}
               sx={{mx: 0}}
             />
-            <div className="text-gray-500 font-sans text-sm">
-              I agree to the
+            <div className="text-gray-400 font-sans text-sm">
+              I agree to the {" "}
               <a
+                className="text-gray-400 underline"
                 target="_blank"
                 rel="noreferrer"
                 href="https://www.riekol.com/event-waiver"
-                className="text-gray-800"
               >
-                {" "}
-                Event Waiver,{" "}
+                Event Waiver
               </a>
+              ,{" "}
               <a
+                className="text-gray-400 underline"
                 target="_blank"
                 rel="noreferrer"
                 href="https://www.riekol.com/termsofservices"
-                className="text-gray-800"
               >
-                {" "}
-                Terms of Service,{" "}
-              </a>
+                Terms of Service
+              </a>,{" "}{" "}
               <a
+                className="text-gray-400 underline"
                 target="_blank"
                 rel="noreferrer"
                 href="https://www.riekol.com/privacypolicy"
-                className="text-gray-800 px-1"
               >
-                {" "}
-                Privacy Policy{" "}
+                Privacy Policy
               </a>{" "}
-              and
+              and {" "}
               <a
+                className="text-gray-400 underline"
                 target="_blank"
                 rel="noreferrer"
                 href="https://www.riekol.com/cancellationpolicy"
-                className="text-gray-800"
               >
-                {" "}
                 Cancellation Policy
               </a>
             </div>

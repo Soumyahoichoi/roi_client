@@ -1,4 +1,8 @@
+import { IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
+
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
 export default function CardOne({
   title,
@@ -6,99 +10,64 @@ export default function CardOne({
   sendData,
   counterData,
   isLoading,
-  voucher,
-  currency,
   candidateIsMember,
   setSpouseTicketCount,
 }) {
   const [counter, setCounter] = useState(0);
 
+  const isRemoveDisabled = counter === 0 || isLoading;
+  const isAddDisabled = counter === 1 || isLoading;
+
   const handleIncrement = () => {
-    setCounter(counter + 1);
+    if (!isAddDisabled) setCounter(counter + 1);
   };
 
   const handleDecrement = () => {
-    setCounter(0);
-    setSpouseTicketCount(0);
+    if (!isRemoveDisabled) {
+      setCounter(0);
+      setSpouseTicketCount(0);
+    }
   };
 
-  const value = `${counter}x`;
   if (sendData !== undefined) {
     sendData(counter);
   }
 
-  // console.log(counterData, "counter");
   useEffect(() => {
     if (counterData !== undefined && counterData > 0) {
       setCounter(counterData);
     }
   }, [counterData]);
 
-  // console.log(counter,'counter');
-
   return (
     <div
-      onClick={
-        !isLoading
-          ? !candidateIsMember
-            ? counter === 0
-              ? handleIncrement
-              : handleDecrement
-            : undefined
-          : undefined
-      }
       class={`w-full ${
         candidateIsMember
           ? "bg-[#a5f1bf]"
-          : counter === 1
-          ? "bg-[#a5f1bf]"
           : "bg-[#fff]"
-      } mx-auto shadow-md rounded-2xl overflow-hidden my-2 flex justify-between ${
+      } mx-auto shadow-md rounded-2xl overflow-hidden mb-2 mt-0 flex justify-between ${
         !isLoading
           ? !candidateIsMember
-            ? "cursor-pointer"
+            ? ""
             : "cursor-not-allowed"
           : "opacity-40 cursor-wait"
       }`}
     >
       <div class="px-6 py-4 flex-initial">
         <h3 class="font-semibold text-2xl mb-1 text-gray-900">
-          {counter > 0 && !candidateIsMember ? value : null}
-          {title}
+          {counter > 0 && !candidateIsMember ? `${counter}x` : null} {title}
         </h3>
         <p class="text-gray-500 text-lg">{discountedPrice}</p>
-        {voucher && (
-          <p class="text-gray-500 text-xs mt-2">
-            Your voucher of {" "}
-            <strong>
-              {currency} {voucher}
-            </strong>{" "}
-            has been applied as a discount on the actual ticket cost 
-            <strong>
-              {currency} {discountedPrice}
-            </strong>{" "}
-          </p>
-        )}
       </div>
       {!candidateIsMember && (
-        <div class="px-3 py-3 flex-initial">
-          <div class="flex space-x-4 py-8">
-            <button
-              class="bg-gray-300 shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full w-12 h-12 disabled:opacity-50"
-              onClick={handleDecrement}
-              disabled={counter === 0 || isLoading}
-            >
-              -
-            </button>
-            <p class="text-gray-500 text-2xl px-2 py-2">{counter}</p>
-            <button
-              class="bg-gray-300  shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full  w-12 h-12 disabled:opacity-50"
-              onClick={handleIncrement}
-              disabled={counter === 1 || isLoading}
-            >
-              +
-            </button>
-          </div>
+        <div class="p-3 flex-initial flex justify-center items-center">
+          <IconButton aria-label="delete" onClick={handleDecrement} disabled={isRemoveDisabled}>
+            <RemoveCircleOutlineIcon fontSize="large"/>
+          </IconButton>
+          <p class="text-gray-500 text-2xl">{counter}</p>
+          <IconButton aria-label="delete" onClick={handleIncrement} disabled={isAddDisabled}>
+            <AddCircleOutlineIcon fontSize="large" />
+          </IconButton>
         </div>
       )}
     </div>
@@ -112,8 +81,6 @@ export function CardTwo({
   sendData,
   counterData,
   isLoading,
-  voucher,
-  currency,
   memberTicketCount,
   setMemberTicketCount,
   candidateIsMember,
@@ -121,22 +88,28 @@ export function CardTwo({
 }) {
   const [counter, setCounter] = useState(0);
 
+  const isRemoveDisabled = counter === 0 || isLoading;
+  const isAddDisabled = counter === 1 || isLoading;
+
   const handleIncrement = () => {
-    if (memberTicketCount === 0) {
-      setCounter(1);
-      if (!candidateIsMember) {
-        setMemberTicketCount(1);
+    if (!isAddDisabled) {
+      if (memberTicketCount === 0) {
+        setCounter(1);
+        if (!candidateIsMember) {
+          setMemberTicketCount(1);
+        }
       }
+      if (!candidateIsMember) setCounter(1);
     }
-    if (!candidateIsMember) setCounter(1);
   };
 
   const handleDecrement = () => {
-    setCounter(0);
-    setSpouseTicketCount(0);
+    if (!isRemoveDisabled) {
+      setCounter(0);
+      setSpouseTicketCount(0);
+    }
   };
 
-  const value = `${counter}x`;
   if (sendData !== undefined) {
     sendData(Number(counter));
   }
@@ -147,58 +120,26 @@ export function CardTwo({
     }
   }, [counterData]);
 
-  // console.log(counter,'counter');
-
   return (
     <div
-      onClick={
-        !isLoading
-          ? counter === 0
-            ? handleIncrement
-            : handleDecrement
-          : undefined
-      }
-      class={`w-full mx-auto ${
-        counter === 1 ? "bg-[#a5f1bf]" : "bg-white"
-      } shadow-md rounded-2xl overflow-hidden my-2 flex justify-between ${
-        !isLoading ? "cursor-pointer" : "opacity-40 cursor-wait"
+      class={`w-full mx-auto shadow-md rounded-2xl overflow-hidden my-2 flex justify-between bg-white ${
+        isLoading && "opacity-40 cursor-wait"
       }`}
     >
       <div class="px-6 py-4 flex-initial">
-        <h3 class="font-bold text-2xl mb-1 text-gray-900">
-          {counter > 0 ? value : null}
-          {title}
+        <h3 class="font-semibold text-2xl mb-1 text-gray-900">
+          {counter > 0 && !candidateIsMember ? `${counter}x` : null} {title}
         </h3>
-        <h5 class="text-lg text-gray-600 mb-2">{subTitle}</h5>
         <p class="text-gray-500 text-lg">{discountedPrice}</p>
-        {voucher && (
-          <p class="text-gray-500 text-xs mt-2">
-            Voucher of{" "}
-            <strong>
-              {currency} {voucher}
-            </strong>{" "}
-            has been applied!
-          </p>
-        )}
       </div>
-      <div class="px-3 py-3 flex-initial">
-        <div class="flex space-x-4 py-8">
-          <button
-            class="bg-gray-300 shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full w-12 h-12 disabled:opacity-50"
-            onClick={handleDecrement}
-            disabled={counter === 0 || isLoading}
-          >
-            -
-          </button>
-          <p class="text-gray-500 text-2xl px-2 py-2">{counter}</p>
-          <button
-            class="bg-gray-300  shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full  w-12 h-12 disabled:opacity-50"
-            onClick={handleIncrement}
-            disabled={counter === 1 || isLoading}
-          >
-            +
-          </button>
-        </div>
+      <div class="p-3 flex-initial flex justify-center items-center">
+        <IconButton aria-label="delete" onClick={handleDecrement} disabled={isRemoveDisabled}>
+          <RemoveCircleOutlineIcon fontSize="large"/>
+        </IconButton>
+        <p class="text-gray-500 text-2xl">{counter}</p>
+        <IconButton aria-label="delete" onClick={handleIncrement} disabled={isAddDisabled}>
+          <AddCircleOutlineIcon fontSize="large" />
+        </IconButton>
       </div>
     </div>
   );
