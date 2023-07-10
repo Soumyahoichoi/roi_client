@@ -4,14 +4,20 @@ import React, { useEffect, useState } from "react";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
+import { calculateAmountWithoutGst } from "../../utils";
+
 export default function CardOne({
   title,
   discountedPrice,
   sendData,
   counterData,
   isLoading,
+  voucher,
+  currency,
   candidateIsMember,
   setSpouseTicketCount,
+  basePrice,
+  isIndianCurrency,
 }) {
   const [counter, setCounter] = useState(0);
 
@@ -57,7 +63,23 @@ export default function CardOne({
         <h3 class="font-semibold text-2xl mb-1 text-gray-900">
           {counter > 0 && !candidateIsMember ? `${counter}x` : null} {title}
         </h3>
-        <p class="text-gray-500 text-lg">{discountedPrice}</p>
+        {voucher !== "null" ? (
+          <p class="text-gray-500 text-md my-2">
+            Your voucher of{" "}
+            <strong>
+              {currency}{voucher}
+            </strong>{" "}
+            has been applied as a discount on the actual ticket cost{" "}
+            <strong>
+              {isIndianCurrency
+                ? `${currency}${calculateAmountWithoutGst(basePrice)}`
+                : basePrice}
+            </strong>{" "}
+            
+          </p>
+        ) : null}
+        <span class="text-gray-500 text-lg mr-1">{discountedPrice}</span>
+        {isIndianCurrency ? <span className="text-sm text-gray-500">excluding of GST</span> : <span className="text-sm text-gray-500">inc. of all taxes</span>}
       </div>
       {!candidateIsMember && (
         <div class="p-3 flex-initial flex justify-center items-center">
@@ -76,15 +98,18 @@ export default function CardOne({
 
 export function CardTwo({
   title,
-  subTitle,
   discountedPrice,
   sendData,
   counterData,
   isLoading,
+  voucher,
+  currency,
   memberTicketCount,
   setMemberTicketCount,
   candidateIsMember,
   setSpouseTicketCount,
+  basePrice,
+  isIndianCurrency,
 }) {
   const [counter, setCounter] = useState(0);
 
@@ -130,7 +155,8 @@ export function CardTwo({
         <h3 class="font-semibold text-2xl mb-1 text-gray-900">
           {counter > 0 && !candidateIsMember ? `${counter}x` : null} {title}
         </h3>
-        <p class="text-gray-500 text-lg">{discountedPrice}</p>
+        <span class="text-gray-500 text-lg mr-1">{discountedPrice}</span>
+        {isIndianCurrency ? <span className="text-sm text-gray-500">excluding of GST</span> : <span className="text-sm text-gray-500">inc. of all taxes</span>}
       </div>
       <div class="p-3 flex-initial flex justify-center items-center">
         <IconButton aria-label="delete" onClick={handleDecrement} disabled={isRemoveDisabled}>

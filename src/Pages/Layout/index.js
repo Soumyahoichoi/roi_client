@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { Box, CircularProgress } from "@mui/material";
 
 import CardOne, { CardTwo } from "../../Components/Card";
 import Paybutton from "../../Components/Paybutton";
+import { calculateAmountWithoutGst } from "../../utils";
 
 export default function Layout() {
   const [counterValue, setCounterValue] = useState(0);
@@ -22,6 +23,8 @@ export default function Layout() {
     plan: "",
   });
 
+  const voucher = localStorage.getItem("voucher");
+
   const [
     initialTicketPriceHasbeenFetched,
     setInitialTicketPriceHasbeenFetched,
@@ -29,7 +32,24 @@ export default function Layout() {
 
   const emailId = localStorage.getItem("email");
   const plan = localStorage.getItem("plan");
+
   const candidateIsMember = localStorage.getItem("candidate") === "member";
+
+  const isIndianCurrency = useMemo(
+    () => currency.toLowerCase().includes("₹"),
+    [currency]
+  );
+
+  const getCurrencySymbol = (currency) => {
+    if (currency.toLowerCase().includes("inr")) {
+      return "₹";
+    }
+    if (currency.toLowerCase().includes("usd")) {
+      return "$";
+    }
+    return currency;
+  };
+
 
   const getCalculatedAmount = () => {
     if (
@@ -52,7 +72,7 @@ export default function Layout() {
           if (response.data) {
             setMemberPrice(response.data.member);
             setPartnerPrice(response.data.spouse);
-            setCurrency(response.data.currency);
+            setCurrency(getCurrencySymbol(response.data.currency));
             setCalculatedAmount(response.data);
           }
         });
@@ -87,7 +107,7 @@ export default function Layout() {
         <div className="w-full h-full bg-gray-100">
           <header class="bg-white shadow-md text-gray-500">
             <div class="ml-5 mx-auto px-4 py-6">
-              <h1 class="text-2xl font-bold font-sans">RIE Kolkata 2024</h1>
+              <h1 class="text-2xl font-bold font-sans">RIE Kolkata 2024 01/11/2024 until 01/14/2024</h1>
             </div>
           </header>
           <main class="mx-auto p-6">
@@ -99,24 +119,32 @@ export default function Layout() {
               <>
                 <CardOne
                   title="Member"
-                  discountedPrice={<>{currency} {memberPrice}{currency.toLowerCase().includes("inr") ? <span className="text-sm">&nbsp;incl. 18% GST</span>: <></>}</>}
+                  discountedPrice={<>{currency} {memberPrice}{currency.toLowerCase().includes("inr")}</>}
                   sendData={handleDataOne}
                   counterData={counterValue}
                   isLoading={isLoading}
+                  voucher={voucher}
+                  currency={currency}
                   candidateIsMember={candidateIsMember}
                   setSpouseTicketCount={setCounterValueTwo}
+                  basePrice={memberPrice}
+                  isIndianCurrency={isIndianCurrency}
                 />
                 <Box mt={2} />
                 <CardTwo
                   title="Spouse/Life Partner"
-                  discountedPrice={<>{currency} {partnerPrice}{currency.toLowerCase().includes("inr") ? <span className="text-sm">&nbsp;incl. 18% GST</span>: <></>}</>}
+                  discountedPrice={<>{currency} {partnerPrice}{currency.toLowerCase().includes("inr")}</>}
                   sendData={handleDataTwo}
                   memberTicketCount={counterValue}
                   setMemberTicketCount={setCounterValue}
                   counterData={counterValueTwo}
                   isLoading={isLoading}
+                  voucher={voucher}
+                  currency={currency}
                   candidateIsMember={candidateIsMember}
                   setSpouseTicketCount={setCounterValueTwo}
+                  basePrice={partnerPrice}
+                  isIndianCurrency={isIndianCurrency}
                 />
               </>
             )}
@@ -167,8 +195,26 @@ export default function Layout() {
                         <hr className="my-4" />
                       </>
                     ) : null}
+                    {currency === "₹" && (
+                      <>
+                        <div class="flex justify-between items-center mb-4">
+                          <h2 class="title_layout text-black">
+                            GST 18%
+                            {/* {memberTypeIsEarlyBird ? " (Early Bird)" : ""} */}
+                          </h2>
+                          <span class="text-black">
+                            {currency}
+                            {isIndianCurrency
+                              ? finalPrice -
+                                calculateAmountWithoutGst(finalPrice)
+                              : finalPrice}{" "}
+                          </span>
+                        </div>
+                        <hr class="my-4" />
+                      </>
+                    )}
                     <div class="flex justify-between items-center">
-                      <h2 class="text-2xl font-semibold font-sans">
+                      <h2 class="text-2xl font-semibold font-sans text-black">
                         Total
                       </h2>
                       <span class="text-2xl text-black">
