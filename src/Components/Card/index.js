@@ -69,13 +69,7 @@ export default function CardOne({
             <strong>
               {currency}{voucher}
             </strong>{" "}
-            has been applied as a discount on the actual ticket cost{" "}
-            <strong>
-              {isIndianCurrency
-                ? `${currency}${calculateAmountWithoutGst(basePrice)}`
-                : basePrice}
-            </strong>{" "}
-            
+            has been applied as a discount
           </p>
         ) : null}
         <span class="text-gray-500 text-lg mr-1">{discountedPrice}</span>
