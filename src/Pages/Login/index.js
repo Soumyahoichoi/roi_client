@@ -12,7 +12,7 @@ import TextField from "@mui/material/TextField";
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../../assets/RIE-KOL-Logo.png"
+import logo from "../../assets/login_logo.svg"
 import './style.css';
 import { IconButton } from "@mui/material";
 
