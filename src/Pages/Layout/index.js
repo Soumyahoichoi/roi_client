@@ -119,7 +119,7 @@ export default function Layout() {
               <>
                 <CardOne
                   title="Member"
-                  discountedPrice={<>{currency} {memberPrice}{currency.toLowerCase().includes("inr")}</>}
+                  discountedPrice={<>{currency} {calculateAmountWithoutGst(memberPrice)}{currency.toLowerCase().includes("inr")}</>}
                   sendData={handleDataOne}
                   counterData={counterValue}
                   isLoading={isLoading}
@@ -133,7 +133,7 @@ export default function Layout() {
                 <Box mt={2} />
                 <CardTwo
                   title="Spouse/Life Partner"
-                  discountedPrice={<>{currency} {partnerPrice}{currency.toLowerCase().includes("inr")}</>}
+                  discountedPrice={<>{currency} {calculateAmountWithoutGst(partnerPrice)}{currency.toLowerCase().includes("inr")}</>}
                   sendData={handleDataTwo}
                   memberTicketCount={counterValue}
                   setMemberTicketCount={setCounterValue}
@@ -175,7 +175,7 @@ export default function Layout() {
                           </h2>
                           <span class="text-black">
                             {currency}&nbsp;
-                            {memberPrice}
+                            {calculateAmountWithoutGst(memberPrice)}
                           </span>
                         </div>
                         <hr class="my-4" />
@@ -189,7 +189,7 @@ export default function Layout() {
                           </h2>
                           <span class="text-black">
                             {currency}&nbsp;
-                            {partnerPrice}
+                            {calculateAmountWithoutGst(partnerPrice)}
                           </span>
                         </div>
                         <hr className="my-4" />
