@@ -119,7 +119,7 @@ export default function Layout() {
               <>
                 <CardOne
                   title="Member"
-                  discountedPrice={<>{currency} {calculateAmountWithoutGst(memberPrice)}{currency.toLowerCase().includes("inr")}</>}
+                  discountedPrice={<>{currency} {isIndianCurrency ? calculateAmountWithoutGst(memberPrice): memberPrice}{currency.toLowerCase().includes("inr")}</>}
                   sendData={handleDataOne}
                   counterData={counterValue}
                   isLoading={isLoading}
@@ -133,7 +133,7 @@ export default function Layout() {
                 <Box mt={2} />
                 <CardTwo
                   title="Spouse/Life Partner"
-                  discountedPrice={<>{currency} {calculateAmountWithoutGst(partnerPrice)}{currency.toLowerCase().includes("inr")}</>}
+                  discountedPrice={<>{currency} {isIndianCurrency ? calculateAmountWithoutGst(partnerPrice) : partnerPrice}{currency.toLowerCase().includes("inr")}</>}
                   sendData={handleDataTwo}
                   memberTicketCount={counterValue}
                   setMemberTicketCount={setCounterValue}
@@ -175,7 +175,7 @@ export default function Layout() {
                           </h2>
                           <span class="text-black">
                             {currency}&nbsp;
-                            {calculateAmountWithoutGst(memberPrice)}
+                            {isIndianCurrency ? calculateAmountWithoutGst(memberPrice) : memberPrice}
                           </span>
                         </div>
                         <hr class="my-4" />
@@ -189,7 +189,7 @@ export default function Layout() {
                           </h2>
                           <span class="text-black">
                             {currency}&nbsp;
-                            {calculateAmountWithoutGst(partnerPrice)}
+                            {isIndianCurrency ? calculateAmountWithoutGst(partnerPrice) : partnerPrice}
                           </span>
                         </div>
                         <hr className="my-4" />
