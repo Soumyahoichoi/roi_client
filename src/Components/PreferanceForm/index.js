@@ -56,7 +56,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
     const formDatas = JSON.stringify({
       order_id: orderId,
       email: email,
-      contact_number: `+${countryCode}${phoneNumber}`,
+      contact_number: phoneNumber ? `+${countryCode}${phoneNumber}` : "",
       food_preference: foodPreference,
       favourite_drink: favoriteDrink,
       alergy: allergies,
@@ -65,7 +65,9 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
       e_pitch: pitch,
       partner_food_preference: partnerFoodPreference,
       intend_to_visit: wishItem,
-      partner_contact_number: `+${countryCode}${partnerPhoneNumber}`,
+      partner_contact_number: partnerPhoneNumber
+        ? `+${countryCode}${partnerPhoneNumber}`
+        : "",
       member_other_food_preference: otherFoodPreference || "",
       partner_other_food_preference: partnerOtherFoodPreference || "",
     });
@@ -112,7 +114,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
       const {
         order_id,
         email,
-        contact_number: phoneNumber,
+        contact_number,
         food_preference,
         favourite_drink,
         allergy,
@@ -121,7 +123,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
         e_pitch,
         partner_food_preference,
         intend_to_visit,
-        partner_contact_number: partnerPhoneNumber,
+        partner_contact_number,
         member_other_food_preference,
         partner_other_food_preference,
       } = preferenceFormData;
@@ -136,8 +138,8 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
         foodPreference: food_preference,
         partnerFoodPreference: partner_food_preference,
         partnerOtherFoodPreference: partner_other_food_preference,
-        partnerPhoneNumber,
-        phoneNumber,
+        partnerPhoneNumber: partner_contact_number || "",
+        phoneNumber: contact_number || "",
         pitch: e_pitch,
         superpower: super_power,
         wishItem: intend_to_visit,
