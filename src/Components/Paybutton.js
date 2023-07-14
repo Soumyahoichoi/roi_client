@@ -14,7 +14,7 @@ export default function Paybutton({ user, count }) {
     formRef.current.submit();
     // if (plan === "Plan 1") {
     // const newOrderResponse = await axios.post(
-    //   "http://localhost:4000/ccavCreateOrder",
+    //   "https://riekolpayment.vercel.app/ccavCreateOrder",
     //   {
     //     user,
     //   }
@@ -43,7 +43,7 @@ export default function Paybutton({ user, count }) {
         ref={formRef}
         method="POST"
         name="customerData"
-        action="http://localhost:4000/ccavRequestHandler"
+        action="https://riekolpayment.vercel.app/ccavRequestHandler"
       >
         <table width="40%" height="100" border="1" align="center">
           <caption>
@@ -102,7 +102,7 @@ export default function Paybutton({ user, count }) {
                 type="text"
                 name="redirect_url"
                 value={
-                  "http://localhost:4000/ccavRequestHandler/payment-successed"
+                  "https://riekolpayment.vercel.app/ccavRequestHandler/payment-successed"
                 }
               />
             </td>
@@ -114,7 +114,7 @@ export default function Paybutton({ user, count }) {
                 type="text"
                 name="cancel_url"
                 value={
-                  "http://localhost:4000/ccavRequestHandler/payment-failed"
+                  "https://riekolpayment.vercel.app/ccavRequestHandler/payment-failed"
                 }
               />
             </td>
