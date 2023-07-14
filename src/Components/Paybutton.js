@@ -35,10 +35,7 @@ export default function Paybutton({ user, count }) {
 
   return (
     <>
-      <div
-        onClick={handleCheckout}
-        className="pay-button"
-      >
+      <div onClick={handleCheckout} className="pay-button">
         {isLoading ? "Loading..." : "Checkout"}
       </div>
       <form
