@@ -4,7 +4,7 @@ import { Box, CircularProgress } from "@mui/material";
 
 import CardOne, { CardTwo } from "../../Components/Card";
 import Paybutton from "../../Components/Paybutton";
-import { calculateAmountWithoutGst } from "../../utils";
+import { calculateGst, calculateAmountWithoutGst, getInrFormattedAmount } from "../../utils";
 
 export default function Layout() {
   const [counterValue, setCounterValue] = useState(0);
@@ -80,13 +80,7 @@ export default function Layout() {
   };
 
   useEffect(() => {
-    setFinalPrice(
-      counterValue + counterValueTwo === 1
-        ? !candidateIsMember
-          ? calculatedAmount.member
-          : calculatedAmount.spouse
-        : calculatedAmount.totalAmount
-    );
+    setFinalPrice(calculate().finalAmount)
   }, [candidateIsMember, counterValue, counterValueTwo, calculatedAmount]);
 
   useEffect(() => {
@@ -101,13 +95,44 @@ export default function Layout() {
     setCounterValueTwo(data);
   };
 
+  const calculate = () => {
+    if (isIndianCurrency) {
+      let finalAmount = 0
+      if (counterValue === 1) {
+        let memberPriceWithoutGst = calculateAmountWithoutGst(memberPrice)
+        if (voucher != null) memberPriceWithoutGst -= voucher
+        finalAmount += memberPriceWithoutGst
+        console.log(finalAmount, 'finalAmount till member')
+      }
+      if (counterValueTwo === 1) {
+        finalAmount += calculateAmountWithoutGst(partnerPrice)
+      }
+      const gst = calculateGst(finalAmount)
+      finalAmount += gst
+      return {
+        gst, finalAmount
+      }
+    } else {
+      let finalAmount = 0
+      if (counterValue === 1) {
+        let tempMemberPrice = memberPrice
+        // if (voucher) tempMemberPrice -= voucher
+        finalAmount += tempMemberPrice
+      }
+      if (counterValueTwo === 1) {
+        finalAmount += partnerPrice
+      }
+      return { finalAmount }
+    }
+  }
+
   return (
     <>
       <div className="w-full f-full flex flex-col md:flex-row md:h-screen">
         <div className="w-full h-full bg-gray-100">
           <header class="bg-white shadow-md text-gray-500">
-            <div class="ml-5 mx-auto px-4 py-6">
-              <h1 class="text-2xl font-bold font-sans">RIE Kolkata 2024 01/11/2024 until 01/14/2024</h1>
+            <div class="ml-5 mx-auto px-4 py-4">
+              <h1 class="text-base font-bold font-sans">RIE Kolkata 11-Jan-2024 till 14-Jan-2024</h1>
             </div>
           </header>
           <main class="mx-auto p-6">
@@ -119,7 +144,7 @@ export default function Layout() {
               <>
                 <CardOne
                   title="Member"
-                  discountedPrice={<>{currency} {isIndianCurrency ? calculateAmountWithoutGst(memberPrice): memberPrice}{currency.toLowerCase().includes("inr")}</>}
+                  discountedPrice={<>{currency} {isIndianCurrency ? getInrFormattedAmount(calculateAmountWithoutGst(memberPrice) - (voucher ?? 0)): memberPrice - (voucher ?? 0)}{currency.toLowerCase().includes("inr")}</>}
                   sendData={handleDataOne}
                   counterData={counterValue}
                   isLoading={isLoading}
@@ -133,7 +158,7 @@ export default function Layout() {
                 <Box mt={2} />
                 <CardTwo
                   title="Spouse/Life Partner"
-                  discountedPrice={<>{currency} {isIndianCurrency ? calculateAmountWithoutGst(partnerPrice) : partnerPrice}{currency.toLowerCase().includes("inr")}</>}
+                  discountedPrice={<>{currency} {isIndianCurrency ? getInrFormattedAmount(calculateAmountWithoutGst(partnerPrice)) : partnerPrice}{currency.toLowerCase().includes("inr")}</>}
                   sendData={handleDataTwo}
                   memberTicketCount={counterValue}
                   setMemberTicketCount={setCounterValue}
@@ -155,8 +180,8 @@ export default function Layout() {
           <div className="w-full h-full">
             <div class="text-gray-500">
               <header class="bg-white shadow-md">
-                <div class="container mx-auto px-4 py-6">
-                  <h1 class="text-2xl font-bold font-sans">Summary</h1>
+                <div class="container mx-auto px-4 py-4">
+                  <h1 class="text-2xl font-extrabold font-sans text-black">Summary</h1>
                 </div>
               </header>
 
@@ -175,7 +200,7 @@ export default function Layout() {
                           </h2>
                           <span class="text-black">
                             {currency}&nbsp;
-                            {isIndianCurrency ? calculateAmountWithoutGst(memberPrice) : memberPrice}
+                            {isIndianCurrency ? getInrFormattedAmount(calculateAmountWithoutGst(memberPrice) - (voucher ?? 0)) : memberPrice - (voucher ?? 0)}
                           </span>
                         </div>
                         <hr class="my-4" />
@@ -189,7 +214,7 @@ export default function Layout() {
                           </h2>
                           <span class="text-black">
                             {currency}&nbsp;
-                            {isIndianCurrency ? calculateAmountWithoutGst(partnerPrice) : partnerPrice}
+                            {isIndianCurrency ? getInrFormattedAmount(calculateAmountWithoutGst(partnerPrice)) : partnerPrice}
                           </span>
                         </div>
                         <hr className="my-4" />
@@ -203,11 +228,8 @@ export default function Layout() {
                             {/* {memberTypeIsEarlyBird ? " (Early Bird)" : ""} */}
                           </h2>
                           <span class="text-black">
-                            {currency}
-                            {isIndianCurrency
-                              ? finalPrice -
-                                calculateAmountWithoutGst(finalPrice)
-                              : finalPrice}{" "}
+                            {currency}&nbsp;
+                            {getInrFormattedAmount(calculate().gst)}{" "}
                           </span>
                         </div>
                         <hr class="my-4" />
@@ -219,7 +241,7 @@ export default function Layout() {
                       </h2>
                       <span class="text-2xl text-black">
                         {currency}&nbsp;
-                        {finalPrice}
+                        {isIndianCurrency ? getInrFormattedAmount(calculate().finalAmount) : (finalPrice - (voucher ?? 0))}
                       </span>
                     </div>
                     <div class="flex justify-center mt-6">
@@ -230,7 +252,6 @@ export default function Layout() {
                         count={counterValue + counterValueTwo}
                       />
                     </div>
-                    <div className="flex justify-center mt-4"><span className="w-3/4 text-center">We will reserve your tickets for you. You will have 15 minutes to complete the order.</span></div>
                   </div>
                 ) : (
                   <>

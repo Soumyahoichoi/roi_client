@@ -113,9 +113,9 @@ export default function SignIn() {
           // localStorage.setItem("currency", found.Plan);
           localStorage.setItem("plan", found.plan);
           if (found.plan === "Plan 1") {
-            localStorage.setItem("voucher", found.VoucherINR);
+            localStorage.setItem("voucher", found.VoucherINR == null ? 0 : found.VoucherINR);
           } else {
-            localStorage.setItem("voucher", found.VoucherUSD);
+            localStorage.setItem("voucher", found.VoucherUSD == null ? 0 : found.VoucherUSD);
           }
           navigate("/layout");
         }

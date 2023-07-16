@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
-import { calculateAmountWithoutGst } from "../../utils";
+import { getInrFormattedAmount } from "../../utils";
 
 export default function CardOne({
   title,
@@ -60,20 +60,20 @@ export default function CardOne({
       }`}
     >
       <div class="px-6 py-4 flex-initial">
-        <h3 class="font-semibold text-2xl mb-1 text-gray-900">
+        <h3 class="font-semibold text-lg mb-1 text-gray-900">
           {counter > 0 && !candidateIsMember ? `${counter}x` : null} {title}
         </h3>
-        {voucher !== "null" ? (
+        {voucher > 0 && (
           <p class="text-gray-500 text-md my-2">
             Your voucher of{" "}
             <strong>
-              {currency}{voucher}
+              {currency}{isIndianCurrency ? getInrFormattedAmount(voucher) : voucher}
             </strong>{" "}
             has been applied as a discount
           </p>
-        ) : null}
+        )}
         <span class="text-gray-500 text-lg mr-1">{discountedPrice}</span>
-        {isIndianCurrency ? <span className="text-sm text-gray-500">excluding of GST</span> : <span className="text-sm text-gray-500">inc. of all taxes</span>}
+        {isIndianCurrency ? <span className="text-sm text-gray-500">exc GST</span> : <span className="text-sm text-gray-500">inc. of all taxes</span>}
       </div>
       {!candidateIsMember && (
         <div class="p-3 flex-initial flex justify-center items-center">
@@ -145,12 +145,12 @@ export function CardTwo({
         isLoading && "opacity-40 cursor-wait"
       }`}
     >
-      <div class="px-6 py-4 flex-initial">
-        <h3 class="font-semibold text-2xl mb-1 text-gray-900">
+      <div class="pl-6 py-4 flex-initial">
+        <h3 class="font-semibold text-lg mb-1 text-gray-900">
           {counter > 0 && !candidateIsMember ? `${counter}x` : null} {title}
         </h3>
         <span class="text-gray-500 text-lg mr-1">{discountedPrice}</span>
-        {isIndianCurrency ? <span className="text-sm text-gray-500">excluding of GST</span> : <span className="text-sm text-gray-500">inc. of all taxes</span>}
+        {isIndianCurrency ? <span className="text-sm text-gray-500">exc GST</span> : <span className="text-sm text-gray-500">inc. of all taxes</span>}
       </div>
       <div class="p-3 flex-initial flex justify-center items-center">
         <IconButton aria-label="delete" onClick={handleDecrement} disabled={isRemoveDisabled}>
