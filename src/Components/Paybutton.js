@@ -1,5 +1,5 @@
-import axios from "axios";
 import React, { useRef, useState } from "react";
+import "./playButton.css";
 
 export default function Paybutton({ user, count }) {
   const formRef = useRef(null);
@@ -11,34 +11,20 @@ export default function Paybutton({ user, count }) {
     localStorage.setItem("count", count);
     setIsLoading(true);
 
-    if (plan === "Plan 1") {
-      formRef.current.submit();
-      // const newOrderResponse = await axios.post(
-      //   "https://riekolpayment.vercel.app/ccavCreateOrder",
-      //   {
-      //     user,
-      //   }
-      // );
+    formRef.current.submit();
+    // if (plan === "Plan 1") {
+    // const newOrderResponse = await axios.post(
+    //   "https://riekolpayment.vercel.app/ccavCreateOrder",
+    //   {
+    //     user,
+    //   }
+    // );
 
-      // if (!newOrderResponse.data) {
-      //   return;
-      // }
-      // setOrderId(newOrderResponse.data.newOrderId);
-    } else {
-      axios
-        .post("https://riekolpayment.vercel.app/create-checkout-session", {
-          email: user,
-          count,
-        })
-        .then((res) => {
-          if (res.data.url) {
-            window.location.href = res.data.url;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    // if (!newOrderResponse.data) {
+    //   return;
+    // }
+    // setOrderId(newOrderResponse.data.newOrderId);
+    // }
   };
 
   // useEffect(() => {
@@ -51,7 +37,7 @@ export default function Paybutton({ user, count }) {
     <>
       <div
         onClick={handleCheckout}
-        className="bg-black hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded w-3/4 text-center cursor-pointer text-2xl"
+        className="bg-black hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded w-3/4 text-center cursor-pointer text-2xl pay-button"
       >
         {isLoading ? "Loading..." : "Checkout"}
       </div>
@@ -100,12 +86,12 @@ export default function Paybutton({ user, count }) {
               <input type="text" name="order_id" value={orderId} />
             </td>
           </tr> */}
-          <tr>
+          {/* <tr>
             <td>Currency</td>
             <td>
               <input type="text" name="currency" value="INR" />
             </td>
-          </tr>
+          </tr> */}
           {/* <tr>
             <td>Amount</td>
             <td>

@@ -1,5 +1,7 @@
 export const calculateAmountWithoutGst = (amount) => {
-  return amount / (1 + 18 / 100);
+const gstPercentage = 18;
+
+return (amount / (100 + gstPercentage)) * 100;
 };
 
 export const getInrFormattedAmount = (amount) => {

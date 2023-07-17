@@ -1,0 +1,21 @@
+.pay-button{
+  background-color: black;
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  padding: 10px 150px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all .35s ease-in-out;
+}
+
+.pay-button:hover{
+  background-color: #333333;
+}
+
+@media screen and (max-width: 500px) {
+  .pay-button{
+    font-size: 16px;
+    padding: 10px 100px;
+  }
+}

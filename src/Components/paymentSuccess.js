@@ -9,6 +9,8 @@ const PaymentSuccessPage = () => {
   console.log({ parsed });
   const [orderDetails, setOrderDetails] = useState({});
   const [isFetchingDetails, setIsFetchingDetails] = useState(false);
+  const [showPartnerForm, setShowPartnerForm] = useState(false);
+  const [preferenceFormData, setPreferenceFormData] = useState({});
 
   const fetchOrderDetails = () => {
     setIsFetchingDetails(true);
@@ -17,9 +19,18 @@ const PaymentSuccessPage = () => {
         order_id: parsed.order_no,
       })
       .then((response) => {
-        setIsFetchingDetails(false);
         if (response.data) {
           setOrderDetails(response.data);
+
+          axios
+            .post("https://riekolpayment.vercel.app/getPreferenceByOrderId", {
+              order_id: parsed.order_no,
+            })
+            .then((response) => {
+              setIsFetchingDetails(false);
+              setShowPartnerForm(response.data.count === 2);
+              setPreferenceFormData(response.data.preferenceDetails || {});
+            });
         }
       });
   };
@@ -136,6 +147,8 @@ const PaymentSuccessPage = () => {
                     <PreferanceForm
                       orderId={parsed.order_no}
                       count={orderDetails.count || 0}
+                      showPartnerForm={showPartnerForm}
+                      preferenceFormData={preferenceFormData}
                     />
                   </main>
                 </div>

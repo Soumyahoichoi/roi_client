@@ -5,6 +5,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
 import { getInrFormattedAmount } from "../../utils";
+import './style.css';
 
 export default function CardOne({
   title,

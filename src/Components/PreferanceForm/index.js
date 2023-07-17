@@ -20,12 +20,13 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-const Form = ({ orderId, count }) => {
+const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
   const {
     control,
     handleSubmit,
     formState: { errors },
     setValue,
+    reset,
     watch,
   } = useForm();
   const navigate = useNavigate();
@@ -55,30 +56,30 @@ const Form = ({ orderId, count }) => {
     const formDatas = JSON.stringify({
       order_id: orderId,
       email: email,
-      contact_number: `+${countryCode}${phoneNumber}`,
+      contact_number: phoneNumber ? `+${countryCode}${phoneNumber}` : "",
       food_preference: foodPreference,
       favourite_drink: favoriteDrink,
       alergy: allergies,
-      personal_d_area: developmentAreas,
+      personal_d_area: JSON.stringify(developmentAreas),
       super_power: superpower,
       e_pitch: pitch,
       partner_food_preference: partnerFoodPreference,
       intend_to_visit: wishItem,
-      partner_contact_number: `+${countryCode}${partnerPhoneNumber}`,
+      partner_contact_number: partnerPhoneNumber
+        ? `+${countryCode}${partnerPhoneNumber}`
+        : "",
       member_other_food_preference: otherFoodPreference || "",
       partner_other_food_preference: partnerOtherFoodPreference || "",
     });
 
-    var config = {
+    axios({
       method: "post",
       url: "https://riekolpayment.vercel.app/createPreference",
       headers: {
         "Content-Type": "application/json",
       },
       data: formDatas,
-    };
-
-    axios(config)
+    })
       .then(function (response) {
         console.log(response.data);
 
@@ -109,7 +110,42 @@ const Form = ({ orderId, count }) => {
 
   useEffect(() => {
     // Fetch data and populate form fields here
-  }, []);
+    if (Object.keys(preferenceFormData).length > 0) {
+      const {
+        order_id,
+        email,
+        contact_number,
+        food_preference,
+        favourite_drink,
+        allergy,
+        personal_d_area,
+        super_power,
+        e_pitch,
+        partner_food_preference,
+        intend_to_visit,
+        partner_contact_number,
+        member_other_food_preference,
+        partner_other_food_preference,
+      } = preferenceFormData;
+
+      reset({
+        allergies: allergy,
+        // countryCode,
+        otherFoodPreference: member_other_food_preference,
+        developmentAreas: !!personal_d_area && JSON.parse(personal_d_area),
+        email,
+        favoriteDrink: favourite_drink,
+        foodPreference: food_preference,
+        partnerFoodPreference: partner_food_preference,
+        partnerOtherFoodPreference: partner_other_food_preference,
+        partnerPhoneNumber: partner_contact_number || "",
+        phoneNumber: contact_number || "",
+        pitch: e_pitch,
+        superpower: super_power,
+        wishItem: intend_to_visit,
+      });
+    }
+  }, [preferenceFormData]);
 
   const handleSelectChange = (selected, field) => {
     if (selected.length > 2) {
@@ -393,143 +429,147 @@ const Form = ({ orderId, count }) => {
           </FormHelperText>
         </Grid>
 
-        <Grid item xs={12}>
-          <Controller
-            control={control}
-            name="email"
-            rules={{
-              required: "This field is required.",
-              pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-            }}
-            render={({ field }) => (
-              <TextField
-                required
-                label="Partner's Email ID"
-                variant="standard"
-                fullWidth
-                error={Boolean(errors.email)}
-                helperText={errors.email?.message}
-                {...field}
-              />
-            )}
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <Grid container spacing={2}>
-            <Grid item xs={2}>
+        {showPartnerForm && (
+          <>
+            <Grid item xs={12}>
               <Controller
                 control={control}
-                name="countryCode"
-                defaultValue="91" // Set the default country code here
+                name="email"
                 rules={{
                   required: "This field is required.",
-                  pattern: /^[0-9]{1,3}$/,
+                  pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                 }}
                 render={({ field }) => (
                   <TextField
                     required
-                    label="Country Code"
+                    label="Partner's Email ID"
                     variant="standard"
                     fullWidth
-                    error={Boolean(errors.countryCode)}
-                    helperText={errors.countryCode?.message}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">+</InputAdornment>
-                      ),
+                    error={Boolean(errors.email)}
+                    helperText={errors.email?.message}
+                    {...field}
+                  />
+                )}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <Grid container spacing={2}>
+                <Grid item xs={2}>
+                  <Controller
+                    control={control}
+                    name="countryCode"
+                    defaultValue="91" // Set the default country code here
+                    rules={{
+                      required: "This field is required.",
+                      pattern: /^[0-9]{1,3}$/,
                     }}
-                    {...field}
+                    render={({ field }) => (
+                      <TextField
+                        required
+                        label="Country Code"
+                        variant="standard"
+                        fullWidth
+                        error={Boolean(errors.countryCode)}
+                        helperText={errors.countryCode?.message}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">+</InputAdornment>
+                          ),
+                        }}
+                        {...field}
+                      />
+                    )}
                   />
-                )}
-              />
+                </Grid>
+                <Grid item xs={10}>
+                  <Controller
+                    control={control}
+                    name="partnerPhoneNumber"
+                    rules={{
+                      required: "This field is required.",
+                      pattern: /^[0-9]{10}$/,
+                    }}
+                    render={({ field }) => (
+                      <TextField
+                        required
+                        label="Partner's Phone Number"
+                        variant="standard"
+                        fullWidth
+                        error={Boolean(errors.partnerPhoneNumber)}
+                        helperText={errors.partnerPhoneNumber?.message}
+                        // InputProps={{
+                        //   startAdornment: (
+                        //     <span>{control.getValues("countryCode")}</span>
+                        //   ),
+                        // }}
+                        {...field}
+                      />
+                    )}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid item xs={10}>
+
+            <Grid item xs={12}>
               <Controller
                 control={control}
-                name="partnerPhoneNumber"
-                rules={{
-                  required: "This field is required.",
-                  pattern: /^[0-9]{10}$/,
-                }}
+                name="partnerFoodPreference"
+                rules={{ required: true }}
                 render={({ field }) => (
-                  <TextField
-                    required
-                    label="Partner's Phone Number"
-                    variant="standard"
-                    fullWidth
-                    error={Boolean(errors.partnerPhoneNumber)}
-                    helperText={errors.partnerPhoneNumber?.message}
-                    // InputProps={{
-                    //   startAdornment: (
-                    //     <span>{control.getValues("countryCode")}</span>
-                    //   ),
-                    // }}
-                    {...field}
-                  />
+                  <FormControl variant="standard" fullWidth>
+                    <InputLabel id="partner-foodPreference-label">
+                      Partner's Preference
+                    </InputLabel>
+                    <Select
+                      labelId="foodPreference-label"
+                      id="partnerFoodPreference"
+                      {...field}
+                    >
+                      <MenuItem value="vegetarian">Vegetarian</MenuItem>
+                      <MenuItem value="non-vegetarian">Non Vegetarian</MenuItem>
+                      <MenuItem value="vegan">Vegan</MenuItem>
+                      <MenuItem value="gluten-free">Gluten Free</MenuItem>
+                      <MenuItem value="other">Other (Specify)</MenuItem>
+                    </Select>
+                  </FormControl>
                 )}
               />
-            </Grid>
-          </Grid>
-        </Grid>
 
-        <Grid item xs={12}>
-          <Controller
-            control={control}
-            name="partnerFoodPreference"
-            rules={{ required: true }}
-            render={({ field }) => (
-              <FormControl variant="standard" fullWidth>
-                <InputLabel id="partner-foodPreference-label">
-                  Partner's Preference
-                </InputLabel>
-                <Select
-                  labelId="foodPreference-label"
-                  id="partnerFoodPreference"
-                  {...field}
-                >
-                  <MenuItem value="vegetarian">Vegetarian</MenuItem>
-                  <MenuItem value="non-vegetarian">Non Vegetarian</MenuItem>
-                  <MenuItem value="vegan">Vegan</MenuItem>
-                  <MenuItem value="gluten-free">Gluten Free</MenuItem>
-                  <MenuItem value="other">Other (Specify)</MenuItem>
-                </Select>
-              </FormControl>
-            )}
-          />
-
-          {errors.partnerFoodPreference && (
-            <FormHelperText sx={{ color: "red" }}>
-              This field is required.
-            </FormHelperText>
-          )}
-          <FormHelperText>
-            Please select your partner's food preference
-          </FormHelperText>
-        </Grid>
-
-        {watch("partnerFoodPreference") === "other" && (
-          <Grid item xs={12}>
-            <Controller
-              control={control}
-              name="partnerOtherFoodPreference"
-              rules={{ required: true }}
-              render={({ field }) => (
-                <TextField
-                  required
-                  label="Specify Other Food Preference"
-                  variant="standard"
-                  fullWidth
-                  {...field}
-                />
+              {errors.partnerFoodPreference && (
+                <FormHelperText sx={{ color: "red" }}>
+                  This field is required.
+                </FormHelperText>
               )}
-            />
-            {errors.partnerOtherFoodPreference && (
-              <FormHelperText sx={{ color: "red" }}>
-                This field is required.
+              <FormHelperText>
+                Please select your partner's food preference
               </FormHelperText>
+            </Grid>
+
+            {watch("partnerFoodPreference") === "other" && (
+              <Grid item xs={12}>
+                <Controller
+                  control={control}
+                  name="partnerOtherFoodPreference"
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <TextField
+                      required
+                      label="Specify Other Food Preference"
+                      variant="standard"
+                      fullWidth
+                      {...field}
+                    />
+                  )}
+                />
+                {errors.partnerOtherFoodPreference && (
+                  <FormHelperText sx={{ color: "red" }}>
+                    This field is required.
+                  </FormHelperText>
+                )}
+              </Grid>
             )}
-          </Grid>
+          </>
         )}
 
         <Grid item xs={12}>

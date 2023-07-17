@@ -194,7 +194,7 @@ export default function SignIn() {
               onChange={(e) => handleEmailChange(e)}
             />
             {emailError && (
-              <span style={{ color: "red", fontSize: "12px", margin: "5px" }}>
+              <span style={{ color: "red", fontSize: "14px", margin: "5px" }}>
                 {emailError}
               </span>
             )}
@@ -250,13 +250,13 @@ export default function SignIn() {
             </Box>
             <br />
             {error && (
-              <span style={{ color: "red", fontSize: "12px" }}>{error}</span>
+              <span style={{ color: "red", fontSize: "14px" ,margin: "5px" }}>{error}</span>
             )}
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, fontWeight: "bold" }}
+              sx={{ mt: 3, mb: 2, fontWeight: "bold" ,fontSize: "16px" }}
             >
               Proceed
             </Button>

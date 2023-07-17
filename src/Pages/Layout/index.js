@@ -50,7 +50,6 @@ export default function Layout() {
     return currency;
   };
 
-
   const getCalculatedAmount = () => {
     if (
       counterValue + counterValueTwo > 0 ||
