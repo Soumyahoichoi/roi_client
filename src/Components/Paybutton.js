@@ -37,7 +37,7 @@ export default function Paybutton({ user, count }) {
     <>
       <div
         onClick={handleCheckout}
-        className="bg-black hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded w-3/4 text-center cursor-pointer text-2xl pay-button"
+        className="bg-black hover:bg-gray-700 text-white font-semibold py-3 px-4 rounded w-3/4 text-center cursor-pointer text-2xl"
       >
         {isLoading ? "Loading..." : "Checkout"}
       </div>
