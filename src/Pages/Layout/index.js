@@ -84,7 +84,7 @@ export default function Layout() {
 
   useEffect(() => {
     getCalculatedAmount();
-  }, [counterValue, counterValueTwo]);
+  }, []);
 
   const handleDataOne = (data) => {
     setCounterValue(data);
@@ -146,7 +146,7 @@ export default function Layout() {
                   discountedPrice={<>{currency} {isIndianCurrency ? getInrFormattedAmount(calculateAmountWithoutGst(memberPrice) - (voucher ?? 0)): memberPrice - (voucher ?? 0)}{currency.toLowerCase().includes("inr")}</>}
                   sendData={handleDataOne}
                   counterData={counterValue}
-                  isLoading={isLoading}
+                  // isLoading={isLoading}
                   voucher={voucher}
                   currency={currency}
                   candidateIsMember={candidateIsMember}
@@ -162,7 +162,7 @@ export default function Layout() {
                   memberTicketCount={counterValue}
                   setMemberTicketCount={setCounterValue}
                   counterData={counterValueTwo}
-                  isLoading={isLoading}
+                  // isLoading={isLoading}
                   voucher={voucher}
                   currency={currency}
                   candidateIsMember={candidateIsMember}
@@ -178,8 +178,8 @@ export default function Layout() {
         <div className="w-full h-full bg-gray-200">
           <div className="w-full h-full">
             <div class="text-gray-500">
-              <header class="bg-white shadow-md">
-                <div class="container mx-auto px-4 py-4">
+              <header class="min-[768px]:bg-white min-[768px]:shadow-md min-[768px]:text-center px-4 py-4 max-[767px]:pl-11">
+                <div class="mx-auto">
                   <h1 class="text-2xl font-extrabold font-sans text-black">Summary</h1>
                 </div>
               </header>
