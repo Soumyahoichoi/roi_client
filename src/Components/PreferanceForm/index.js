@@ -162,7 +162,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
       <Grid container rowSpacing={4} alignItems="center" justify="center">
         <Grid item xs={12}>
           <Grid container spacing={2}>
-            <Grid item xs={2}>
+            <Grid item xs={4} sm={3}>
               <Controller
                 control={control}
                 name="countryCode"
@@ -189,7 +189,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
                 )}
               />
             </Grid>
-            <Grid item xs={10}>
+            <Grid item xs={8} sm={9}>
               <Controller
                 control={control}
                 name="phoneNumber"

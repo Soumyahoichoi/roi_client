@@ -1,6 +1,12 @@
+import { IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { calculateAmountWithoutGst } from "../../utils";
+
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+
+import { getInrFormattedAmount } from "../../utils";
 import './style.css';
+
 export default function CardOne({
   title,
   discountedPrice,
@@ -16,21 +22,24 @@ export default function CardOne({
 }) {
   const [counter, setCounter] = useState(0);
 
+  const isRemoveDisabled = counter === 0 || isLoading;
+  const isAddDisabled = counter === 1 || isLoading;
+
   const handleIncrement = () => {
-    setCounter(counter + 1);
+    if (!isAddDisabled) setCounter(counter + 1);
   };
 
   const handleDecrement = () => {
-    setCounter(0);
-    setSpouseTicketCount(0);
+    if (!isRemoveDisabled) {
+      setCounter(0);
+      setSpouseTicketCount(0);
+    }
   };
 
-  const value = `${counter}x`;
   if (sendData !== undefined) {
     sendData(counter);
   }
 
-  console.log(discountedPrice, "counter");
   useEffect(() => {
     if (counterData !== undefined && counterData > 0) {
       setCounter(counterData);
@@ -39,89 +48,43 @@ export default function CardOne({
 
   return (
     <div
-      className={` custom-class ${
-        candidateIsMember ? "bg-[#a5f1bf]" : "bg-[#fff]"
-      }  ${
-        !isLoading ? "" : "opacity-40 cursor-wait"
+      class={`w-full ${
+        candidateIsMember
+          ? "bg-[#a5f1bf]"
+          : "bg-[#fff]"
+      } mx-auto shadow-md rounded-2xl overflow-hidden mb-2 mt-0 flex justify-between ${
+        !isLoading
+          ? !candidateIsMember
+            ? ""
+            : "cursor-not-allowed"
+          : "opacity-40 cursor-wait"
       }`}
     >
       <div class="px-6 py-4 flex-initial">
-        <h3 className="title">
-          {counter > 0 && !candidateIsMember ? value : null}
-          {" "}{title}
+        <h3 class="font-semibold text-lg mb-1 text-gray-900">
+          {counter > 0 && !candidateIsMember ? `${counter}x` : null} {title}
         </h3>
-        
-        
-        {voucher !== "null" ? (
+        {voucher > 0 && (
           <p class="text-gray-500 text-md my-2">
             Your voucher of{" "}
             <strong>
-              {currency}{voucher}
+              {currency}{isIndianCurrency ? getInrFormattedAmount(voucher) : voucher}
             </strong>{" "}
-            has been applied as a discount on the actual ticket cost{" "}
-            <strong>
-              {isIndianCurrency
-                ? `${currency}${calculateAmountWithoutGst(basePrice)}`
-                : basePrice}
-            </strong>{" "}
-            
+            has been applied as a discount
           </p>
-        ) : null}
-
-            <p class="text-gray-500 text-lg">{discountedPrice}{" "}
-            {isIndianCurrency ? <span className="text">incl. 18% GST</span> : <span className="text">inc. of all taxes</span>}
-            </p>
-        
-        {/* <p class="text-gray-500 text-lg">
-          {isIndianCurrency
-            ? `${currency}${calculateAmountWithoutGst(basePrice)}`
-            : `${currency}${basePrice}`}
-        </p> */}
-        
+        )}
+        <span class="text-gray-500 text-lg mr-1">{discountedPrice}</span>
+        {isIndianCurrency ? <span className="text-sm text-gray-500">exc GST</span> : <span className="text-sm text-gray-500">inc. of all taxes</span>}
       </div>
       {!candidateIsMember && (
-        <div class="px-3 py-3 flex-initial">
-          <div className="button_container">
-            <button
-              class={`bg-gray-300 shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full w-12 h-12 disabled:opacity-50 ${
-                counter === 0 || isLoading
-                  ? "cursor-not-allowed"
-                  : "cursor-pointer"
-              }`}
-              onClick={
-                !isLoading
-                  ? !candidateIsMember
-                    ? counter === 0
-                      ? handleIncrement
-                      : handleDecrement
-                    : undefined
-                  : undefined
-              }
-              disabled={counter === 0 || isLoading}
-            >
-              -
-            </button>
-            <p class="text-gray-500 text-2xl px-2 py-2">{counter}</p>
-            <button
-              class={`bg-gray-300  shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full  w-12 h-12 disabled:opacity-50 ${
-                counter === 1 || isLoading
-                  ? "cursor-not-allowed"
-                  : "cursor-pointer"
-              }`}
-              onClick={
-                !isLoading
-                  ? !candidateIsMember
-                    ? counter === 0
-                      ? handleIncrement
-                      : handleDecrement
-                    : undefined
-                  : undefined
-              }
-              disabled={counter === 1 || isLoading}
-            >
-              +
-            </button>
-          </div>
+        <div class="p-3 flex-initial flex justify-center items-center">
+          <IconButton aria-label="delete" onClick={handleDecrement} disabled={isRemoveDisabled}>
+            <RemoveCircleOutlineIcon fontSize="large"/>
+          </IconButton>
+          <p class="text-gray-500 text-2xl">{counter}</p>
+          <IconButton aria-label="delete" onClick={handleIncrement} disabled={isAddDisabled}>
+            <AddCircleOutlineIcon fontSize="large" />
+          </IconButton>
         </div>
       )}
     </div>
@@ -130,7 +93,6 @@ export default function CardOne({
 
 export function CardTwo({
   title,
-  subTitle,
   discountedPrice,
   sendData,
   counterData,
@@ -146,22 +108,28 @@ export function CardTwo({
 }) {
   const [counter, setCounter] = useState(0);
 
+  const isRemoveDisabled = counter === 0 || isLoading;
+  const isAddDisabled = counter === 1 || isLoading;
+
   const handleIncrement = () => {
-    if (memberTicketCount === 0) {
-      setCounter(1);
-      if (!candidateIsMember) {
-        setMemberTicketCount(1);
+    if (!isAddDisabled) {
+      if (memberTicketCount === 0) {
+        setCounter(1);
+        if (!candidateIsMember) {
+          setMemberTicketCount(1);
+        }
       }
+      if (!candidateIsMember) setCounter(1);
     }
-    if (!candidateIsMember) setCounter(1);
   };
 
   const handleDecrement = () => {
-    setCounter(0);
-    setSpouseTicketCount(0);
+    if (!isRemoveDisabled) {
+      setCounter(0);
+      setSpouseTicketCount(0);
+    }
   };
 
-  const value = `${counter}x`;
   if (sendData !== undefined) {
     sendData(Number(counter));
   }
@@ -172,67 +140,27 @@ export function CardTwo({
     }
   }, [counterData]);
 
-  // console.log(counter,'counter');
-
   return (
     <div
-      className="custom-class"
+      class={`w-full mx-auto shadow-md rounded-2xl overflow-hidden my-2 flex justify-between bg-white ${
+        isLoading && "opacity-40 cursor-wait"
+      }`}
     >
-      <div class="px-6 py-4 flex-initial">
-        <h3 className="title">
-          {counter > 0 ? value : null} {" "}
-          {title}
+      <div class="pl-6 py-4 flex-initial">
+        <h3 class="font-semibold text-lg mb-1 text-gray-900">
+          {counter > 0 && !candidateIsMember ? `${counter}x` : null} {title}
         </h3>
-        <h5 class="text-lg text-gray-600 mb-2">{subTitle}</h5>
-        <p class="text-gray-500 text-lg">{discountedPrice}{" "}
-        {isIndianCurrency ? <span className="text">incl. 18% GST</span> : <span className="text">inc. of all taxes</span>}
-        </p>
-        {/* {voucher !== "null" ? (
-        <p class="text-gray-500 text-lg">
-          {isIndianCurrency
-            ? `${currency} ${calculateAmountWithoutGst(basePrice)}`
-            : `${currency} ${basePrice}`}
-        </p>
-        ) : null} */}
+        <span class="text-gray-500 text-lg mr-1">{discountedPrice}</span>
+        {isIndianCurrency ? <span className="text-sm text-gray-500">exc GST</span> : <span className="text-sm text-gray-500">inc. of all taxes</span>}
       </div>
-      <div class="px-3 py-3 flex-initial">
-        <div className="button_container">
-          <button
-            class={`bg-gray-300 shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full w-12 h-12 disabled:opacity-50 ${
-              counter === 0 || isLoading
-                ? "cursor-not-allowed"
-                : "cursor-pointer"
-            }`}
-            onClick={
-              !isLoading
-                ? counter === 0
-                  ? handleIncrement
-                  : handleDecrement
-                : undefined
-            }
-            disabled={counter === 0 || isLoading}
-          >
-            -
-          </button>
-          <p class="text-gray-500 text-2xl px-2 py-2">{counter}</p>
-          <button
-            class={`bg-gray-300  shadow-md hover:bg-gray-500 hover:shadow-lg text-black text-4xl font-normal  rounded-full  w-12 h-12 disabled:opacity-50 ${
-              counter === 1 || isLoading
-                ? "cursor-not-allowed"
-                : "cursor-pointer"
-            }`}
-            onClick={
-              !isLoading
-                ? counter === 0
-                  ? handleIncrement
-                  : handleDecrement
-                : undefined
-            }
-            disabled={counter === 1 || isLoading}
-          >
-            +
-          </button>
-        </div>
+      <div class="p-3 flex-initial flex justify-center items-center">
+        <IconButton aria-label="delete" onClick={handleDecrement} disabled={isRemoveDisabled}>
+          <RemoveCircleOutlineIcon fontSize="large"/>
+        </IconButton>
+        <p class="text-gray-500 text-2xl">{counter}</p>
+        <IconButton aria-label="delete" onClick={handleIncrement} disabled={isAddDisabled}>
+          <AddCircleOutlineIcon fontSize="large" />
+        </IconButton>
       </div>
     </div>
   );

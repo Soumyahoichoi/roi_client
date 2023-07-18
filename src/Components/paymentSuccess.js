@@ -56,7 +56,7 @@ const PaymentSuccessPage = () => {
           <Grid container className="text-white w-full h-full">
             <Grid item xs={12} md={6} className="w-full h-full bg-gray-100">
               <div className="px-8">
-                <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
+                <div className="min-[900px]:min-h-screen bg-gray-100 flex flex-col justify-center items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-20 w-20 text-green-500 mb-4"

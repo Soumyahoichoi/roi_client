@@ -1,16 +1,12 @@
-import { Box, CircularProgress, Grid } from "@mui/material";
-import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
+import axios from "axios";
+import { Box, CircularProgress } from "@mui/material";
+
 import CardOne, { CardTwo } from "../../Components/Card";
 import Paybutton from "../../Components/Paybutton";
-import { calculateAmountWithoutGst } from "../../utils";
-import "./style.css";
-export default function Layout() {
-  const [error, setError] = useState(null);
-  const [data, setData] = useState([]);
-  const [message, setMessage] = useState(false);
+import { calculateGst, calculateAmountWithoutGst, getInrFormattedAmount } from "../../utils";
 
-  const voucher = localStorage.getItem("voucher");
+export default function Layout() {
   const [counterValue, setCounterValue] = useState(0);
   const [counterValueTwo, setCounterValueTwo] = useState(0);
   const [memberPrice, setMemberPrice] = useState(0);
@@ -18,7 +14,6 @@ export default function Layout() {
   const [isLoading, setIsLoading] = useState(false);
   const [currency, setCurrency] = useState("");
   const [finalPrice, setFinalPrice] = useState(0);
-  const [memberTypeIsEarlyBird, setMemberTypeIsEarlyBird] = useState(false);
   const [calculatedAmount, setCalculatedAmount] = useState({
     member: 0,
     spouse: 0,
@@ -28,15 +23,16 @@ export default function Layout() {
     plan: "",
   });
 
+  const voucher = localStorage.getItem("voucher");
+
   const [
     initialTicketPriceHasbeenFetched,
     setInitialTicketPriceHasbeenFetched,
   ] = useState(false);
 
-  let regularMemberPrice, regularAddOns;
-  let emailId = localStorage.getItem("email");
-  let plan = localStorage.getItem("plan");
-  let voucherDiscount = localStorage.getItem("voucher");
+  const emailId = localStorage.getItem("email");
+  const plan = localStorage.getItem("plan");
+
   const candidateIsMember = localStorage.getItem("candidate") === "member";
 
   const isIndianCurrency = useMemo(
@@ -76,48 +72,19 @@ export default function Layout() {
             setMemberPrice(response.data.member);
             setPartnerPrice(response.data.spouse);
             setCurrency(getCurrencySymbol(response.data.currency));
-            setMemberTypeIsEarlyBird(
-              response.data.cap.toLowerCase() === "earlybird"
-            );
             setCalculatedAmount(response.data);
-            // setFinalPrice(
-            //   counterValue + counterValueTwo === 1
-            //     ? !candidateIsMember
-            //       ? response.data.member
-            //       : response.data.spouse
-            //     : response.data.totalAmount
-            // );
           }
         });
-    } else {
-      // setMemberPrice(0);
-      // setPartnerPrice(0);
-      // setFinalPrice(0);
-      // setCurrency("");
     }
   };
 
   useEffect(() => {
-    setFinalPrice(
-      counterValue + counterValueTwo === 1
-        ? !candidateIsMember
-          ? calculatedAmount.member
-          : calculatedAmount.spouse
-        : calculatedAmount.totalAmount
-    );
-
-    return () => {};
+    setFinalPrice(calculate().finalAmount)
   }, [candidateIsMember, counterValue, counterValueTwo, calculatedAmount]);
-
-  console.log({
-    candidateIsMember,
-    counterValue,
-    counterValueTwo,
-  });
 
   useEffect(() => {
     getCalculatedAmount();
-  }, [counterValue, counterValueTwo]);
+  }, []);
 
   const handleDataOne = (data) => {
     setCounterValue(data);
@@ -127,223 +94,176 @@ export default function Layout() {
     setCounterValueTwo(data);
   };
 
-  useEffect(() => {
-    if (voucherDiscount === "null") {
-      setMessage(true);
+  const calculate = () => {
+    if (isIndianCurrency) {
+      let finalAmount = 0
+      if (counterValue === 1) {
+        let memberPriceWithoutGst = calculateAmountWithoutGst(memberPrice)
+        if (voucher != null) memberPriceWithoutGst -= voucher
+        finalAmount += memberPriceWithoutGst
+        console.log(finalAmount, 'finalAmount till member')
+      }
+      if (counterValueTwo === 1) {
+        finalAmount += calculateAmountWithoutGst(partnerPrice)
+      }
+      const gst = calculateGst(finalAmount)
+      finalAmount += gst
+      return {
+        gst, finalAmount
+      }
     } else {
-      setMessage(false);
+      let finalAmount = 0
+      if (counterValue === 1) {
+        let tempMemberPrice = memberPrice
+        // if (voucher) tempMemberPrice -= voucher
+        finalAmount += tempMemberPrice
+      }
+      if (counterValueTwo === 1) {
+        finalAmount += partnerPrice
+      }
+      return { finalAmount }
     }
-  }, []);
+  }
 
   return (
-    <React.Fragment>
-      <section>
-        <Grid container className="w-full h-full text-white">
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            className="w-full h-full bg-gray-100 md:h-screen container"
-          >
-            <div className=" w-full h-full">
-              {/* header */}
-              <header class="bg-white shadow-md">
-                  <div class="container mx-auto px-4 py-6">
-                    <h1 class="text-lg font-bold font-sans text-black">
-                    RIE Kolkata 2024 01/11/2024 until 01/14/2024
-                    </h1>
-                  </div>
-                  <div>
-                    <p class="text-md font-semibold font-sans text-gray-500 text-center">
-                        Select tickets
-                    </p>
-                  </div>
-                </header>
-                
-            <div
-              // minWidth={"40rem"}
-              className="flex flex-col justify-center items-center  px-8 py-10 md:pb-20"
-            >
-              {/* <header>
-                <div class="container mx-auto px-4 py-6 ">
-                  <h1 class="text-xl font-normal text-black border-b border-black font-sans text-left">
-                    Tickets
-                  </h1>
-                </div>
-              </header> */}
-              {!initialTicketPriceHasbeenFetched ? (
-                <Box display="flex" justifyContent={"center"}>
-                  <CircularProgress sx={{ color: "#454545" }} />
-                </Box>
-              ) : (
-                <>
-                  <CardOne
-                    title="Member"
-                    discountedPrice={`${currency}${memberPrice}`}
-                    // ${
-                    //   isIndianCurrency ? " incl. 18% GST" : ""
-                    // }`}
-                    sendData={handleDataOne}
-                    counterData={counterValue}
-                    isLoading={isLoading}
-                    voucher={voucher}
-                    currency={currency}
-                    candidateIsMember={candidateIsMember}
-                    setSpouseTicketCount={setCounterValueTwo}
-                    basePrice={memberPrice}
-                    isIndianCurrency={isIndianCurrency}
-                  />
-                  <Box mt={2} />
-                  <CardTwo
-                    title={"Spouse/Life Partner"}
-                    // subTitle={`Bring along your Spouse / Life Partner to India!`}
-                    discountedPrice={`${currency}${partnerPrice}`}
-                    // ${
-                    //   isIndianCurrency ? " incl. 18% GST" : ""
-                    // }`}
-                    sendData={handleDataTwo}
-                    memberTicketCount={counterValue}
-                    setMemberTicketCount={setCounterValue}
-                    counterData={counterValueTwo}
-                    isLoading={isLoading}
-                    voucher={voucher}
-                    currency={currency}
-                    candidateIsMember={candidateIsMember}
-                    setSpouseTicketCount={setCounterValueTwo}
-                    basePrice={partnerPrice}
-                    isIndianCurrency={isIndianCurrency}
-                  />
-                </>
-              )}
+    <>
+      <div className="w-full f-full flex flex-col md:flex-row md:h-screen">
+        <div className="w-full h-full bg-gray-100">
+          <header class="bg-white shadow-md text-gray-500">
+            <div class="ml-5 mx-auto px-4 py-4">
+              <h1 class="text-base font-bold font-sans">RIE Kolkata 11-Jan-2024 till 14-Jan-2024</h1>
             </div>
-            </div>
-          </Grid>
+          </header>
+          <main class="mx-auto p-6">
+            {!initialTicketPriceHasbeenFetched ? (
+              <Box display="flex" justifyContent={"center"}>
+                <CircularProgress sx={{ color: "#454545" }} />
+              </Box>
+            ) : (
+              <>
+                <CardOne
+                  title="Member"
+                  discountedPrice={<>{currency} {isIndianCurrency ? getInrFormattedAmount(calculateAmountWithoutGst(memberPrice) - (voucher ?? 0)): memberPrice - (voucher ?? 0)}{currency.toLowerCase().includes("inr")}</>}
+                  sendData={handleDataOne}
+                  counterData={counterValue}
+                  // isLoading={isLoading}
+                  voucher={voucher}
+                  currency={currency}
+                  candidateIsMember={candidateIsMember}
+                  setSpouseTicketCount={setCounterValueTwo}
+                  basePrice={memberPrice}
+                  isIndianCurrency={isIndianCurrency}
+                />
+                <Box mt={2} />
+                <CardTwo
+                  title="Spouse/Life Partner"
+                  discountedPrice={<>{currency} {isIndianCurrency ? getInrFormattedAmount(calculateAmountWithoutGst(partnerPrice)) : partnerPrice}{currency.toLowerCase().includes("inr")}</>}
+                  sendData={handleDataTwo}
+                  memberTicketCount={counterValue}
+                  setMemberTicketCount={setCounterValue}
+                  counterData={counterValueTwo}
+                  // isLoading={isLoading}
+                  voucher={voucher}
+                  currency={currency}
+                  candidateIsMember={candidateIsMember}
+                  setSpouseTicketCount={setCounterValueTwo}
+                  basePrice={partnerPrice}
+                  isIndianCurrency={isIndianCurrency}
+                />
+              </>
+            )}
+          </main>
+        </div>
 
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            className="w-full h-full bg-gray-200 md:h-screen container"
-          >
-            {/* 
-             Shopping Cart
-             Purchase Overview
-             */}
-            <div className="w-full h-full bg-white">
-              {/* <Addtocart /> */}
-              <div class="text-gray-500 min-h-screen">
-                <header>
-                <div class="container mx-auto px-4 py-2 ">
-                  <h1 class="text-xl font-normal text-black  font-sans">
-                    Summary
-                  </h1>
+        <div className="w-full h-full bg-gray-200">
+          <div className="w-full h-full">
+            <div class="text-gray-500">
+              <header class="min-[768px]:bg-white min-[768px]:shadow-md min-[768px]:text-center px-4 py-4 max-[767px]:pl-11">
+                <div class="mx-auto">
+                  <h1 class="text-2xl font-extrabold font-sans text-black">Summary</h1>
                 </div>
-                <hr class="my-4 color:black" />
               </header>
 
-                <main class=" mx-auto px-2 py-2">
-                  {isLoading ? (
-                    <div class="bg-white w-full p-4 font-sans text-xl text-gray-400">
-                      Loading...
-                    </div>
-                  ) : counterValue + counterValueTwo > 0 ? (
-                    <>
-                      <div class="bg-white w-full p-6">
-                        {counterValue > 0 && (
-                          <>
-                            <div class="flex justify-between items-center mb-4">
-                              <h2 class="title_layout">
-                                Member
-                                {memberTypeIsEarlyBird ? " (Early Bird)" : ""}
-                              </h2>
-                              <span class="text-black">
-                                {currency}
-                                {isIndianCurrency
-                                  ? calculateAmountWithoutGst(memberPrice)
-                                  : memberPrice}{" "}
-                              </span>
-                            </div>
-                            <hr class="my-4" />
-                          </>
-                        )}
-                        {counterValueTwo > 0 ? (
-                          <>
-                            <div class="flex justify-between items-center mb-4 ">
-                              <h2 class="title_layout">
-                                Spouse/Life Partner
-                                {memberTypeIsEarlyBird ? " (Early Bird)" : ""}
-                              </h2>
-                              <span class="text-black">
-                                {currency}
-                                {isIndianCurrency
-                                  ? calculateAmountWithoutGst(partnerPrice)
-                                  : partnerPrice}{" "}
-                              </span>
-                            </div>
-                            <hr className="my-4" />
-                          </>
-                        ) : null}
-
-                        {/* GST */}
-
-                        {currency === "₹" && (
-                          <>
-                            <div class="flex justify-between items-center mb-4">
-                              <h2 class="title_layout">
-                                GST 18%
-                                {/* {memberTypeIsEarlyBird ? " (Early Bird)" : ""} */}
-                              </h2>
-                              <span class="text-black">
-                                {currency}
-                                {isIndianCurrency
-                                  ? finalPrice -
-                                    calculateAmountWithoutGst(finalPrice)
-                                  : finalPrice}{" "}
-                              </span>
-                            </div>
-                            <hr class="my-4" />
-                          </>
-                        )}
-
-                        <div class="flex justify-between items-center">
-                          <h2 class="text-2xl font-semibold font-sans">
-                            Total
+              <main class="mx-auto p-6">
+                {isLoading ? (
+                  <div class="bg-white shadow w-full p-6 font-sans text-xl rounded-2xl">
+                    Loading...
+                  </div>
+                ) : counterValue + counterValueTwo > 0 ? (
+                  <div class="bg-white shadow w-full p-6 rounded-2xl">
+                    {counterValue > 0 && (
+                      <>
+                        <div class="flex justify-between items-center mb-4">
+                          <h2 class="text-lg text-black font-semibold font-sans">
+                            Member
                           </h2>
-                          <span class="total_price">
+                          <span class="text-black">
                             {currency}&nbsp;
-                            {finalPrice}
-                            {currency.toLowerCase().includes("₹")
-                              ? " (inc. of GST)"
-                              : " (inc. of all taxes)"}
+                            {isIndianCurrency ? getInrFormattedAmount(calculateAmountWithoutGst(memberPrice) - (voucher ?? 0)) : memberPrice - (voucher ?? 0)}
                           </span>
                         </div>
-                        <div class="flex justify-center mt-6">
-                          {/* <button class="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-1/2 text-center"
-                          onClick={handleSubmit}>
-                          Proceed to payment
-                          </button> */}
-                          <Paybutton
-                            plan={plan}
-                            amount={finalPrice}
-                            user={emailId}
-                            count={counterValue + counterValueTwo}
-                          />
+                        <hr class="my-4" />
+                      </>
+                    )}
+                    {counterValueTwo > 0 ? (
+                      <>
+                        <div class="flex justify-between items-center mb-4 ">
+                          <h2 class="text-lg text-black font-semibold font-sans">
+                            Spouse/Life Partner
+                          </h2>
+                          <span class="text-black">
+                            {currency}&nbsp;
+                            {isIndianCurrency ? getInrFormattedAmount(calculateAmountWithoutGst(partnerPrice)) : partnerPrice}
+                          </span>
                         </div>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div class=" w-full p-6 font-sans text-xl rounded-2xl text-gray-400">
-                        Your cart is empty. Please select tickets.
-                      </div>
-                    </>
-                  )}
-                </main>
-              </div>
+                        <hr className="my-4" />
+                      </>
+                    ) : null}
+                    {currency === "₹" && (
+                      <>
+                        <div class="flex justify-between items-center mb-4">
+                          <h2 class="title_layout text-black">
+                            GST 18%
+                            {/* {memberTypeIsEarlyBird ? " (Early Bird)" : ""} */}
+                          </h2>
+                          <span class="text-black">
+                            {currency}&nbsp;
+                            {getInrFormattedAmount(calculate().gst)}{" "}
+                          </span>
+                        </div>
+                        <hr class="my-4" />
+                      </>
+                    )}
+                    <div class="flex justify-between items-center">
+                      <h2 class="text-2xl font-semibold font-sans text-black">
+                        Total
+                      </h2>
+                      <span class="text-2xl text-black">
+                        {currency}&nbsp;
+                        {isIndianCurrency ? getInrFormattedAmount(calculate().finalAmount) : (finalPrice - (voucher ?? 0))}
+                      </span>
+                    </div>
+                    <div class="flex justify-center mt-6">
+                      <Paybutton
+                        plan={plan}
+                        amount={finalPrice}
+                        user={emailId}
+                        count={counterValue + counterValueTwo}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div class="bg-white shadow w-full p-6 font-sans text-xl rounded-2xl">
+                      Your cart is empty. Please select tickets.
+                    </div>
+                  </>
+                )}
+              </main>
             </div>
-          </Grid>
-        </Grid>
-      </section>
-    </React.Fragment>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
