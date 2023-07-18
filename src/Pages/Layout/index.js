@@ -129,7 +129,7 @@ export default function Layout() {
     <>
       <div className="w-full f-full flex flex-col md:flex-row md:h-screen">
         <div className="w-full h-full bg-gray-100">
-          <header class="bg-white shadow-md text-gray-500">
+          <header class="bg-gray-100 text-gray-500">
             <div class="ml-5 mx-auto px-4 py-4">
               <h1 class="text-base font-bold font-sans">RIE Kolkata 11-Jan-2024 till 14-Jan-2024</h1>
             </div>
@@ -182,6 +182,13 @@ export default function Layout() {
                 <div class="mx-auto">
                   <h1 class="text-2xl font-extrabold font-sans text-black">Summary</h1>
                 </div>
+                {currency === "₹" && (
+                <div class="">
+                  <h4 class="text-sm font-normal font-sans text-gray sm:text-sm md:text-sm lg:text-base pt-4">
+                  To avail GST input, please enter your company name in the form that appears after payment completion
+                  </h4>
+                </div>
+                )}
               </header>
 
               <main class="mx-auto p-6">
@@ -254,7 +261,7 @@ export default function Layout() {
                   </div>
                 ) : (
                   <>
-                    <div class="bg-white shadow w-full p-6 font-sans text-xl rounded-2xl">
+                    <div class="bg-white shadow w-full p-6 font-sans text-base rounded-2xl sm:text-lg md:text-lg lg:text-2xl">
                       Your cart is empty. Please select tickets.
                     </div>
                   </>
