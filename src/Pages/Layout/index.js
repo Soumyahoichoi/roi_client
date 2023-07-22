@@ -130,7 +130,7 @@ export default function Layout() {
       <div className="w-full f-full flex flex-col md:flex-row md:h-screen">
         <div className="w-full h-full bg-gray-100">
           <header class="bg-gray-100 text-gray-500">
-            <div class="ml-5 mx-auto px-4 py-4">
+            <div class="ml-5 mx-auto px-4 pt-4 ">
               <h1 class="text-base font-bold font-sans">RIE Kolkata 11-Jan-2024 till 14-Jan-2024</h1>
             </div>
           </header>
@@ -178,7 +178,7 @@ export default function Layout() {
         <div className="w-full h-full bg-gray-200">
           <div className="w-full h-full">
             <div class="text-gray-500">
-              <header class="min-[768px]:bg-white min-[768px]:shadow-md min-[768px]:text-center px-4 py-4 max-[767px]:pl-11">
+              <header class="min-[768px]:bg-white min-[768px]:shadow-md min-[768px]:text-center px-4 pt-4 max-[767px]:pl-11 min-[768px]:pb-4">
                 <div class="mx-auto">
                   <h1 class="text-2xl font-extrabold font-sans text-black">Summary</h1>
                 </div>
