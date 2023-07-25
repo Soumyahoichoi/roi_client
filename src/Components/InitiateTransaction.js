@@ -45,7 +45,7 @@ const ProcessingPage = () => {
       </Typography>
       <CircularProgress />
       <form
-        style={{ display: "hidden" }}
+        style={{ display: "none" }}
         method="POST"
         action="http://localhost:4000/zuddl-ccavRequestHandler"
         ref={formRef}
