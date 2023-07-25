@@ -70,7 +70,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
     console.log(data);
 
     const formDatas = JSON.stringify({
-      name: name,
+      member_name: name,
       gst_no: gstNo || "",
       chapter_name: chapterName,
       company_name: companyName,
@@ -140,7 +140,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
     // Fetch data and populate form fields here
     if (Object.keys(preferenceFormData).length > 0) {
       const {
-        name,
+        member_name,
         order_id,
         email,
         contact_number,
@@ -175,7 +175,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
         // countryCode,
         otherFoodPreference: member_other_food_preference,
         developmentAreas: !!personal_d_area && JSON.parse(personal_d_area),
-        name,
+        name:member_name,
         challanges:challanges,
         partnerAllergy: partner_allergy,
         partnerChallanges: partner_challenges,
@@ -210,6 +210,13 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
     field.onChange(selected);
   };
 
+  const handlePartnerSelectChange = (selected, field) => {
+    if (selected.length > 2) {
+      selected = selected.slice(0, 2); // Limit the selection to two options
+    }
+    field.onChange(selected);
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h2 className="text-1xl font-bold text-gray-900 mb-5">
@@ -220,10 +227,10 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
         <Grid item xs={12}>
               <Controller
                 control={control}
-                name="name"
+                name="member_name"
                 rules={{
                   required: "This field is required.",
-                  pattern: /^[A-Za-z'-]+$/,
+                  pattern: /^[a-zA-Z ]*$/,
                 }}
                 render={({ field }) => (
                   <TextField
@@ -231,8 +238,8 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
                     label="Name"
                     variant="standard"
                     fullWidth
-                    error={Boolean(errors.name)}
-                    helperText={errors.name?.message}
+                    error={Boolean(errors.member_name)}
+                    helperText={errors.member_name?.message}
                     {...field}
                   />
                 )}
@@ -332,8 +339,8 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
                     label="GST Number"
                     variant="standard"
                     fullWidth
-                    error={Boolean(errors.name)}
-                    helperText={errors.name?.message}
+                    error={Boolean(errors.gstNo)}
+                    helperText={errors.gstNo?.message}
                     {...field}
                   />
                 )}
@@ -355,8 +362,8 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
                     label="Chapter Name"
                     variant="standard"
                     fullWidth
-                    error={Boolean(errors.name)}
-                    helperText={errors.name?.message}
+                    error={Boolean(errors.chapterName)}
+                    helperText={errors.chapterName?.message}
                     {...field}
                   />
                 )}
@@ -377,7 +384,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
                     label="Company Name"
                     variant="standard"
                     fullWidth
-                    error={Boolean(errors.name)}
+                    error={Boolean(errors.companyName)}
                     helperText={errors.name?.message}
                     {...field}
                   />
@@ -738,7 +745,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
             <Grid item xs={12}>
               <Controller
                 control={control}
-                name="email"
+                name="partnerEmail"
                 rules={{
                   required: "This field is required.",
                   pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
@@ -749,8 +756,8 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
                     label=" Email ID"
                     variant="standard"
                     fullWidth
-                    error={Boolean(errors.email)}
-                    helperText={errors.email?.message}
+                    error={Boolean(errors.partnerEmail)}
+                    helperText={errors.partnerEmail?.message}
                     {...field}
                   />
                 )}
@@ -848,7 +855,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
                   {...field}
                   multiple
                   value={field.value || []}
-                  onChange={(e) => handleSelectChange(e.target.value, field)}
+                  onChange={(e) => handlePartnerSelectChange(e.target.value, field)}
                   input={<Input label="Multiple Select" />}
                   maxRows={2}
                   required
@@ -860,7 +867,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
                           key={value}
                           label={value}
                           onDelete={() =>
-                            handleSelectChange(
+                            handlePartnerSelectChange(
                               field.value.filter((item) => item !== value),
                               field
                             )
@@ -878,7 +885,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
                       sx={{ justifyContent: "space-between" }}
                     >
                       {name}
-                      {field.value?.includes(name) ? (
+                      {field.value && field.value.includes(name) ? (
                         <CheckIcon color="info" />
                       ) : null}
                     </MenuItem>
@@ -887,9 +894,9 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
               </FormControl>
             )}
           />
-          {errors.developmentAreas && (
+          {errors.partnerDevelopmentAreas && (
             <FormHelperText error>
-              {errors.developmentAreas.message}
+              {errors.partnerDevelopmentAreas.message}
             </FormHelperText>
           )}
           <FormHelperText>
