@@ -1,19 +1,32 @@
 export const calculateAmountWithoutGst = (amount) => {
-const gstPercentage = 18;
+  const gstPercentage = 18;
 
-return (amount / (100 + gstPercentage)) * 100;
+  return (amount / (100 + gstPercentage)) * 100;
 };
 
 export const getInrFormattedAmount = (amount) => {
   try {
-    const result = new Intl.NumberFormat('en-IN', { style: "currency", currency: "INR", minimumFractionDigits: 0 }).format(amount)
-    return result.slice(1)
+    const result = new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      minimumFractionDigits: 0,
+    }).format(amount);
+    return result.slice(1);
   } catch (e) {
-    return amount
+    return amount;
   }
-}
+};
 
 export const calculateGst = (amount) => {
   const gstPercentage = 18;
-  return (amount * gstPercentage) / 100;;
-}
+  return (amount * gstPercentage) / 100;
+};
+
+export const getParameterByName = (name, url = window.location.href) => {
+  name = name.replace(/[\[\]]/g, "\\$&");
+  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+    results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return "";
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
+};
