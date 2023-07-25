@@ -81,7 +81,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
       food_preference: foodPreference,
       favourite_drink: favoriteDrink,
       challenges: challanges,
-      alergy: allergies,
+      allergies: allergies,
       personal_d_area: JSON.stringify(developmentAreas),
       super_power: superpower,
       e_pitch: pitch,
@@ -824,7 +824,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
         <Grid item xs={12}>
           <Controller
             control={control}
-            name="partnerAllergies"
+            name="partnerAllergy"
             rules={{ required: true }}
             render={({ field }) => (
               <TextField
@@ -836,7 +836,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
               />
             )}
           />
-          {errors.partnerAllergies && (
+          {errors.partnerAllergy && (
             <FormHelperText sx={{ color: "red" }}>
               This field is required.
             </FormHelperText>
