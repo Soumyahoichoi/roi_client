@@ -227,7 +227,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
         <Grid item xs={12}>
               <Controller
                 control={control}
-                name="member_name"
+                name="name"
                 rules={{
                   required: "This field is required.",
                   pattern: /^[a-zA-Z ]*$/,
@@ -238,8 +238,8 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
                     label="Name"
                     variant="standard"
                     fullWidth
-                    error={Boolean(errors.member_name)}
-                    helperText={errors.member_name?.message}
+                    error={Boolean(errors.name)}
+                    helperText={errors.name?.message}
                     {...field}
                   />
                 )}
@@ -674,8 +674,8 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
                     label="Name"
                     variant="standard"
                     fullWidth
-                    error={Boolean(errors.name)}
-                    helperText={errors.name?.message}
+                    error={Boolean(errors.partnerName)}
+                    helperText={errors.partnerName?.message}
                     {...field}
                   />
                 )}
@@ -814,7 +814,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
               />
             )}
           />
-          {errors.favoriteDrink && (
+          {errors.partnerFavoriteDrink && (
             <FormHelperText sx={{ color: "red" }}>
               This field is required.
             </FormHelperText>
@@ -836,7 +836,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
               />
             )}
           />
-          {errors.allergies && (
+          {errors.partnerAllergies && (
             <FormHelperText sx={{ color: "red" }}>
               This field is required.
             </FormHelperText>
@@ -920,7 +920,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
               />
             )}
           />
-          {errors.superpower && (
+          {errors.partnerSuperPower && (
             <FormHelperText sx={{ color: "red" }}>
               This field is required.
             </FormHelperText>
@@ -945,7 +945,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
               />
             )}
           />
-          {errors.superpower && (
+          {errors.partnerChallanges && (
             <FormHelperText sx={{ color: "red" }}>
               This field is required.
             </FormHelperText>
@@ -970,7 +970,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
               />
             )}
           />
-          {errors.pitch && (
+          {errors.partnerEPitch && (
             <FormHelperText sx={{ color: "red" }}>
               This field is required.
             </FormHelperText>
