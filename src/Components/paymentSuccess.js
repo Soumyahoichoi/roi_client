@@ -155,6 +155,7 @@ const PaymentSuccessPage = () => {
                       count={orderDetails.count || 0}
                       showPartnerForm={showPartnerForm}
                       preferenceFormData={preferenceFormData}
+                      currency={parsed.currency}
                     />
                   </main>
                 </div>

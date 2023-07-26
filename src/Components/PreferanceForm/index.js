@@ -3,6 +3,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import {
   Button,
   Chip,
+  Divider,
   CircularProgress,
   FormControl,
   FormHelperText,
@@ -15,12 +16,13 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import axios from "axios";
+import axios, { all } from "axios";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
+
+const Form = ({ orderId, showPartnerForm, preferenceFormData, currency }) => {
   const {
     control,
     handleSubmit,
@@ -36,11 +38,22 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
     // Perform your form submission logic here
     setIsSavingData(true);
     const {
+      name,
       allergies,
       countryCode,
       otherFoodPreference,
       developmentAreas,
       email,
+      gstNo,
+      chapterName,
+      companyName,
+      industry,
+      partnerAllergy,
+      partnerChallanges,
+      partnerEmail,
+      partnerName,
+      partnerSuperPower,
+      partnerEPitch,
       favoriteDrink,
       foodPreference,
       partnerFoodPreference,
@@ -48,28 +61,43 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
       partnerPhoneNumber,
       phoneNumber,
       pitch,
+      challanges,
       superpower,
+      partnerDevelopmentAreas,
+      partnerFavoriteDrink,
       wishItem,
     } = data;
     console.log(data);
 
     const formDatas = JSON.stringify({
+      member_name: name,
+      gst_no: gstNo || "",
+      chapter_name: chapterName,
+      company_name: companyName,
+      industry: industry,
       order_id: orderId,
       email: email,
       contact_number: phoneNumber ? `+${countryCode}${phoneNumber}` : "",
       food_preference: foodPreference,
       favourite_drink: favoriteDrink,
-      alergy: allergies,
+      challenges: challanges,
+      allergies: allergies,
       personal_d_area: JSON.stringify(developmentAreas),
       super_power: superpower,
       e_pitch: pitch,
+      partner_email: partnerEmail,
+      partner_name: partnerName,
+      partner_allergy: partnerAllergy,
       partner_food_preference: partnerFoodPreference,
+      partner_super_power: partnerSuperPower,
+      partner_challenges: partnerChallanges,    
+      partner_e_pitch: partnerEPitch,
+      partner_personal_d_area: JSON.stringify(partnerDevelopmentAreas),
+      partner_favorite_drink: partnerFavoriteDrink,
+      partner_contact_number: partnerPhoneNumber,
       intend_to_visit: wishItem,
-      partner_contact_number: partnerPhoneNumber
-        ? `+${countryCode}${partnerPhoneNumber}`
-        : "",
       member_other_food_preference: otherFoodPreference || "",
-      partner_other_food_preference: partnerOtherFoodPreference || "",
+      partner_other_food_preference: partnerOtherFoodPreference || ""
     });
 
     axios({
@@ -114,16 +142,30 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
     // Fetch data and populate form fields here
     if (Object.keys(preferenceFormData).length > 0) {
       const {
+        member_name,
         order_id,
         email,
         contact_number,
         food_preference,
         favourite_drink,
         allergy,
+        industry,
+        chapter_name,
+        company_name,
+        gst_no,
+        challanges,
         personal_d_area,
         super_power,
         e_pitch,
+        partner_name,
+        partner_email,
         partner_food_preference,
+        partner_allergy,
+        partner_challenges,
+        partner_super_power,
+        partner_e_pitch,
+        partner_personal_d_area,
+        partner_favorite_drink,
         intend_to_visit,
         partner_contact_number,
         member_other_food_preference,
@@ -135,8 +177,22 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
         // countryCode,
         otherFoodPreference: member_other_food_preference,
         developmentAreas: !!personal_d_area && JSON.parse(personal_d_area),
+        name:member_name,
+        challanges:challanges,
+        partnerAllergy: partner_allergy,
+        partnerChallanges: partner_challenges,
+        partnerEmail: partner_email,
+        partnerName: partner_name,
+        partnerSuperPower: partner_super_power,
+        partnerEPitch: partner_e_pitch,
+        partnerDevelopmentAreas: !!partner_personal_d_area && JSON.parse(partner_personal_d_area),
         email,
+        industry,
+        gstNo: gst_no,
+        chapterName: chapter_name,
+        companyName: company_name,
         favoriteDrink: favourite_drink,
+        partnerFavoriteDrink: partner_favorite_drink, 
         foodPreference: food_preference,
         partnerFoodPreference: partner_food_preference,
         partnerOtherFoodPreference: partner_other_food_preference,
@@ -156,12 +212,41 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
     field.onChange(selected);
   };
 
+  const handlePartnerSelectChange = (selected, field) => {
+    if (selected.length > 2) {
+      selected = selected.slice(0, 2); // Limit the selection to two options
+    }
+    field.onChange(selected);
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h2 className="text-1xl font-bold text-gray-900 mb-5">
         Preference Registration
       </h2>
       <Grid container rowSpacing={4} alignItems="center" justify="center">
+
+        <Grid item xs={12}>
+              <Controller
+                control={control}
+                name="name"
+                rules={{
+                  required: "This field is required.",
+                  pattern: /^[a-zA-Z ]*$/,
+                }}
+                render={({ field }) => (
+                  <TextField
+                    required
+                    label="Name"
+                    variant="standard"
+                    fullWidth
+                    error={Boolean(errors.name)}
+                    helperText={errors.name?.message}
+                    {...field}
+                  />
+                )}
+              />
+        </Grid>
         <Grid item xs={12}>
           <Grid container spacing={2}>
             <Grid item xs={4} sm={3}>
@@ -218,6 +303,117 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
               />
             </Grid>
           </Grid>
+        </Grid>
+
+        <Grid item xs={12}>
+              <Controller
+                control={control}
+                name="email"
+                rules={{
+                  required: "This field is required.",
+                  pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                }}
+                render={({ field }) => (
+                  <TextField
+                    required
+                    label="Email ID"
+                    variant="standard"
+                    fullWidth
+                    error={Boolean(errors.email)}
+                    helperText={errors.email?.message}
+                    {...field}
+                  />
+                )}
+              />
+        </Grid>
+        {currency === "INR" && (
+        <Grid item xs={12}>
+              <Controller
+                control={control}
+                name="gstNo"
+                rules={{
+                  required: "This field is required.",
+                  pattern: /^[a-zA-Z0-9]+$/,
+                }}
+                render={({ field }) => (
+                  <TextField
+                    required
+                    label="GST Number"
+                    variant="standard"
+                    fullWidth
+                    error={Boolean(errors.gstNo)}
+                    helperText={errors.gstNo?.message}
+                    {...field}
+                  />
+                )}
+              />
+        </Grid>
+        )}
+
+        <Grid item xs={12}>
+              <Controller
+                control={control}
+                name="chapterName"
+                rules={{
+                  required: "This field is required.",
+                  pattern: /^[A-Za-z'-]+$/,
+                }}
+                render={({ field }) => (
+                  <TextField
+                    required
+                    label="Chapter Name"
+                    variant="standard"
+                    fullWidth
+                    error={Boolean(errors.chapterName)}
+                    helperText={errors.chapterName?.message}
+                    {...field}
+                  />
+                )}
+              />
+        </Grid>
+
+        <Grid item xs={12}>
+              <Controller
+                control={control}
+                name="companyName"
+                rules={{
+                  required: "This field is required.",
+                  pattern: /^[A-Za-z'-]+$/,
+                }}
+                render={({ field }) => (
+                  <TextField
+                    required
+                    label="Company Name"
+                    variant="standard"
+                    fullWidth
+                    error={Boolean(errors.companyName)}
+                    helperText={errors.name?.message}
+                    {...field}
+                  />
+                )}
+              />
+        </Grid>
+
+        <Grid item xs={12}>
+              <Controller
+                control={control}
+                name="industry"
+                rules={{
+                  required: "This field is required.",
+                  pattern: /^[A-Za-z'-]+$/,
+                }}
+                render={({ field }) => (
+                  <TextField
+                    required
+                    label="Industry"
+                    variant="standard"
+                    fullWidth
+                    error={Boolean(errors.name)}
+                    helperText={errors.name?.message}
+                    {...field}
+                  />
+                )}
+              />
         </Grid>
 
         <Grid item xs={12}>
@@ -283,7 +479,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
             render={({ field }) => (
               <TextField
                 required
-                label="My Favorite Drink"
+                label="Favorite Drink"
                 variant="standard"
                 fullWidth
                 {...field}
@@ -409,12 +605,37 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
         <Grid item xs={12}>
           <Controller
             control={control}
+            name="challanges"
+            rules={{ required: true }}
+            render={({ field }) => (
+              <TextField
+                required
+                label="Challanges"
+                variant="standard"
+                fullWidth
+                {...field}
+              />
+            )}
+          />
+          {errors.superpower && (
+            <FormHelperText sx={{ color: "red" }}>
+              This field is required.
+            </FormHelperText>
+          )}
+          <FormHelperText>
+            Please enter your top two challanges  (something you have encountered in your journey)
+          </FormHelperText>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Controller
+            control={control}
             name="pitch"
             rules={{ required: true }}
             render={({ field }) => (
               <TextField
                 required
-                label="My elevator Pitch is"
+                label="Elevator Pitch is"
                 variant="standard"
                 fullWidth
                 {...field}
@@ -431,29 +652,39 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
           </FormHelperText>
         </Grid>
 
+        
+
         {showPartnerForm && (
           <>
-            <Grid item xs={12}>
+          <Grid item xs={12}>
+          <Divider>
+            <Chip label="Partner's Details" />
+          </Divider>
+          </Grid>
+
+          <Grid item xs={12}>
               <Controller
                 control={control}
-                name="email"
+                name="partnerName"
                 rules={{
                   required: "This field is required.",
-                  pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                  pattern: /^[A-Za-z'-]+$/,
                 }}
                 render={({ field }) => (
                   <TextField
                     required
-                    label="Partner's Email ID"
+                    label="Name"
                     variant="standard"
                     fullWidth
-                    error={Boolean(errors.email)}
-                    helperText={errors.email?.message}
+                    error={Boolean(errors.partnerName)}
+                    helperText={errors.partnerName?.message}
                     {...field}
                   />
                 )}
               />
-            </Grid>
+        </Grid>
+
+            
 
             <Grid item xs={12}>
               <Grid container spacing={2}>
@@ -495,7 +726,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
                     render={({ field }) => (
                       <TextField
                         required
-                        label="Partner's Phone Number"
+                        label="Phone Number"
                         variant="standard"
                         fullWidth
                         error={Boolean(errors.partnerPhoneNumber)}
@@ -516,12 +747,34 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
             <Grid item xs={12}>
               <Controller
                 control={control}
+                name="partnerEmail"
+                rules={{
+                  required: "This field is required.",
+                  pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                }}
+                render={({ field }) => (
+                  <TextField
+                    required
+                    label=" Email ID"
+                    variant="standard"
+                    fullWidth
+                    error={Boolean(errors.partnerEmail)}
+                    helperText={errors.partnerEmail?.message}
+                    {...field}
+                  />
+                )}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <Controller
+                control={control}
                 name="partnerFoodPreference"
                 rules={{ required: true }}
                 render={({ field }) => (
                   <FormControl variant="standard" fullWidth>
                     <InputLabel id="partner-foodPreference-label">
-                      Partner's Preference
+                      Food Preference
                     </InputLabel>
                     <Select
                       labelId="foodPreference-label"
@@ -547,6 +800,187 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
                 Please select your partner's food preference
               </FormHelperText>
             </Grid>
+
+            <Grid item xs={12}>
+          <Controller
+            control={control}
+            name="partnerFavoriteDrink"
+            rules={{ required: true }}
+            render={({ field }) => (
+              <TextField
+                required
+                label="Favorite Drink"
+                variant="standard"
+                fullWidth
+                {...field}
+              />
+            )}
+          />
+          {errors.partnerFavoriteDrink && (
+            <FormHelperText sx={{ color: "red" }}>
+              This field is required.
+            </FormHelperText>
+          )}
+        </Grid>
+
+        <Grid item xs={12}>
+          <Controller
+            control={control}
+            name="partnerAllergy"
+            rules={{ required: true }}
+            render={({ field }) => (
+              <TextField
+                required
+                label="Please specify if your partner have any allergies"
+                variant="standard"
+                fullWidth
+                {...field}
+              />
+            )}
+          />
+          {errors.partnerAllergy && (
+            <FormHelperText sx={{ color: "red" }}>
+              This field is required.
+            </FormHelperText>
+          )}
+        </Grid>
+
+        <Grid item xs={12}>
+          <Controller
+            control={control}
+            name="partnerDevelopmentAreas"
+            rules={{ required: "Please select important areas" }}
+            render={({ field }) => (
+              <FormControl fullWidth variant="outlined">
+                <InputLabel id="development-areas">Important Areas</InputLabel>
+                <Select
+                  {...field}
+                  multiple
+                  value={field.value || []}
+                  onChange={(e) => handlePartnerSelectChange(e.target.value, field)}
+                  input={<Input label="Multiple Select" />}
+                  maxRows={2}
+                  required
+                  labelId="development-areas"
+                  renderValue={(selected) => (
+                    <Stack gap={1} direction="row" flexWrap="wrap">
+                      {selected.map((value) => (
+                        <Chip
+                          key={value}
+                          label={value}
+                          onDelete={() =>
+                            handlePartnerSelectChange(
+                              field.value.filter((item) => item !== value),
+                              field
+                            )
+                          }
+                          deleteIcon={<CancelIcon />}
+                        />
+                      ))}
+                    </Stack>
+                  )}
+                >
+                  {names.map((name) => (
+                    <MenuItem
+                      key={name}
+                      value={name}
+                      sx={{ justifyContent: "space-between" }}
+                    >
+                      {name}
+                      {field.value && field.value.includes(name) ? (
+                        <CheckIcon color="info" />
+                      ) : null}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          />
+          {errors.partnerDevelopmentAreas && (
+            <FormHelperText error>
+              {errors.partnerDevelopmentAreas.message}
+            </FormHelperText>
+          )}
+          <FormHelperText>
+            What are the two most important areas of personal development that
+            your partner would like to seek
+          </FormHelperText>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Controller
+            control={control}
+            name="partnerSuperPower "
+            rules={{ required: true }}
+            render={({ field }) => (
+              <TextField
+                required
+                label="Partner's superpower is"
+                variant="standard"
+                fullWidth
+                {...field}
+              />
+            )}
+          />
+          {errors.partnerSuperPower && (
+            <FormHelperText sx={{ color: "red" }}>
+              This field is required.
+            </FormHelperText>
+          )}
+          <FormHelperText>
+            Please enter your partner's superpower (something your partner is really good at)
+          </FormHelperText>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Controller
+            control={control}
+            name="partnerChallanges"
+            rules={{ required: true }}
+            render={({ field }) => (
+              <TextField
+                required
+                label="Challanges"
+                variant="standard"
+                fullWidth
+                {...field}
+              />
+            )}
+          />
+          {errors.partnerChallanges && (
+            <FormHelperText sx={{ color: "red" }}>
+              This field is required.
+            </FormHelperText>
+          )}
+          <FormHelperText>
+            Please enter the top two challanges of your partner (something your partner have encountered in his/her journey so far)
+          </FormHelperText>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Controller
+            control={control}
+            name="partnerEPitch"
+            rules={{ required: true }}
+            render={({ field }) => (
+              <TextField
+                required
+                label="Elevator Pitch is"
+                variant="standard"
+                fullWidth
+                {...field}
+              />
+            )}
+          />
+          {errors.partnerEPitch && (
+            <FormHelperText sx={{ color: "red" }}>
+              This field is required.
+            </FormHelperText>
+          )}
+          <FormHelperText>
+            Please enter your partner's elevator pitch (something your partner would like to share)
+          </FormHelperText>
+        </Grid>
 
             {watch("partnerFoodPreference") === "other" && (
               <Grid item xs={12}>
