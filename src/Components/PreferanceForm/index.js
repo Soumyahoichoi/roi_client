@@ -74,7 +74,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
 
     axios({
       method: "post",
-      url: "https://riekolpayment.vercel.app/createPreference",
+      url: `${process.env.REACT_APP_BACKEND_API_BASE_URL}/zuddl-createPreference`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -82,6 +82,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
     })
       .then(function (response) {
         console.log(response.data);
+        setIsSavingData(false);
 
         if (response.data) {
           Swal.fire({
@@ -97,6 +98,7 @@ const Form = ({ orderId, showPartnerForm, preferenceFormData }) => {
       })
       .catch(function (error) {
         console.log(error);
+        setIsSavingData(false);
       });
   };
 

@@ -1,5 +1,3 @@
-
-import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -12,9 +10,8 @@ import TextField from "@mui/material/TextField";
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../../assets/login_logo.svg"
-import './style.css';
-import { IconButton } from "@mui/material";
+import logo from "../../assets/login_logo.svg";
+import "./style.css";
 
 // function Copyright(props) {
 //   return (
@@ -84,7 +81,7 @@ export default function SignIn() {
   const fetchData = async () => {
     localStorage.removeItem("candidate");
     const { data, error } = await axios.post(
-      "https://riekolpayment.vercel.app/getMemberByEmail",
+      `${process.env.REACT_APP_BACKEND_API_BASE_URL}/getMemberByEmail`,
       {
         email,
       }
@@ -100,7 +97,7 @@ export default function SignIn() {
       setLoading(false);
       if (found) {
         const checkForExistingOrderByEmailResponse = await axios.post(
-          "https://riekolpayment.vercel.app/checkForExistingOrderByEmail",
+          `${process.env.REACT_APP_BACKEND_API_BASE_URL}/checkForExistingOrderByEmail`,
           {
             email,
           }
@@ -113,9 +110,15 @@ export default function SignIn() {
           // localStorage.setItem("currency", found.Plan);
           localStorage.setItem("plan", found.plan);
           if (found.plan === "Plan 1") {
-            localStorage.setItem("voucher", found.VoucherINR == null ? 0 : found.VoucherINR);
+            localStorage.setItem(
+              "voucher",
+              found.VoucherINR == null ? 0 : found.VoucherINR
+            );
           } else {
-            localStorage.setItem("voucher", found.VoucherUSD == null ? 0 : found.VoucherUSD);
+            localStorage.setItem(
+              "voucher",
+              found.VoucherUSD == null ? 0 : found.VoucherUSD
+            );
           }
           navigate("/layout");
         }
@@ -167,8 +170,7 @@ export default function SignIn() {
             justifyContent: "center",
           }}
         >
-
-          <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+          <div style={{ textAlign: "center", marginBottom: "1rem" }}>
             <img src={logo} alt="Logo" className="logo-avatar" />
           </div>
 
@@ -199,64 +201,69 @@ export default function SignIn() {
               </span>
             )}
             <br />
-            <Box sx={{  
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center"
-            }}>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              onChange={(e) => handleCheckChange(e)}
-              checked={checked}
-              sx={{mx: 0}}
-            />
-            <div className="text-gray-400 font-sans text-sm">
-              I agree to the {" "}
-              <a
-                className="text-gray-400 underline"
-                target="_blank"
-                rel="noreferrer"
-                href="https://www.riekol.com/event-waiver"
-              >
-                Event Waiver
-              </a>
-              ,{" "}
-              <a
-                className="text-gray-400 underline"
-                target="_blank"
-                rel="noreferrer"
-                href="https://www.riekol.com/termsofservices"
-              >
-                Terms of Service
-              </a>,{" "}{" "}
-              <a
-                className="text-gray-400 underline"
-                target="_blank"
-                rel="noreferrer"
-                href="https://www.riekol.com/privacypolicy"
-              >
-                Privacy Policy
-              </a>{" "}
-              and {" "}
-              <a
-                className="text-gray-400 underline"
-                target="_blank"
-                rel="noreferrer"
-                href="https://www.riekol.com/cancellationpolicy"
-              >
-                Cancellation Policy
-              </a>
-            </div>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <FormControlLabel
+                control={<Checkbox value="remember" color="primary" />}
+                onChange={(e) => handleCheckChange(e)}
+                checked={checked}
+                sx={{ mx: 0 }}
+              />
+              <div className="text-gray-400 font-sans text-sm">
+                I agree to the{" "}
+                <a
+                  className="text-gray-400 underline"
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://www.riekol.com/event-waiver"
+                >
+                  Event Waiver
+                </a>
+                ,{" "}
+                <a
+                  className="text-gray-400 underline"
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://www.riekol.com/termsofservices"
+                >
+                  Terms of Service
+                </a>
+                ,{" "}
+                <a
+                  className="text-gray-400 underline"
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://www.riekol.com/privacypolicy"
+                >
+                  Privacy Policy
+                </a>{" "}
+                and{" "}
+                <a
+                  className="text-gray-400 underline"
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://www.riekol.com/cancellationpolicy"
+                >
+                  Cancellation Policy
+                </a>
+              </div>
             </Box>
             <br />
             {error && (
-              <span style={{ color: "red", fontSize: "14px" ,margin: "5px" }}>{error}</span>
+              <span style={{ color: "red", fontSize: "14px", margin: "5px" }}>
+                {error}
+              </span>
             )}
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, fontWeight: "bold" ,fontSize: "16px" }}
+              sx={{ mt: 3, mb: 2, fontWeight: "bold", fontSize: "16px" }}
             >
               Proceed
             </Button>

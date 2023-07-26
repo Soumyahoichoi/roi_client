@@ -47,7 +47,7 @@ const ProcessingPage = () => {
       <form
         style={{ display: "none" }}
         method="POST"
-        action="https://riekolpayment.vercel.app/zuddl-ccavRequestHandler"
+        action={`${process.env.REACT_APP_BACKEND_API_BASE_URL}/zuddl-ccavRequestHandler`}
         ref={formRef}
       >
         <input name="paymentId" value={paymentId} />

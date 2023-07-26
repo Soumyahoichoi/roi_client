@@ -1,10 +1,14 @@
-import React, { useEffect, useMemo, useState } from "react";
-import axios from "axios";
 import { Box, CircularProgress } from "@mui/material";
+import axios from "axios";
+import React, { useEffect, useMemo, useState } from "react";
 
 import CardOne, { CardTwo } from "../../Components/Card";
 import Paybutton from "../../Components/Paybutton";
-import { calculateGst, calculateAmountWithoutGst, getInrFormattedAmount } from "../../utils";
+import {
+  calculateAmountWithoutGst,
+  calculateGst,
+  getInrFormattedAmount,
+} from "../../utils";
 
 export default function Layout() {
   const [counterValue, setCounterValue] = useState(0);
@@ -59,12 +63,15 @@ export default function Layout() {
         setIsLoading(true);
       }
       axios
-        .post("https://riekolpayment.vercel.app/calculate-amount", {
-          count: !initialTicketPriceHasbeenFetched
-            ? 2
-            : counterValue + counterValueTwo,
-          email: emailId,
-        })
+        .post(
+          `${process.env.REACT_APP_BACKEND_API_BASE_URL}/calculate-amount`,
+          {
+            count: !initialTicketPriceHasbeenFetched
+              ? 2
+              : counterValue + counterValueTwo,
+            email: emailId,
+          }
+        )
         .then((response) => {
           setIsLoading(false);
           setInitialTicketPriceHasbeenFetched(true);
@@ -79,7 +86,7 @@ export default function Layout() {
   };
 
   useEffect(() => {
-    setFinalPrice(calculate().finalAmount)
+    setFinalPrice(calculate().finalAmount);
   }, [candidateIsMember, counterValue, counterValueTwo, calculatedAmount]);
 
   useEffect(() => {
@@ -96,34 +103,35 @@ export default function Layout() {
 
   const calculate = () => {
     if (isIndianCurrency) {
-      let finalAmount = 0
+      let finalAmount = 0;
       if (counterValue === 1) {
-        let memberPriceWithoutGst = calculateAmountWithoutGst(memberPrice)
-        if (voucher != null) memberPriceWithoutGst -= voucher
-        finalAmount += memberPriceWithoutGst
-        console.log(finalAmount, 'finalAmount till member')
+        let memberPriceWithoutGst = calculateAmountWithoutGst(memberPrice);
+        if (voucher != null) memberPriceWithoutGst -= voucher;
+        finalAmount += memberPriceWithoutGst;
+        console.log(finalAmount, "finalAmount till member");
       }
       if (counterValueTwo === 1) {
-        finalAmount += calculateAmountWithoutGst(partnerPrice)
+        finalAmount += calculateAmountWithoutGst(partnerPrice);
       }
-      const gst = calculateGst(finalAmount)
-      finalAmount += gst
+      const gst = calculateGst(finalAmount);
+      finalAmount += gst;
       return {
-        gst, finalAmount
-      }
+        gst,
+        finalAmount,
+      };
     } else {
-      let finalAmount = 0
+      let finalAmount = 0;
       if (counterValue === 1) {
-        let tempMemberPrice = memberPrice
+        let tempMemberPrice = memberPrice;
         // if (voucher) tempMemberPrice -= voucher
-        finalAmount += tempMemberPrice
+        finalAmount += tempMemberPrice;
       }
       if (counterValueTwo === 1) {
-        finalAmount += partnerPrice
+        finalAmount += partnerPrice;
       }
-      return { finalAmount }
+      return { finalAmount };
     }
-  }
+  };
 
   return (
     <>
@@ -131,7 +139,9 @@ export default function Layout() {
         <div className="w-full h-full bg-gray-100">
           <header class="bg-gray-100 text-gray-500">
             <div class="ml-5 mx-auto px-4 py-4">
-              <h1 class="text-base font-bold font-sans">RIE Kolkata 11-Jan-2024 till 14-Jan-2024</h1>
+              <h1 class="text-base font-bold font-sans">
+                RIE Kolkata 11-Jan-2024 till 14-Jan-2024
+              </h1>
             </div>
           </header>
           <main class="mx-auto p-6">
@@ -143,7 +153,18 @@ export default function Layout() {
               <>
                 <CardOne
                   title="Member"
-                  discountedPrice={<>{currency} {isIndianCurrency ? getInrFormattedAmount(calculateAmountWithoutGst(memberPrice) - (voucher ?? 0)): memberPrice - (voucher ?? 0)}{currency.toLowerCase().includes("inr")}</>}
+                  discountedPrice={
+                    <>
+                      {currency}{" "}
+                      {isIndianCurrency
+                        ? getInrFormattedAmount(
+                            calculateAmountWithoutGst(memberPrice) -
+                              (voucher ?? 0)
+                          )
+                        : memberPrice - (voucher ?? 0)}
+                      {currency.toLowerCase().includes("inr")}
+                    </>
+                  }
                   sendData={handleDataOne}
                   counterData={counterValue}
                   // isLoading={isLoading}
@@ -157,7 +178,17 @@ export default function Layout() {
                 <Box mt={2} />
                 <CardTwo
                   title="Spouse/Life Partner"
-                  discountedPrice={<>{currency} {isIndianCurrency ? getInrFormattedAmount(calculateAmountWithoutGst(partnerPrice)) : partnerPrice}{currency.toLowerCase().includes("inr")}</>}
+                  discountedPrice={
+                    <>
+                      {currency}{" "}
+                      {isIndianCurrency
+                        ? getInrFormattedAmount(
+                            calculateAmountWithoutGst(partnerPrice)
+                          )
+                        : partnerPrice}
+                      {currency.toLowerCase().includes("inr")}
+                    </>
+                  }
                   sendData={handleDataTwo}
                   memberTicketCount={counterValue}
                   setMemberTicketCount={setCounterValue}
@@ -180,14 +211,17 @@ export default function Layout() {
             <div class="text-gray-500">
               <header class="min-[768px]:bg-white min-[768px]:shadow-md min-[768px]:text-center px-4 py-4 max-[767px]:pl-11">
                 <div class="mx-auto">
-                  <h1 class="text-2xl font-extrabold font-sans text-black">Summary</h1>
+                  <h1 class="text-2xl font-extrabold font-sans text-black">
+                    Summary
+                  </h1>
                 </div>
                 {currency === "₹" && (
-                <div class="">
-                  <h4 class="text-sm font-normal font-sans text-gray sm:text-sm md:text-sm lg:text-base pt-4">
-                  To avail GST input, please enter your company name in the form that appears after payment completion
-                  </h4>
-                </div>
+                  <div class="">
+                    <h4 class="text-sm font-normal font-sans text-gray sm:text-sm md:text-sm lg:text-base pt-4">
+                      To avail GST input, please enter your company name in the
+                      form that appears after payment completion
+                    </h4>
+                  </div>
                 )}
               </header>
 
@@ -206,7 +240,12 @@ export default function Layout() {
                           </h2>
                           <span class="text-black">
                             {currency}&nbsp;
-                            {isIndianCurrency ? getInrFormattedAmount(calculateAmountWithoutGst(memberPrice) - (voucher ?? 0)) : memberPrice - (voucher ?? 0)}
+                            {isIndianCurrency
+                              ? getInrFormattedAmount(
+                                  calculateAmountWithoutGst(memberPrice) -
+                                    (voucher ?? 0)
+                                )
+                              : memberPrice - (voucher ?? 0)}
                           </span>
                         </div>
                         <hr class="my-4" />
@@ -220,7 +259,11 @@ export default function Layout() {
                           </h2>
                           <span class="text-black">
                             {currency}&nbsp;
-                            {isIndianCurrency ? getInrFormattedAmount(calculateAmountWithoutGst(partnerPrice)) : partnerPrice}
+                            {isIndianCurrency
+                              ? getInrFormattedAmount(
+                                  calculateAmountWithoutGst(partnerPrice)
+                                )
+                              : partnerPrice}
                           </span>
                         </div>
                         <hr className="my-4" />
@@ -247,7 +290,9 @@ export default function Layout() {
                       </h2>
                       <span class="text-2xl text-black">
                         {currency}&nbsp;
-                        {isIndianCurrency ? getInrFormattedAmount(calculate().finalAmount) : (finalPrice - (voucher ?? 0))}
+                        {isIndianCurrency
+                          ? getInrFormattedAmount(calculate().finalAmount)
+                          : finalPrice - (voucher ?? 0)}
                       </span>
                     </div>
                     <div class="flex justify-center mt-6">

@@ -15,16 +15,19 @@ const PaymentSuccessPage = () => {
   const fetchOrderDetails = () => {
     setIsFetchingDetails(true);
     axios
-      .post("https://riekolpayment.vercel.app/zuddl-getOrderByPaymentId", {
-        payment_id: parsed.order_no,
-      })
+      .post(
+        `${process.env.REACT_APP_BACKEND_API_BASE_URL}/zuddl-getOrderByPaymentId`,
+        {
+          payment_id: parsed.order_no,
+        }
+      )
       .then((response) => {
         if (response.data) {
           setOrderDetails(response.data);
 
           axios
             .post(
-              "https://riekolpayment.vercel.app/zuddl-getPreferenceByPaymentId",
+              `${process.env.REACT_APP_BACKEND_API_BASE_URL}/zuddl-getPreferenceByPaymentId`,
               {
                 payment_id: parsed.order_no,
               }
