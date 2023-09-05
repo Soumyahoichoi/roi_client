@@ -2,7 +2,7 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 import React, { useEffect, useRef } from "react";
 import { getParameterByName } from "../utils";
 
-const ProcessingPage = () => {
+const InitiateTransaction = ({ isUsd = false }) => {
   const paymentId = getParameterByName("paymentId");
   const formRef = useRef(null);
 
@@ -47,7 +47,11 @@ const ProcessingPage = () => {
       <form
         style={{ display: "none" }}
         method="POST"
-        action={`${process.env.REACT_APP_BACKEND_API_BASE_URL}/zuddl-ccavRequestHandler`}
+        action={`${
+          isUsd
+            ? process.env.REACT_APP_USD_BACKEND_API_BASE_URL
+            : process.env.REACT_APP_BACKEND_API_BASE_URL
+        }/zuddl-ccavRequestHandler`}
         ref={formRef}
       >
         <input name="paymentId" value={paymentId} />
@@ -56,4 +60,4 @@ const ProcessingPage = () => {
   );
 };
 
-export default ProcessingPage;
+export default InitiateTransaction;

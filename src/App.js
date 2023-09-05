@@ -25,6 +25,10 @@ function App() {
             path="/initiate-transaction"
             element={<InitiateTransaction />}
           />
+          <Route
+            path="/initiate-transaction/usd"
+            element={<InitiateTransaction isUsd />}
+          />
           {/* <Route path="/payment" element={ <StripeContainer/> } /> */}
           <Route path="/payment-successed" element={<PaymentSuccess />} />
           <Route path="/payment-failed" element={<PaymentFailed />} />
