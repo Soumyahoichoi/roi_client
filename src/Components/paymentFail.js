@@ -23,9 +23,7 @@ const PaymentFailurePage = () => {
       </p>
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded max-w-md"
-        onClick={(event) =>
-          (window.location.href = "https://register.riekol.com/")
-        }
+        onClick={(event) => (window.location.href = "https://riekol.com/")}
       >
         Try Again
       </button>
